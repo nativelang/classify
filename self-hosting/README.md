@@ -1,6 +1,6 @@
 # Run Classify on your own machine
 
-Run the free Classify server when you want an app to send it text and get a choice back over HTTP. The text stays on your machine. The server includes the model and can work offline after installation.
+Run the free Classify server when you want an app to send it text and get a category back over HTTP. The text stays on your machine. The server includes the model and can work offline after installation.
 
 These instructions describe the planned first release. When downloads are available, pick **Docker** if you already run containers, or the **native server** to run it directly on macOS or Linux. [Classify releases](https://github.com/nativelang/classify/releases)
 
@@ -31,11 +31,8 @@ curl --request POST 'http://127.0.0.1:8080/v1/classify' \
   --header 'Content-Type: application/json' \
   --data '{
     "text": "This is a terrible movie",
-    "options": [
-      {"id": "good", "description": "The reviewer liked the movie."},
-      {"id": "bad", "description": "The reviewer disliked the movie."}
-    ]
+    "categories": ["good", "bad"]
   }'
 ```
 
-Look for `"option": "bad"` and `"source": "self_hosted"` in the response. Then change just the text to “The movie starts at seven.” The expected status is `unknown`, with `null` for the option and score. [All response fields](../SPECIFICATION.md#call-and-result)
+Look for `"category": "bad"` and `"source": "self_hosted"` in the response. Then change just the text to “The movie starts at seven.” The expected status is `unknown`, with `null` for the category and score. [All response fields](../SPECIFICATION.md#call-and-result)
