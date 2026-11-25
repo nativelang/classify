@@ -1,4 +1,4 @@
-<h1>
+<h1 id="classify-by-nativelang">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/classify-dark.png">
     <img src="assets/classify-light.png" width="201" height="76" alt="Classify by NativeLang">
