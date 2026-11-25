@@ -2,9 +2,7 @@
 
 ## First call
 
-To sort a movie review, give Classify the review and two categories.
-
-*Pseudocode*
+*Example (pseudocode)*
 
 ```text
 classify("This is a terrible movie", categories=["good", "bad"])

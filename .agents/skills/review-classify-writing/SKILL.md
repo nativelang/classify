@@ -5,9 +5,9 @@ description: Write or review a Classify explanation so a first-time reader can s
 
 # Give the reader a useful first example
 
-Write the first example from the reader’s point of view. If the user gives you an example that answers it, keep the words and values that make it clear. Change it only if the change makes the idea clearer or corrects a misleading result.
+Describe the product in one sentence that also holds for a different use case. Put the concrete scenario in a labeled example below it. If the user gives you an example that answers it, keep the words and values that make it clear. Change it only if the change makes the idea clearer or corrects a misleading result.
 
-*Pseudocode*
+*Example (pseudocode)*
 
 ```text
 classify("This is a terrible movie", categories=["good", "bad"])
