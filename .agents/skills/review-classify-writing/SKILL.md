@@ -15,7 +15,7 @@ classify("This is a terrible movie", categories=["good", "bad"])
 
 The result is `"bad"`.
 
-**Review the example on its own.** Cover the surrounding paragraphs. Can you point to the text, name the categories, and say the answer? Keep real values inline. A movie app sorts reviews into categories, so call them categories. Show the answer directly. Fix the example before adding prose.
+**Review the example on its own.** Cover the surrounding paragraphs. Can you point to the text, name the categories, and say the answer? Keep real values inline. A movie app sorts reviews into categories, so call them categories. End the first example at the answer. Put ambiguous inputs and error cases in the reference where readers handle them.
 
 When the user has suggested a simpler version, compare it with the draft before merging. For each extra name, field, or step, ask what it teaches at this point. Cut anything the reader can learn later.
 

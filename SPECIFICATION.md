@@ -10,8 +10,6 @@ classify("This is a terrible movie", categories=["good", "bad"])
 
 The result is `"bad"`.
 
-“The movie starts at seven” gives no opinion. Classify can return `unknown` so your app can leave that review unlabeled.
-
 <a id="define-your-own-options"></a>
 
 ## Define your own categories
@@ -27,7 +25,7 @@ delivery = [
 ]
 ```
 
-You can also use a built-in set of categories. If your app asks “Should I send this message?”, `classify("Go ahead", "builtins.confirmation")` can pick `yes`. “Please hold off” means `no`. “Who will receive it?” fits neither.
+You can also use a built-in set of categories. If your app asks “Should I send this message?”, `classify("Go ahead", "builtins.confirmation")` can pick `yes`. “Please hold off” means `no`.
 
 ## Call and result
 
@@ -40,6 +38,8 @@ Call `classify(text, categories, settings?)` with at least one category. Each li
 | `score` | Match strength from 0 to 1, or `null` for `unknown`. Higher means stronger. A score of 0.9 does not imply a 90% chance of being correct. |
 | `source` | `local` for a decision inside the app, `self_hosted` for a server you run (even on the same machine), or `hosted` for NativeLang’s service. |
 | `alternatives` | When requested, other candidates with a `category` ID and a `score`, strongest first. On `unknown`, these can help your app ask a follow-up. |
+
+“The movie starts at seven” gives no opinion. Classify can return `unknown` so your app can leave that review unlabeled.
 
 Start with the defaults. Two settings change what you receive.
 
