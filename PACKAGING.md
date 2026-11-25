@@ -18,13 +18,7 @@ For example, a Python app could use the library once Python is listed as support
 
 Pin the software version and model together when you want to reproduce a result. A library version tells you which calls your code can make. A model ID tells you which model and decision settings interpret the text.
 
-Take `dm-qwen3-32b-nf4-r1` as an example. It identifies a decision model (`dm`) in the Qwen3 family, with about 32 billion parameters (`32b`), using a 4-bit weight format (`nf4`), revision one (`r1`). This illustrates the naming scheme. The first free model will be identified in its release.
-
-```text
-dm-<family>-<size>-<precision>-r<revision>
-```
-
-Size is expressed in millions (`m`) or billions (`b`) of model parameters. Use the published download size and memory requirements to judge whether a model fits your machine. Precision describes how the main weights are stored, for example `fp32`, `bf16`, `int8` or `nf4`. The profile lists components that use a different precision. Revisions start at `r1`. Changing the weights, tokenizer, text preparation or default decision thresholds gives that family, size and precision a new revision.
+`dm-classify-1.7b-fp32-r1.zip`
 
 ### What to download together
 
