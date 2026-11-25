@@ -5,7 +5,7 @@
   </picture>
 </h1>
 
-Classify sorts text into categories you choose.
+Classify text from categories you choose.
 
 *Example (pseudocode)*
 
