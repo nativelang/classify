@@ -28,11 +28,15 @@ Size is expressed in millions (`m`) or billions (`b`) of model parameters. Use t
 
 ### What to download together
 
-Each release will include a list of compatible files (the **release manifest**). Use it to find these details.
+For an embedded install, choose the runtime for your computer and the model listed with it. The native server download already includes both. The release page will link to these files.
 
-- Your language package and native library versions, supported operating systems and processors, and the model ID. Software versions follow semantic versioning, for example `v0.1.0`. The list also identifies the native binary interface (ABI) and HTTP API version, such as `/v1`.
-- Download links, file sizes, licenses and a SHA-256 fingerprint for each file. Verify the fingerprint against your download. If the model or library comes separately, copy it with its notices to the offline machine.
-- Native server archives and the Docker image name, tag and exact image fingerprint (digest).
+Each language package will pin a **release manifest** by its download URL and SHA-256 fingerprint. This file lists the compatible runtime and model, so installing the same SDK version selects the same artifacts. A later SDK release can pin a different model.
+
+For a manual install, first check the manifest’s SHA-256 against the fingerprint in the release announcement. Then use the verified manifest to find these details.
+
+- The runtime version, native binary interface (ABI), HTTP API version and model ID. Software versions follow semantic versioning, for example `0.1.0`.
+- Download links for the model and each supported computer’s runtime and server, with sizes, licenses and SHA-256 fingerprints. Verify the downloaded files before opening them. Copy the files and their notices to the offline machine.
+- The Docker image name, tag and exact fingerprint (digest).
 
 ## Hosted and premium delivery
 
