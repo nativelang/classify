@@ -7,3 +7,5 @@ Write for junior programmers and product managers with little technical backgrou
 Use everyday words and explain unfamiliar terms where they first matter. Prefer one familiar example when it makes the idea click. Keep exact fields, commands, and limits where someone needs them to use Classify correctly.
 
 When reviewing a guide or example, use the [Classify writing review](.agents/skills/review-classify-writing/SKILL.md).
+
+For every change, including documentation, work on a branch and open a pull request. Merge it into `main` after required checks and reviews pass.
