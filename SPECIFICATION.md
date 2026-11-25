@@ -1,128 +1,111 @@
-# Classify by NativeLang
-
-Classify is the classification library maintained by the NativeLang organization in [nativelang/classify](https://github.com/nativelang/classify). It classifies text against the options supplied by an application. This is the proposed version 1 contract for the planned packages and services. Examples use language-neutral notation unless they show HTTP or JSON.
+# Using Classify in your app
 
 ## First call
 
-Give `classify` a short string and the meanings your application recognizes. For a chat app asking “Should I send this message?”, the built-in `confirmation` option set supplies two IDs, `yes` and `no`.
+A movie app wants to sort reviews. Its list of choices, `ratings`, contains `good` and `bad`.
 
 ```text
-result = classify("Go ahead and send it", "builtins.confirmation")
-
-match result.status
-  "matched" → handle_confirmation(result.option)
-  "unknown" → ask_for_clarification()
+classify("This is a terrible movie", ratings).option → "bad"
 ```
 
-“Go ahead and send it” expresses `yes`. “Please hold off” expresses `no`. “Who will receive it?” fits neither and should yield `unknown`. Each call interprets only the supplied text and option definitions. The caller supplies any context needed to distinguish the options.
+Your app reads `option` to get the answer. For “The movie starts at seven,” neither choice fits. The result has status `unknown` and an empty option (`null`). Your app can leave that review unlabeled.
 
 ## Define your own options
 
-An **option** has a stable string `id` for application code, a plain-language `description` of its meaning, and optional `examples` of text expressing that meaning. An **option set** is a reusable list of these options. Built-in and custom sets work the same way.
+Here is the complete movie example in pseudocode for the proposed v1 API. Define the choices once. Each needs a name your code can use (`id`) and a sentence explaining what it means (`description`).
 
 ```text
-errors = [
-  {id: "temporary", description: "The message says the failure is temporary.",
-   examples: ["Service busy. Try again later."]},
-  {id: "invalid_input", description: "The message says the request contains invalid data.",
-   examples: ["Missing a required field."]}
+ratings = [
+  {id: "good", description: "The reviewer liked the movie."},
+  {id: "bad",  description: "The reviewer disliked the movie."}
 ]
 
-classify("Capacity exhausted. Please try again in a minute.", errors)
-→ {status: "matched", option: "temporary", score: 0.91, source: "local"}
-
-classify("Operation failed.", errors)
-→ {status: "unknown", option: null, score: null, source: "local"}
+result = classify("This is a terrible movie", ratings)
+result.option → "bad"
 ```
 
-The score is illustrative. The classification describes what the error message says. The application decides whether repeating that particular operation is safe.
+An option can also have an `examples` list alongside its `id` and `description`. Use it to show how people might express that choice. Classify only sees the text and choices you give it, so include any context it needs to tell them apart.
 
-## Name a set or compile a catalog
-
-For a single call, pass the option list directly. To reuse a list by name, register it with the client that will use it. The name selects exactly one set. Classify supplies names under `builtins.*`, and customers define names under `app.*`.
-
-```text
-app = client()
-app.defineOptions("app.errors", errors)
-app.classify("Service busy.", "app.errors")
-```
-
-A **catalog** is a saved collection of named option sets. When an application has many sets or examples, it can compile them once during development or release preparation. Give `compileCatalog` a mapping of names to option lists and a destination folder. It validates all sets, saves the prepared catalog, and returns a read-only handle ready to use.
-
-```text
-sets = {"app.errors": errors, "app.support": supportOptions}
-catalog = compileCatalog(sets, "./catalogs/support-v1")
-
-# Later, at application startup
-app = client(catalog = openCatalog("./catalogs/support-v1"))
-app.classify("Service busy.", "app.errors")
-```
-
-The folder contains everything needed to reuse those sets with a compatible Classify installation. Customers can copy it with their application and open it once per process, even offline. To update a catalog, compile the revised definitions into a new folder and open that version. An unknown set name or an incompatible catalog produces an error. A failed compile leaves existing catalogs usable.
-
-Catalogs are available in every tier. With the same options, settings, and local runtime, a compiled set yields the same local decision as its inline list. If fallback is enabled, only the selected set's definitions accompany the input and settings to the backend. Other sets stay local.
+For common choices you can also use a built-in set. If your app asks “Should I send this message?”, `classify("Go ahead", "builtins.confirmation")` can pick `yes`. “Please hold off” means `no`. “Who will receive it?” fits neither.
 
 ## Call and result
 
-`classify(text, options, settings?)` returns one result. Option IDs are case-sensitive and unique within a set. The text, IDs, and descriptions must be nonblank strings, and the set must contain at least one option. When supplied, `examples` is a list of nonblank strings.
+Call `classify(text, options, settings?)` with at least one option. Text, IDs, descriptions and individual examples must be nonblank strings. IDs are case-sensitive and unique within a set. If supplied, `examples` is a list.
 
-| Field | Meaning |
+| Field | What your app receives |
 | --- | --- |
-| `status` | `matched` when the text supports one clear choice. `unknown` when the evidence is weak, multiple options apply, or the text fits none of them. |
-| `option` | The exact ID of the selected option, or `null` for `unknown`. |
-| `score` | Strength of the selected match on a scale from 0 to 1, or `null` for `unknown`. Higher means a stronger match. A score of 0.9 does not imply a 90% chance of correctness. |
-| `source` | Where the final decision was made. `local` means the Classify library running in the application process, `self_hosted` means a customer-operated server (including one on loopback), and `hosted` means the managed service. |
-| `alternatives` | When requested, a ranked list of other candidates with their `option` IDs and scores. An `unknown` result can include candidates for a clarification prompt. |
+| `status` | `matched` for one clear choice. `unknown` when none fits, several apply, or the evidence is weak. |
+| `option` | The exact ID you supplied for the selected choice, or `null` for `unknown`. |
+| `score` | Match strength from 0 to 1, or `null` for `unknown`. Higher means stronger. A score of 0.9 does not imply a 90% chance of being correct. |
+| `source` | `local` for a decision inside the app, `self_hosted` for a server you run (even on the same machine), or `hosted` for NativeLang’s service. |
+| `alternatives` | When requested, other candidates with an `option` ID and a `score`, strongest first. On `unknown`, these can help your app ask a follow-up. |
 
-Reordering a set preserves the local decision. If adding a second option makes two choices apply to the same text, the expected result is `unknown`.
+Start with the defaults. Two settings change what you receive.
 
-Two settings are optional. Defaults suit a first call.
+- Set `minScore` to a number from 0 to 1 to set the lowest match strength you will accept. Omitting it uses the library or service default. A choice can meet the minimum and still be ambiguous.
+- Set `maxAlternatives` to a nonnegative integer to limit the list of alternatives. The default, 0, omits the field. The list excludes the selected choice. Requesting it leaves the decision unchanged.
 
-- `minScore` sets a minimum acceptable match score in [0, 1]. Omitting it uses the service or library default. A candidate that clears the minimum can still be ambiguous. Reordering the options never resolves a tie.
-- `maxAlternatives` is a nonnegative integer limiting how many candidates to return, highest score first, excluding a selected option. It defaults to 0, which omits the field. Asking for alternatives leaves the decision unchanged.
+Reordering the choices preserves the local decision. If two options both apply or tie for first place, the local result is `unknown`. Invalid input produces an `invalid_argument` error.
 
-Invalid inputs or settings produce an `invalid_argument` error. A valid but inconclusive request succeeds with `unknown`.
+## Name a set or compile a catalog
+
+If you use the same choices repeatedly, give the list a name on your client. Your names start with `app.` and built-in names start with `builtins.`. Each name selects one set.
+
+```text
+app = client()
+app.defineOptions("app.ratings", ratings)
+app.classify("I loved every minute", "app.ratings")
+```
+
+If you ship several named sets with your app, you can prepare them once and save them together in a **catalog**. Compile it during release preparation, then open the saved folder at startup. This is available in every planned edition.
+
+```text
+sets = {"app.ratings": ratings}
+catalog = compileCatalog(sets, "./catalogs/reviews-v1")
+
+# At startup
+app = client(catalog = openCatalog("./catalogs/reviews-v1"))
+app.classify("I loved every minute", "app.ratings")
+```
+
+Compiling validates every set and returns a read-only handle. You can copy the folder with your app and open it offline with a compatible installation. Given the same choices, settings and local runtime, a saved set gives the same decision as passing its list directly. To update the catalog, compile to a new folder. A failed compile leaves existing catalogs usable. An unknown name or an incompatible catalog produces an error.
 
 ## Free embedded and server use
 
-The free edition of Classify can run inside the application via `classify(text, options, settings?)`, or as a customer-operated HTTP server using Docker or a native macOS or Linux executable. Both forms work offline and require no account. Remote fallback is disabled by default.
-
-The native server defaults to `http://127.0.0.1:8080`. The Docker image binds `0.0.0.0:8080` inside the container and the documented run command publishes it on host loopback. The listen address and port are configurable. To classify directly, send `POST /v1/classify` with a JSON body containing `text`, the `options` list, and optional `settings`. When using a named set, resolve it to its option definitions for the HTTP body. The free loopback endpoint requires no credentials.
+The free edition is designed to run inside your app or on a server you run. Both work offline after installation and require no account. To call a server directly, send `POST /v1/classify` with a JSON body containing `text`, the list of `options`, and optional `settings`. Expand a named set to its definitions before sending it.
 
 ```sh
 curl --request POST 'http://127.0.0.1:8080/v1/classify' \
   --header 'Content-Type: application/json' \
   --data '{
-    "text": "Capacity exhausted. Please try again in a minute.",
+    "text": "This is a terrible movie",
     "options": [
-      {"id": "temporary", "description": "The message says the failure is temporary.",
-       "examples": ["Service busy. Try again later."]},
-      {"id": "invalid_input", "description": "The message says the request contains invalid data.",
-       "examples": ["Missing a required field."]}
+      {"id": "good", "description": "The reviewer liked the movie."},
+      {"id": "bad", "description": "The reviewer disliked the movie."}
     ]
   }'
 ```
 
-The server classifies the request immediately. HTTP 200 carries the same result fields for both `matched` and `unknown`. For this example the server could return
+A successful response uses HTTP 200 for either `matched` or `unknown`. For this example you might receive
 
 ```json
-{"status": "matched", "option": "temporary", "score": 0.91, "source": "self_hosted"}
+{"status": "matched", "option": "bad", "score": 0.91, "source": "self_hosted"}
 ```
+
+The native server defaults to `http://127.0.0.1:8080` on your machine. You can change its address and port. The [server guide](self-hosting/README.md) shows how to start the native or Docker server and reach it from the same machine.
 
 ## Opt-in fallback and paid offerings
 
-An application that wants a second decision on an embedded `unknown` configures fallback on its client.
+Normally the library handles the request inside your app. If you want a second opinion when it returns `unknown`, configure a **fallback** on the client. A local match always ends the call.
 
-| Client | Behavior |
+| Client setup | Where an uncertain request goes |
 | --- | --- |
-| `client()` | Uses Classify in process. The input stays in the application process. |
-| `client(fallback = hosted(apiKey))` | Sends an uncertain request to the paid managed service. |
-| `client(fallback = selfHosted(endpoint, credentials))` | Sends an uncertain request to the configured customer-operated endpoint. Pass `null` for credentials on the free loopback endpoint or supply credentials for a protected endpoint. |
+| `client()` | It stays inside the app. This is the default. |
+| `client(fallback = selfHosted(endpoint, credentials))` | To the server you specify. Pass `null` for credentials on the free local endpoint, or supply the credentials your server requires. |
+| `client(fallback = hosted(apiKey))` | To the planned paid NativeLang service. |
 
-Call `client.classify(text, options, settings?)` just as in the first example. A local match completes immediately. On a local `unknown`, an enabled fallback receives the input text, option IDs, descriptions, examples, and classification settings. It returns a final `matched` or `unknown` under the same contract. A self-hosted client contacts only its configured backend. The customer's deployment determines which LLM service, if any, subsequently receives the request.
+Use `client.classify(text, options, settings?)` with any of these clients. An enabled fallback sends the text, settings and just the selected set of option IDs, descriptions and examples. The server returns a final `matched` or `unknown`. If you run the server, its configuration determines whether it sends data to another service.
 
-The customer-operated server and the proposed paid managed service expose the same `POST /v1/classify` contract. Managed calls use a bearer API key. Direct HTTP calls go straight to the chosen server even when the embedded library could have answered.
+You can also call a server directly even when the library could answer. The planned managed service uses the same HTTP request with a bearer API key. [Hosted and licensed options](PACKAGING.md#hosted-and-premium-delivery)
 
-Premium models are a separate licensed offering. A customer can embed a premium model with Classify when its license permits. Premium package details and paid managed-service terms are still to be determined. [Packaging and licenses](PACKAGING.md)
-
-When an enabled fallback cannot complete, the call reports an operational error so the application can choose how to proceed. HTTP errors carry a stable `error.code` and a human-readable `error.message`. Bindings expose the same codes, including `invalid_argument` (400), `unauthenticated` (401), `forbidden` (403), `rate_limited` (429), and `unavailable` (backend failure, timeout, or connection failure).
+If the server cannot complete a request, including a fallback, your app receives an error. HTTP errors have an `error.code` for code and an `error.message` for people. Bindings use the same codes. Codes include `invalid_argument` (400), `unauthenticated` (401), `forbidden` (403), `rate_limited` (429), and `unavailable` for a backend failure, timeout or connection failure.
