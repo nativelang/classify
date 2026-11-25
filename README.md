@@ -20,6 +20,6 @@ The result is `"bad"`.
 The first release is in development. Downloads and install commands will appear on [GitHub Releases](https://github.com/nativelang/classify/releases).
 
 - **Use Classify in your app.** [Library installation guide](PACKAGING.md#free-downloads) · [Make your first call](SPECIFICATION.md#first-call)
-- **Run Classify on your machine.** [Set up the server with Docker or directly on macOS or Linux](self-hosting/README.md) · [Send a request](self-hosting/README.md#try-a-request)
+- **Run Classify on your machine.** [Set up the server with Docker or directly on Windows, macOS, or Linux](self-hosting/README.md) · [Send a request](self-hosting/README.md#try-a-request)
 
 Local use will be free and won’t require an API key. The [planned hosted service](SPECIFICATION.md#opt-in-fallback-and-paid-offerings) will use an API key.
