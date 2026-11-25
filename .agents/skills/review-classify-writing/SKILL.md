@@ -1,12 +1,16 @@
 ---
 name: review-classify-writing
-description: Review a Classify guide or example for clarity, brevity, and accurate customer expectations.
+description: Write or review a Classify explanation so a first-time reader can see the idea before learning the details.
 ---
 
-# Review a Classify explanation
+# Give the reader a useful first example
 
-Read the opening as a product manager. What decision does this page help you make, and when would you use it? Then read it as a junior programmer. If there’s a task, can you tell what to do next and what result to expect?
+Choose the smallest example that makes the point on sight. For Classify, “This is a terrible movie,” choices `good` and `bad`, result `bad` is enough. Now the reader knows why an app could use Classify to sort reviews. Show just the chosen label. Save optional settings and the full response for the reference.
 
-Test the explanation with a question that fits the page. For a guide to `unknown`, what happens when a scheduling app offers “reschedule” and “cancel,” but someone asks for directions? For a server guide, where does the app send the text?
+If a real call needs several fields, highlight the ones that explain the idea. Label a partial snippet as an excerpt, or use a named list such as `ratings` and show how to define it in the next example. Label shared examples as pseudocode so readers know they can skip setup to focus on the idea.
 
-Check claims about results against the [API specification](../../../SPECIFICATION.md) and claims about availability against the [release list](https://github.com/nativelang/classify/releases). Cut any sentence whose removal leaves the reader equally able to decide or act.
+For a language-specific example, install the stated package version in a clean environment. Run the published code exactly as shown, including imports and setup, and check the result it tells the reader to expect. If the binding is still planned, use labeled pseudocode until a real example can be tested.
+
+For a setup guide, start with what will be running and where the reader’s text goes. Follow with the command and what they should see when it works.
+
+Read just the opening as someone new to the product. Could they explain what happens in their own words? Then follow the example as a junior programmer. Put prerequisites before the step that needs them and keep exact syntax, limits, and error behavior within reach. A short example must still be accurate. [Check the API](../../../SPECIFICATION.md) and [what has shipped](https://github.com/nativelang/classify/releases).

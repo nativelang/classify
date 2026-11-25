@@ -1,37 +1,41 @@
-# Installing and versioning Classify
+# Choose how to run Classify
 
-The first release targets free, offline classification. You can use a language binding in your process, run a container, or install a native HTTP server alongside the binding. All three use the same native inference library, model profile and decision settings for a given release. After installation, classification works without an account, an API key or a network connection to NativeLang.
+The first release will be free and will work offline after installation. You can run Classify inside your app or send text to a server on your own machine. Both use the same model and the same rules for choosing an answer. Neither requires an account.
 
 ## Free downloads
 
-The [Classify releases page](https://github.com/nativelang/classify/releases) is the planned download index. The first binary release is pending. Each release will list supported languages, operating systems and processor architectures. Use its API documentation and install instructions for your target.
+The software is still in development. The [releases page](https://github.com/nativelang/classify/releases) will list the first downloads, the languages and computers they support, and the install commands.
 
-| Installation | What to obtain | How your application calls it |
-| --- | --- | --- |
-| Embedded library | The binding for your language, its compatible native inference library for your OS and processor, and the free model bundle. A binding may bundle these dependencies. | Call `classify(text, options)` in process. A binding can also register and reuse named option sets. |
-| Docker | The free OCI image pinned in the release. It includes the server executable, runtime and model. | Publish a local port and send `POST /v1/classify`. |
-| Native macOS or Linux server | The server archive for your OS and processor, including the compatible runtime and model. Install your language binding as well if you want to use the embedded API or its fallback client. | Start the server and send the same HTTP request as for Docker. |
+| If you want to… | Choose |
+| --- | --- |
+| Call Classify directly from your code | **Library.** Install the package for your language. It uses a native inference library (the code that runs the model) and the free model. The package may include both. |
+| Call Classify over HTTP and already use Docker | **Docker image.** The server, inference library and model come installed together. |
+| Run a server on macOS or Linux without Docker | **Native server.** Unpack the download for your computer and start the included server. You can install the language package alongside it. |
 
-For an embedded installation, select your language and platform in the release manifest. Follow the binding’s install instructions and use its listed runtime and model if they are separate downloads. Check each download against its listed SHA-256. Copy those files and their notices into the target environment for offline use. Registry package coordinates will be published with the first binding. [API examples](SPECIFICATION.md#first-call) · [Local server commands](self-hosting/README.md)
+For example, a Python app could use the library once Python is listed as supported. Several apps sharing one machine could all call the same server. The Docker and native servers accept the same requests. [Library example](SPECIFICATION.md#first-call) · [Server instructions](self-hosting/README.md)
 
 ## Library versions and model IDs
 
-Use the Classify release tag, such as `v0.1.0`, to identify a software release. Bindings and the native runtime use semantic versions. The release manifest pins their compatible versions together with the HTTP API major version, such as `/v1`. The classifier’s learned behavior has a separate model profile ID.
+Pin the software version and model together when you want to reproduce a result. A library version tells you which calls your code can make. A model ID tells you which model and decision settings interpret the text.
+
+Take `dm-qwen3-32b-nf4-r1` as an example. It identifies a decision model (`dm`) in the Qwen3 family, with about 32 billion parameters (`32b`), using a 4-bit weight format (`nf4`), revision one (`r1`). This illustrates the naming scheme. The first free model will be identified in its release.
 
 ```text
 dm-<family>-<size>-<precision>-r<revision>
 ```
 
-For example, `dm-potion-8m-fp32-r1` describes revision 1 of an 8-million-parameter family at FP32. `dm-qwen3-32b-nf4-r1` describes a nominal 32-billion-parameter family with 4-bit NF4 quantization. Both IDs and the software tag above illustrate the convention. The first shipped profile will be named in its release.
+Size is expressed in millions (`m`) or billions (`b`) of model parameters. Use the published download size and memory requirements to judge whether a model fits your machine. Precision describes how the main weights are stored, for example `fp32`, `bf16`, `int8` or `nf4`. The profile lists components that use a different precision. Revisions start at `r1`. Changing the weights, tokenizer, text preparation or default decision thresholds gives that family, size and precision a new revision.
 
-- `dm` means decision model. `m` and `b` express the family’s nominal parameter count in millions and billions. Download bytes and runtime memory are separate measurements.
-- The precision field identifies the main weight format, such as `fp32`, `bf16`, `int8` or `nf4`. The profile records any mixed-precision components.
-- The revision starts at `r1`. Within a family, size and precision, changed weights, tokenizer, preprocessing or default decision thresholds get a new revision. Pin the full ID and artifact digest to reproduce a configuration.
+### What to download together
 
-Each release manifest will give the binding package names and versions, native runtime version and ABI, supported targets, model ID, download URLs, file sizes, SHA-256 digests and license notices. For the server it will also give the native archive names and the container image tag and digest. This lets applications update a binding while deliberately retaining a compatible model profile.
+Each release will include a list of compatible files (the **release manifest**). Use it to find these details.
+
+- Your language package and native library versions, supported operating systems and processors, and the model ID. Software versions follow semantic versioning, for example `v0.1.0`. The list also identifies the native binary interface (ABI) and HTTP API version, such as `/v1`.
+- Download links, file sizes, licenses and a SHA-256 fingerprint for each file. Verify the fingerprint against your download. If the model or library comes separately, copy it with its notices to the offline machine.
+- Native server archives and the Docker image name, tag and exact image fingerprint (digest).
 
 ## Hosted and premium delivery
 
-NativeLang plans a paid hosted API with access to more powerful models. The endpoint, pricing and additional features will be published when available. A direct HTTP request goes to the endpoint you choose. An embedded client sends an uncertain request to a backend only when you configure fallback. [API and fallback behavior](SPECIFICATION.md#opt-in-fallback-and-paid-offerings)
+If you want NativeLang to run Classify for you, the planned paid service will offer more powerful models. Pricing, features and the service address will be announced later. You can call the service directly or configure your app to ask it only when a local result is uncertain. [How fallback works](SPECIFICATION.md#opt-in-fallback-and-paid-offerings)
 
-Customers who license premium models can deploy them in their own infrastructure using a licensed container, a compatible library and model bundle, or both as covered by their agreement. Premium artifacts will be delivered through the licensed channel. The public SDK and guides use the [MIT License](LICENSE). Each binary or model download includes its own terms and applicable third-party notices.
+If you want a premium model to run on your infrastructure, the planned license covers the delivery formats in your agreement, such as a container or a library and model bundle. The public code and guides use the [MIT License](LICENSE). Model and binary downloads carry their own terms and third-party notices.
