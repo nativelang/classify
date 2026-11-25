@@ -4,13 +4,13 @@ The first release will be free and will work offline after installation. You can
 
 ## Free downloads
 
-The software is still in development. The [releases page](https://github.com/nativelang/classify/releases) will list the first downloads, the languages and computers they support, and the install commands.
+The first release targets Windows, macOS, and Linux for both the embedded library and the native server. The [releases page](https://github.com/nativelang/classify/releases) will list the first downloads, the languages and computers they support, and the install commands.
 
 | If you want to… | Choose |
 | --- | --- |
 | Call Classify directly from your code | **Library.** Install the package for your language. It uses a native inference library (the code that runs the model) and the free model. The package may include both. |
 | Call Classify over HTTP and already use Docker | **Docker image.** The server, inference library and model come installed together. |
-| Run a server on macOS or Linux without Docker | **Native server.** Unpack the download for your computer and start the included server. You can install the language package alongside it. |
+| Run a server on your computer without Docker | **Native server.** Unpack the download for your computer and start the included server. You can install the language package alongside it. |
 
 For example, a Python app could use the library once Python is listed as supported. Several apps sharing one machine could all call the same server. The Docker and native servers accept the same requests. [Library example](SPECIFICATION.md#first-call) · [Server instructions](self-hosting/README.md)
 
