@@ -8,4 +8,6 @@ When the user supplies a clear example, keep it as the starting point. In the fi
 
 Keep a line of code, prose, or example only when removing it would cost the reader something or change behavior someone relies on.
 
+Use IBM Plex Sans for the Classify name, headings, and body text on pages we style. Use IBM Plex Mono for code. GitHub sets its own Markdown fonts, so use the wordmark for the README title and keep examples as copyable text. [IBM Plex fonts](https://github.com/IBM/plex)
+
 For every change, including documentation, work on a branch and open a pull request. Merge it into `main` after required checks and reviews pass.

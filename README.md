@@ -1,4 +1,9 @@
-# Classify by NativeLang
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/classify-dark.png">
+    <img src="assets/classify-light.png" width="201" height="76" alt="Classify by NativeLang">
+  </picture>
+</h1>
 
 Classify sorts text into categories you choose.
 
