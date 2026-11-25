@@ -12,7 +12,7 @@ Your app reads `option` to get the answer. For “The movie starts at seven,” 
 
 ## Define your own options
 
-Here is the complete movie example for the proposed v1 API. Define the choices once. Each needs a name your code can use (`id`) and a sentence explaining what it means (`description`).
+Here is the complete movie example in pseudocode for the proposed v1 API. Define the choices once. Each needs a name your code can use (`id`) and a sentence explaining what it means (`description`).
 
 ```text
 ratings = [
@@ -49,7 +49,7 @@ Reordering the choices preserves the local decision. If two options both apply o
 
 ## Name a set or compile a catalog
 
-If you use the same choices repeatedly, give the list a name on your client. Your names start with `app.` and built-in names start with `builtins.`. Each name selects one set.
+If you use the same choices repeatedly, give the list a name on your client. Your names start with `app.` and built-in names start with `builtins.`. Each name selects one set. Both examples below use pseudocode.
 
 ```text
 app = client()
