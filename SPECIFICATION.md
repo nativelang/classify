@@ -2,7 +2,7 @@
 
 ## First call
 
-A movie app wants to sort reviews. Its list of choices, `ratings`, contains `good` and `bad`.
+A movie app wants to sort reviews. In this pseudocode, its list of choices, `ratings`, contains `good` and `bad`.
 
 ```text
 classify("This is a terrible movie", ratings).option → "bad"
@@ -12,7 +12,7 @@ Your app reads `option` to get the answer. For “The movie starts at seven,” 
 
 ## Define your own options
 
-Here is the complete movie example in pseudocode for the proposed v1 API. Define the choices once. Each needs a name your code can use (`id`) and a sentence explaining what it means (`description`).
+Here is the complete movie example for the proposed v1 API. Define the choices once. Each needs a name your code can use (`id`) and a sentence explaining what it means (`description`).
 
 ```text
 ratings = [

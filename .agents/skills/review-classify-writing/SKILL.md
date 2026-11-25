@@ -7,7 +7,9 @@ description: Write or review a Classify explanation so a first-time reader can s
 
 Choose the smallest example that makes the point on sight. For Classify, “This is a terrible movie,” choices `good` and `bad`, result `bad` is enough. Now the reader knows why an app could use Classify to sort reviews. Show just the chosen label. Save optional settings and the full response for the reference.
 
-If a real call needs several fields, highlight the ones that explain the idea. Label a partial snippet as an excerpt, or use a named list such as `ratings` and show how to define it in the next example. Give readers a complete example when they are ready to try it.
+If a real call needs several fields, highlight the ones that explain the idea. Label a partial snippet as an excerpt, or use a named list such as `ratings` and show how to define it in the next example. Label shared examples as pseudocode so readers know they can skip setup to focus on the idea.
+
+For a language-specific example, install the stated package version in a clean environment. Run the published code exactly as shown, including imports and setup, and check the result it tells the reader to expect. If the binding is still planned, use labeled pseudocode until a real example can be tested.
 
 For a setup guide, start with what will be running and where the reader’s text goes. Follow with the command and what they should see when it works.
 

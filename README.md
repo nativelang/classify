@@ -1,6 +1,6 @@
 # Classify by NativeLang
 
-Suppose you want to sort movie reviews into `good` and `bad`. Give Classify those two choices in a list called `ratings`.
+Suppose you want to sort movie reviews into `good` and `bad`. In this pseudocode, `ratings` holds those two choices.
 
 ```text
 classify("This is a terrible movie", ratings).option → "bad"
