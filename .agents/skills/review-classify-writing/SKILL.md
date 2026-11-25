@@ -5,20 +5,20 @@ description: Write or review a Classify explanation so a first-time reader can s
 
 # Give the reader a useful first example
 
-Show the input, the actual choices, and the answer together. A reader should be able to understand the first example without looking up a variable.
+Describe the product in one sentence that also holds for a different use case. Put the concrete scenario in a labeled example below it. If the user gives you an example that answers it, keep the words and values that make it clear. Change it only if the change makes the idea clearer or corrects a misleading result.
 
-*Pseudocode*
+*Example (pseudocode)*
 
 ```text
-classify("This is a terrible movie", options=["good", "bad"])
+classify("This is a terrible movie", categories=["good", "bad"])
 ```
 
 The result is `"bad"`.
 
-In shared pseudocode, leave out setup and response fields that distract from the idea. Put the complete call in the API reference for readers who need it.
+**Review the example on its own.** Cover the surrounding paragraphs. Can you point to the text, name the categories, and say the answer? Keep real values inline. A movie app sorts reviews into categories, so call them categories. Show the answer directly. Fix the example before adding prose.
 
-For a language-specific example, install the stated package version in a clean environment. Run the published code exactly as shown, including imports and setup, and check the result it tells the reader to expect. If the binding is still planned, use labeled pseudocode until a real example can be tested.
+When the user has suggested a simpler version, compare it with the draft before merging. For each extra name, field, or step, ask what it teaches at this point. Cut anything the reader can learn later.
 
-For a setup guide, start with what will be running and where the reader’s text goes. Follow with the command and what they should see when it works.
+Check shared pseudocode against the behavior promised to customers. Keep internal data structures out of it. For a language-specific example, install the stated package version in a clean environment, run the published code exactly as shown, and check the result. Use labeled pseudocode while a binding is still planned. [API specification](../../../SPECIFICATION.md) · [Releases](https://github.com/nativelang/classify/releases)
 
-Read just the opening as someone new to the product. Could they explain what happens in their own words? Then follow the example as a junior programmer. Put prerequisites before the step that needs them and keep exact syntax, limits, and error behavior within reach. A short example must still be accurate. [Check the API](../../../SPECIFICATION.md) and [what has shipped](https://github.com/nativelang/classify/releases).
+For a setup guide, open with what will be running and where the reader’s text goes. Then give the command and what they should see when it works.
