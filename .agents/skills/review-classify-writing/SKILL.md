@@ -5,9 +5,17 @@ description: Write or review a Classify explanation so a first-time reader can s
 
 # Give the reader a useful first example
 
-Choose the smallest example that makes the point on sight. For Classify, “This is a terrible movie,” choices `good` and `bad`, result `bad` is enough. Now the reader knows why an app could use Classify to sort reviews. Show just the chosen label. Save optional settings and the full response for the reference.
+Show the input, the actual choices, and the answer together. A reader should be able to understand the first example without looking up a variable.
 
-If a real call needs several fields, highlight the ones that explain the idea. Label a partial snippet as an excerpt, or use a named list such as `ratings` and show how to define it in the next example. Label shared examples as pseudocode so readers know they can skip setup to focus on the idea.
+*Pseudocode*
+
+```text
+classify("This is a terrible movie", options=["good", "bad"])
+```
+
+The result is `"bad"`.
+
+In shared pseudocode, leave out setup and response fields that distract from the idea. Put the complete call in the API reference for readers who need it.
 
 For a language-specific example, install the stated package version in a clean environment. Run the published code exactly as shown, including imports and setup, and check the result it tells the reader to expect. If the binding is still planned, use labeled pseudocode until a real example can be tested.
 

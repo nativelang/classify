@@ -2,13 +2,17 @@
 
 ## First call
 
-A movie app wants to sort reviews. In this pseudocode, its list of choices, `ratings`, contains `good` and `bad`.
+To sort a movie review, give Classify the review and two choices.
+
+*Pseudocode*
 
 ```text
-classify("This is a terrible movie", ratings).option → "bad"
+classify("This is a terrible movie", options=["good", "bad"])
 ```
 
-Your app reads `option` to get the answer. For “The movie starts at seven,” neither choice fits. The result has status `unknown` and an empty option (`null`). Your app can leave that review unlabeled.
+The result is `"bad"`.
+
+“The movie starts at seven” gives no opinion. Classify can return `unknown` so your app can leave that review unlabeled.
 
 ## Define your own options
 

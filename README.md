@@ -1,10 +1,14 @@
 # Classify by NativeLang
 
-Suppose you want to sort movie reviews into `good` and `bad`. In this pseudocode, `ratings` holds those two choices.
+Give Classify a movie review and the choices your app cares about.
+
+*Pseudocode*
 
 ```text
-classify("This is a terrible movie", ratings).option → "bad"
+classify("This is a terrible movie", options=["good", "bad"])
 ```
+
+The result is `"bad"`.
 
 “The movie starts at seven” gives no opinion, so Classify can return `unknown`. Use your own choices to sort other kinds of text in your app. [See how to define the choices](SPECIFICATION.md#define-your-own-options)
 
