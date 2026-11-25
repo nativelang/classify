@@ -15,9 +15,9 @@ classify("This is a terrible movie", categories=["good", "bad"])
 
 The result is `"bad"`.
 
-**Review the example on its own.** Cover the surrounding paragraphs. Can you point to the text, name the categories, and say the answer? Keep real values inline. A movie app sorts reviews into categories, so call them categories. End the first example at the answer. Put ambiguous inputs and error cases in the reference where readers handle them.
+**Review the example on its own.** Cover the surrounding paragraphs. Can you point to the text, name the categories, and say the answer? Keep real values inline. End the first example at the answer. Put ambiguous inputs and error cases in the reference where readers handle them.
 
-When the user has suggested a simpler version, compare it with the draft before merging. For each extra name, field, or step, ask what it teaches at this point. Cut anything the reader can learn later.
+When the user has suggested a simpler version, compare it with the draft before merging. Keep a detail only if it helps the reader understand, decide, or act here. Move it to the step where it matters, or cut it.
 
 Check shared pseudocode against the behavior promised to customers. Keep internal data structures out of it. For a language-specific example, install the stated package version in a clean environment, run the published code exactly as shown, and check the result. Use labeled pseudocode while a binding is still planned. [API specification](../../../SPECIFICATION.md) · [Releases](https://github.com/nativelang/classify/releases)
 
