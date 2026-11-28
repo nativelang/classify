@@ -1,6 +1,8 @@
-# Rust
+# Classify a movie review in Rust
 
-Create a project and install Classify.
+You’ll need Rust and Cargo. Use an Apple Silicon Mac with macOS 15 or later, or [Debian 12-compatible Linux](../../SPECIFICATION.md#linux-requirements) on ARM64 or x64. On Windows or an Intel Mac, [run the local server](../../self-hosting/README.md).
+
+Create a project and add Classify.
 
 ```sh
 cargo new movie
@@ -8,7 +10,7 @@ cd movie
 cargo add classify --git https://github.com/nativelang/classify --tag v0.2.0
 ```
 
-Save this as `src/main.rs`.
+Replace the contents of `src/main.rs` with this code.
 
 ```rust
 use classify::classify;
@@ -22,4 +24,16 @@ fn main() -> std::io::Result<()> {
 }
 ```
 
-Run `cargo run`. It prints `negative`. The first call downloads the model and runtime. Later calls use the local cache. A successful call returns `None` when no category fits.
+The first run downloads the model (about 1.6 GB). Later runs work offline.
+
+```sh
+cargo run
+```
+
+Expected output
+
+```text
+negative
+```
+
+If no category fits, `classify` returns `Ok(None)`.

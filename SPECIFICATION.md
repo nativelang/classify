@@ -1,16 +1,8 @@
 # Classify API
 
-The [language packages](README.md#examples) return the matching category or an empty result when Classify is unsure. If the cached installation is damaged, move its platform folder out of `~/.nativelang/classify/` and call Classify again to download a fresh copy.
-
-## Deployment options
-
-**Share one loaded model across apps.** Loading a model takes time and memory. If several programs on your machine use Classify, or your script starts and stops often, have them send text to one server over HTTP. The server keeps the model loaded even after a program exits. This also works on Windows and Intel Macs. [Install and start the server](self-hosting/README.md)
-
-**Call Classify inside a C program.** Link the C library when you want your program to load the model itself. Open it at startup, classify as many texts as you need, and close it when you’re done. This works without a separate server. [Build the C example for your platform](examples/c/)
-
 ## Call and result
 
-The server listens on `127.0.0.1:8080` by default. To use another port, [start it with `--port`](self-hosting/README.md#use-a-different-port).
+With the [local server running](self-hosting/README.md), send it some text and the categories to choose from. Run this in a second terminal on macOS or Linux.
 
 ```sh
 curl http://127.0.0.1:8080/v1/classify \
@@ -23,6 +15,16 @@ The movie request returned this result on Apple Silicon with the Compact model.
 ```json
 {"status":"matched","category":"negative","score":0.9844168916948893,"source":"self_hosted"}
 ```
+
+<details>
+<summary>Send the same request in Windows PowerShell</summary>
+
+```powershell
+$body = '{"text":"This is a terrible movie","categories":["positive","negative","neutral"]}'
+Invoke-RestMethod -Uri http://127.0.0.1:8080/v1/classify -Method Post -ContentType application/json -Body $body
+```
+
+</details>
 
 | Field | Meaning |
 | --- | --- |
@@ -41,7 +43,7 @@ Send 1–16 categories. A string such as `"negative"` supplies both the ID and i
 
 ```json
 {
-  "text": "My order was due yesterday.",
+  "text": "My package arrived on time.",
   "categories": [
     {"id": "late", "description": "A delivery missed its promised date.", "examples": ["My parcel is overdue."]},
     {"id": "on_time", "description": "A delivery arrived as scheduled."}
@@ -49,11 +51,13 @@ Send 1–16 categories. A string such as `"negative"` supplies both the ID and i
 }
 ```
 
+With Compact, this request returns the category ID `on_time`.
+
 IDs must be unique and are case-sensitive. Text, IDs, descriptions and example phrases must be nonblank.
 
 ## Optional settings
 
-Add a `settings` object to the request to change either default.
+To change the server address, [start the server on a different port](self-hosting/README.md#use-a-different-port). To change how Classify selects categories, add a `settings` object to the request.
 
 | Setting | Effect |
 | --- | --- |
@@ -62,6 +66,20 @@ Add a `settings` object to the request to change either default.
 
 Asking for alternatives preserves the decision. On a match, the list excludes the selected category. On `unknown`, it can help your app suggest choices.
 
+## Where the language packages store the model
+
+On the first call, the package downloads the Compact model and the program that runs it (about 1.6 GB together). It checks the download and saves the files under `~/.nativelang/classify/` in your home folder. Projects using the same version under your account reuse that copy, even across languages. Later calls work offline.
+
+<a id="deployment-options"></a>
+
+To share a model already loaded in memory, [run a local server](self-hosting/README.md). To load it directly in a C program, [use the C library](examples/c/).
+
+## Linux requirements
+
+The language packages run on ARM64 or x64 Linux with glibc and libstdc++ compatible with Debian 12 (Bookworm). On a minimal installation, the first download needs `curl`, `tar`, `sha256sum`, and `flock`. On Debian 12, these come from the `curl`, `tar`, `coreutils`, and `util-linux` packages.
+
 ## Errors
 
 The server returns HTTP 400 with `error.code` set to `invalid_argument` for an invalid classification request, such as an empty category list. A classifier failure returns HTTP 503 with code `unavailable`. Read `error.message` for the reason.
+
+If a language package reports an incomplete installation, move the platform folder named in the error out of `~/.nativelang/classify/`. Run the same call again to download a fresh copy.

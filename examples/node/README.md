@@ -1,10 +1,14 @@
-# JavaScript and TypeScript
+# Classify a movie review in JavaScript or TypeScript
 
-Install the package and run the example with Node.js 22.18 or later on macOS 15+ with Apple Silicon or Debian 12-compatible Linux on ARM64 or x64.
+You’ll need Node.js 22.18 or later. Use an Apple Silicon Mac with macOS 15 or later, or [Debian 12-compatible Linux](../../SPECIFICATION.md#linux-requirements) on ARM64 or x64. On Windows or an Intel Mac, [run the local server](../../self-hosting/README.md).
+
+Install Classify in an empty folder.
 
 ```sh
 npm install @nativelang/classify
 ```
+
+Save this as `movie.mjs`.
 
 ```javascript
 import { classify } from "@nativelang/classify";
@@ -13,6 +17,16 @@ const category = await classify("This is a terrible movie", ["positive", "negati
 console.log(category);
 ```
 
-Save as `movie.mjs` and run `node movie.mjs`. For TypeScript, save as `movie.mts` and run `node movie.mts`. Both print `negative`. If no category fits, `classify` returns `null`.
+The first run downloads the model (about 1.6 GB). Later runs work offline.
 
-The first call downloads and verifies the local runtime and model. Later runs reuse the download, including offline. Calls in the same app reuse the running classifier.
+```sh
+node movie.mjs
+```
+
+Expected output
+
+```text
+negative
+```
+
+For TypeScript, save the same code as `movie.mts` and run `node movie.mts`. Both versions return `null` when no category fits. Calls in the same app reuse the running classifier.

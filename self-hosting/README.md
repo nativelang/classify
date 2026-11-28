@@ -1,10 +1,14 @@
 # Install and start the Classify server
 
+If several scripts use Classify, one server can keep the model loaded between runs. Each script sends its text and categories over HTTP and gets a result back. You can also use the server to try Classify on Windows or an Intel Mac.
+
+To load the model directly in a C program, follow the [C example](../examples/c/). To run the server in a container, follow the [Docker guide](manual.md#docker).
+
 ## 1. Install
 
-Open a terminal on the computer where your app will run. In an empty folder, run the installer. It downloads the server and model (about 1.6–2.5 GB) into `classify-server`.
+Open a terminal in an empty folder. The installer creates a `classify-server` folder and downloads the model for your computer.
 
-**macOS 15+ or Debian 12-compatible Linux**
+**macOS or Linux.** Use macOS 15 or later, or Debian 12-compatible Linux on ARM64 or x64. The installer downloads Compact (about 1.6 GB) on Apple Silicon and Linux, or Standard (about 2.5 GB) on Intel Macs.
 
 ```sh
 curl -fLO https://raw.githubusercontent.com/nativelang/classify/120966b8f282730af7f3e22b7e09c3e742a64c3c/self-hosting/install.sh && sh install.sh
@@ -13,7 +17,7 @@ curl -fLO https://raw.githubusercontent.com/nativelang/classify/120966b8f282730a
 <details>
 <summary>Windows</summary>
 
-In PowerShell, run the installer.
+On x64 or ARM64 Windows, run this in PowerShell to install Standard (about 2.5 GB).
 
 ```powershell
 curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/120966b8f282730af7f3e22b7e09c3e742a64c3c/self-hosting/install.cmd
@@ -32,9 +36,11 @@ From the same folder, start the server. It listens at `http://127.0.0.1:8080` by
 ./classify-server/start
 ```
 
-On Windows, run `.\classify-server\start.cmd`. The launcher starts the native executable (`classify serve` or `classify.exe serve`).
+On Windows, run `.\classify-server\start.cmd`.
 
-When [the health page](http://127.0.0.1:8080/health) says `ok`, [send a request](../SPECIFICATION.md#call-and-result) in another terminal. Press Ctrl+C in the server terminal to stop it.
+## 3. Classify a movie review
+
+Leave the server terminal open. When the [health page](http://127.0.0.1:8080/health) says `ok`, open a second terminal and [run the movie request](../SPECIFICATION.md#call-and-result). Look for `negative` in the `category` field. Press Ctrl+C in the server terminal when you’re done.
 
 ### Use a different port
 

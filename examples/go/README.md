@@ -1,4 +1,6 @@
-# Go
+# Classify a movie review in Go
+
+You’ll need Go 1.20 or later. Use an Apple Silicon Mac with macOS 15 or later, or [Debian 12-compatible Linux](../../SPECIFICATION.md#linux-requirements) on ARM64 or x64. On Windows or an Intel Mac, [run the local server](../../self-hosting/README.md).
 
 In an empty folder, create a module and install Classify.
 
@@ -30,4 +32,16 @@ func main() {
 }
 ```
 
-Run `go run main.go`. It prints `negative`. The first call downloads the model and runtime. Later calls use the local cache. A successful call returns a nil label when no category fits.
+The first run downloads the model (about 1.6 GB). Later runs work offline.
+
+```sh
+go run main.go
+```
+
+Expected output
+
+```text
+negative
+```
+
+If no category fits, `Classify` returns a `nil` label and a `nil` error.
