@@ -14,9 +14,8 @@ First, [install and start the Classify server on your laptop or server](self-hos
 ```text
 # Pseudocode
 classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
+# The result is "negative".
 ```
-
-The result is `"negative"`.
 
 Try it in your language.
 
