@@ -10,16 +10,22 @@ Classify text from categories you choose.
 *Example (pseudocode)*
 
 ```text
-classify("This is a terrible movie", categories=["good", "bad"])
+classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
 ```
 
-The result is `"bad"`.
+The result is `"negative"`.
+
+## Examples
+
+The C example runs in your app. The other examples call the local server.
+
+[Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/) · [C](examples/c/)
 
 ## Install and use
 
 Compact r3 and Standard r1 run offline after installation. Download a server with its model included, or embed the C library and load the model separately. [Published downloads](https://github.com/nativelang/classify-artifacts/releases)
 
-- **Use Classify in your app.** [Download the C SDK and model](PACKAGING.md#free-downloads) · [C example](examples/classify.c)
+- **Use Classify in your app.** [Download the C SDK and model](PACKAGING.md#free-downloads) · [C example](examples/c/classify.c)
 - **Run Classify on your machine.** [Set up the server with Docker or directly on Windows, macOS, or Linux](self-hosting/README.md) · [Send a request](self-hosting/README.md#try-a-request)
 - **Run the large model on your infrastructure.** The model and its GPU serving software are available under an enterprise license. [Enterprise licensing](PACKAGING.md#enterprise-licensing)
 

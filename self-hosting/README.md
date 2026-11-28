@@ -72,12 +72,12 @@ Keep the extracted files together so the executable can find its model. To stop 
 
 ## Try a request
 
-With the native server running, open a second terminal. With Docker, use the same terminal. Ask it whether a movie review is good or bad. The local server requires no API key.
+With the native server running, open a second terminal. With Docker, use the same terminal. Ask it whether a movie review is positive, negative, or neutral. The local server requires no API key.
 
 **Windows (PowerShell)**
 
 ```powershell
-$review = '{"text":"This is a terrible movie","categories":["good","bad"]}'
+$review = '{"text":"This is a terrible movie","categories":["positive","negative","neutral"]}'
 Invoke-RestMethod -Uri 'http://127.0.0.1:8080/v1/classify' -Method Post -ContentType 'application/json' -Body $review
 ```
 
@@ -88,8 +88,8 @@ curl --request POST 'http://127.0.0.1:8080/v1/classify' \
   --header 'Content-Type: application/json' \
   --data '{
     "text": "This is a terrible movie",
-    "categories": ["good", "bad"]
+    "categories": ["positive", "negative", "neutral"]
   }'
 ```
 
-With compact r3, the response shows `bad` for the category and `self_hosted` for the source. Change just the text to “The movie starts at seven.” Compact returns `unknown` with `null` for the category and score. [All response fields](../SPECIFICATION.md#call-and-result)
+With compact r3, the response shows `negative` for the category and `self_hosted` for the source. Try “I neither liked nor disliked this movie.” for a `neutral` match. Compact r3 returned `unknown` for “The movie starts at seven.” [All response fields](../SPECIFICATION.md#call-and-result)

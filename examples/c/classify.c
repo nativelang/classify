@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
     }
 
     const char *request =
-        "{\"text\":\"This is a terrible movie\",\"categories\":[\"good\",\"bad\"]}";
+        "{\"text\":\"This is a terrible movie\",\"categories\":[\"positive\",\"negative\",\"neutral\"]}";
     char *error = NULL;
     classify_handle *model = classify_open(argv[1], &error);
     char *result = NULL;

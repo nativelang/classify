@@ -33,7 +33,7 @@ Optional accelerated SDKs use the same model ZIPs. Choose Metal for an Apple Sil
 
 ## Make a C call on Apple Silicon
 
-The [C example](examples/classify.c) classifies “This is a terrible movie” using the categories `good` and `bad`. With a C compiler installed, start in the root of a checkout of this repository. Save the compact ZIP and its [Apple Silicon portable SDK](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-runtime-0.1.0-aarch64-apple-darwin.tar.gz) there. First verify the two archives.
+The [C example](examples/c/classify.c) classifies “This is a terrible movie” using the categories `positive`, `negative`, and `neutral`. With a C compiler installed, start in the root of a checkout of this repository. Save the compact ZIP and its [Apple Silicon portable SDK](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-runtime-0.1.0-aarch64-apple-darwin.tar.gz) there. First verify the two archives.
 
 ```sh
 shasum -a 256 -c - <<'SUMS'
@@ -48,12 +48,12 @@ When both files report `OK`, unpack them, compile the example and run it.
 mkdir sdk
 tar -xzf classify-runtime-0.1.0-aarch64-apple-darwin.tar.gz -C sdk
 unzip -q dm-classify-compact-r3.zip -d model
-cc -std=c11 -Isdk/include examples/classify.c -Lsdk/lib -lclassify_core \
+cc -std=c11 -Isdk/include examples/c/classify.c -Lsdk/lib -lclassify_core \
   -Wl,-rpath,@executable_path/sdk/lib -o classify-example
 ./classify-example model/profile.json
 ```
 
-The compact portable SDK returned `"status":"matched"`, `"category":"bad"` and `"source":"local"` on Apple Silicon. For repeated requests, open the profile once, reuse the handle and free each returned string with `classify_free`. Keep the extracted model directory and notices together.
+The compact portable SDK returned `"status":"matched"`, `"category":"negative"` and `"source":"local"` on Apple Silicon. For repeated requests, open the profile once, reuse the handle and free each returned string with `classify_free`. Keep the extracted model directory and notices together.
 
 On Linux, use the SDK for your CPU and change the linker option to `'-Wl,-rpath,$ORIGIN/sdk/lib'`. On Windows, use the matching MSVC developer shell, include `sdk\include`, link `sdk\lib\classify_core.lib`, and place `sdk\bin\classify_core.dll` beside your executable.
 

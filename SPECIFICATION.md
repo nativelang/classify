@@ -5,10 +5,10 @@
 *Example (pseudocode)*
 
 ```text
-classify("This is a terrible movie", categories=["good", "bad"])
+classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
 ```
 
-The result is `"bad"`.
+The result is `"negative"`.
 
 <a id="define-your-own-options"></a>
 
@@ -37,7 +37,7 @@ The C SDK and HTTP server accept one to sixteen categories per request. Each lis
 | `source` | `local` for a decision inside the app, `self_hosted` for a server you run (even on the same machine), or `hosted` for NativeLang’s service. |
 | `alternatives` | When requested, other candidates with a `category` ID and a `score`, strongest first. On `unknown`, these can help your app ask a follow-up. |
 
-“The movie starts at seven” gives no opinion. Classify can return `unknown` so your app can leave that review unlabeled.
+With the same three categories, Compact r3 returned `positive` for “This movie was fantastic!” and `neutral` for “I neither liked nor disliked this movie.” For “The movie starts at seven.” it returned `unknown`, with a null category.
 
 Start with the defaults. Two settings change what you receive.
 
@@ -52,14 +52,14 @@ The following examples describe a planned client API. With the current C SDK and
 
 ```text
 app = client()
-app.defineCategories("app.ratings", ["good", "bad"])
+app.defineCategories("app.ratings", ["positive", "negative", "neutral"])
 app.classify("I loved every minute", "app.ratings")
 ```
 
 If you ship several named sets with your app, you can prepare them once and save them together in a **catalog**. Compile it during release preparation, then open the saved folder at startup. This is available in every planned edition.
 
 ```text
-sets = {"app.ratings": ["good", "bad"]}
+sets = {"app.ratings": ["positive", "negative", "neutral"]}
 catalog = compileCatalog(sets, "./catalogs/reviews-v1")
 
 # At startup
@@ -78,14 +78,14 @@ curl --request POST 'http://127.0.0.1:8080/v1/classify' \
   --header 'Content-Type: application/json' \
   --data '{
     "text": "This is a terrible movie",
-    "categories": ["good", "bad"]
+    "categories": ["positive", "negative", "neutral"]
   }'
 ```
 
 A successful response uses HTTP 200 for either `matched` or `unknown`. Compact r3 on Apple Silicon returned
 
 ```json
-{"status": "matched", "category": "bad", "score": 0.9227963089685403, "source": "self_hosted"}
+{"status": "matched", "category": "negative", "score": 0.9844168916948893, "source": "self_hosted"}
 ```
 
 The native server defaults to `http://127.0.0.1:8080` on your machine. You can change its address and port. The [server guide](self-hosting/README.md) shows how to start the native or Docker server and reach it from the same machine.
