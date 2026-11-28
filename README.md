@@ -13,7 +13,7 @@ classify("This is a terrible movie", categories=["positive", "negative", "neutra
 # The result is "negative".
 ```
 
-Turn a sentence into a value you can use in a `switch` statement. Classify runs locally, so you don’t need a large language model API.
+Your app can make decisions based on what a sentence means. Classify runs locally, so you don’t need to call a large language model API or pay per token.
 
 <a id="examples"></a>
 
