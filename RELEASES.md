@@ -11,7 +11,7 @@ Choose a model ZIP and its runtime archive for your operating system and process
 | [Compact r3](https://huggingface.co/nativelang/classify-models/resolve/47ab2a3f4280647a64e6ac307f262a74a1b4694e/models/dm-classify-compact-r3.zip) | 1,578,269,501 | `37f6090c9760d46543fff5587ba1cdeef84cf55e02723a5923a3c866364deaa9` |
 | [Standard r1](https://huggingface.co/nativelang/classify-models/resolve/47ab2a3f4280647a64e6ac307f262a74a1b4694e/models/dm-classify-standard-r1.zip) | 2,450,864,999 | `1345fb5f8a2ec9ee30d46acc8ec4bcc28991a0c4442353d5652f83d2ce36de40` |
 
-GitHub also carries the [compact ZIP](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-model/dm-classify-compact-r3.zip) and the [standard ZIP in two parts](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-model-manual). After reassembling the standard ZIP, check its SHA-256 against the table.
+GitHub also carries the [compact ZIP](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-model/dm-classify-compact-r3.zip) and the [standard ZIP in two parts](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-model-manual). To [join the two parts](self-hosting/manual.md#join-the-two-parts), use the model release’s index checksum `28c96430f276902fbd88aba50110bc73af6cec3cacc6aa2445baa09e911ecb2f`. Check the completed ZIP against the table.
 
 | Portable C SDK | Supported platforms | Manifest SHA-256 |
 | --- | --- | --- |
