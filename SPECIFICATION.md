@@ -74,6 +74,10 @@ On the first call, the package downloads the Compact model and the program that 
 
 To share a model already loaded in memory, [run a local server](self-hosting/README.md). To load it directly in a C program, [use the C library](examples/c/).
 
+## Python platform support
+
+The Python package requires Python 3.9 or later. Its local runtime supports Apple Silicon on macOS 15 or later and [Debian 12-compatible Linux](#linux-requirements) on ARM64 or x64. On Windows and Intel Macs, applications can call the [local HTTP server](self-hosting/README.md).
+
 ## Linux requirements
 
 The language packages run on ARM64 or x64 Linux with glibc and libstdc++ compatible with Debian 12 (Bookworm). On a minimal installation, the first download needs `curl`, `tar`, `sha256sum`, and `flock`. On Debian 12, these come from the `curl`, `tar`, `coreutils`, and `util-linux` packages.
