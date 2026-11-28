@@ -15,8 +15,10 @@ GitHub also carries the [Compact ZIP](https://github.com/nativelang/classify-art
 
 | Portable C SDK | Supported platforms | Manifest SHA-256 |
 | --- | --- | --- |
-| [Compact manifest](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/manifest.json) | Apple Silicon with macOS 15+, or Linux ARM64 or x64 | `249a88b696c8879e05018cf107f63399e6a3214b62f2eaa22400b48ff051d9ef` |
+| [Compact manifest](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/manifest.json) | Apple Silicon with macOS 15+, or Linux ARM64 or x64 | `68f080308b42e6df3587b98a22340b12c0419ffef7417decb33edf91a1134ac6` |
 | [Standard manifest](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1/manifest.json) | macOS 15+, Linux, or Windows on ARM64 or x64 | `256d64d3f8a62fb103ce9ed59eda419fb4284f2ef53281a550ee2d2de5a43d05` |
+
+Compact 0.1.1 selects the available CPU instructions at startup and uses Metal on Apple Silicon. To run on the Mac CPU, launch your app with `CLASSIFY_DEVICE=cpu`.
 
 The native Linux packages require glibc and libstdc++ compatible with Debian 12 (Bookworm). On Windows, install the current [Microsoft Visual C++ v14 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) for your app’s architecture (x64 or ARM64).
 

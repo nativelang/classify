@@ -1,7 +1,7 @@
 # Classify a movie review in Go
 
 ```sh
-go get github.com/nativelang/classify/bindings/go@v0.2.0
+go get github.com/nativelang/classify/bindings/go@v0.2.2
 ```
 
 ```go

@@ -19,7 +19,7 @@ Use a C compiler and glibc and libstdc++ compatible with Debian 12 (Bookworm). O
 
 ```sh
 mkdir sdk
-tar -xzf classify-runtime-0.1.0-*-unknown-linux-gnu.tar.gz -C sdk
+tar -xzf classify-runtime-0.1.1-*-unknown-linux-gnu.tar.gz -C sdk
 unzip -q dm-classify-compact-r3.zip -d model
 cc -std=c11 -Isdk/include examples/c/classify.c -Lsdk/lib -lclassify_core \
   '-Wl,-rpath,$ORIGIN/sdk/lib' -o classify-example
@@ -34,7 +34,7 @@ Install the Xcode Command Line Tools if you need a C compiler (`xcode-select --i
 
 ```sh
 mkdir sdk
-tar -xzf classify-runtime-0.1.0-*-apple-darwin.tar.gz -C sdk
+tar -xzf classify-runtime-*-apple-darwin.tar.gz -C sdk
 unzip -q dm-classify-*.zip -d model
 cc -std=c11 -Isdk/include examples/c/classify.c -Lsdk/lib -lclassify_core \
   -Wl,-rpath,@executable_path/sdk/lib -o classify-example
@@ -57,9 +57,9 @@ Copy-Item sdk\bin\classify_core.dll .
 
 The import library is used when building. The executable needs the DLL when it runs. On every platform, keep the extracted model files and license notices together.
 
-[linux-arm]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-runtime-0.1.0-aarch64-unknown-linux-gnu.tar.gz
-[linux-x64]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-runtime-0.1.0-x86_64-unknown-linux-gnu.tar.gz
-[mac-arm]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-runtime-0.1.0-aarch64-apple-darwin.tar.gz
+[linux-arm]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-runtime-0.1.1-aarch64-unknown-linux-gnu.tar.gz
+[linux-x64]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-runtime-0.1.1-x86_64-unknown-linux-gnu.tar.gz
+[mac-arm]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-runtime-0.1.1-aarch64-apple-darwin.tar.gz
 [mac-x64]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1/classify-runtime-0.1.0-x86_64-apple-darwin.tar.gz
 [win-arm]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1/classify-runtime-0.1.0-aarch64-pc-windows-msvc.zip
 [win-x64]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1/classify-runtime-0.1.0-x86_64-pc-windows-msvc.zip
