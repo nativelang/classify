@@ -32,7 +32,7 @@ def build(folder):
             subprocess.run(["go", "build", "-trimpath", "-buildvcs=false", "-ldflags=-s -w -buildid=", "-o", binary, "."],
                            env=dict(env, GOOS=system, GOARCH=arch), cwd=APP, check=True)
             path = folder / f"classify-service-{target}.tar.gz"
-            with path.open("wb") as f, gzip.GzipFile(filename="", fileobj=f, mode="wb", mtime=0) as gz, tarfile.open(fileobj=gz, mode="w") as tar:
+            with path.open("wb") as f, gzip.GzipFile(filename="", fileobj=f, mode="wb", mtime=0, compresslevel=9) as gz, tarfile.open(fileobj=gz, mode="w") as tar:
                 for name, data, mode in ((exe, binary.read_bytes(), 0o755), ("LICENSE.txt", license_text, 0o644)):
                     item = tarfile.TarInfo(name)
                     item.size = len(data)

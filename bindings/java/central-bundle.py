@@ -2,6 +2,7 @@
 
 import argparse
 import hashlib
+import os
 from pathlib import Path
 import re
 import shutil
@@ -59,8 +60,13 @@ def main():
         shutil.copyfile(java / "central.pom", files / f"{artifact}.pom")
 
         for path in sorted(files.iterdir()):
-            subprocess.run(["gpg", "--armor", "--local-user", args.fingerprint,
-                            "--detach-sign", path], check=True)
+            command = ["gpg", "--armor", "--local-user", args.fingerprint, "--detach-sign", str(path)]
+            passphrase = os.environ.get("CENTRAL_SIGNING_PASSPHRASE")
+            if passphrase is None:
+                subprocess.run(command, check=True)
+            else:
+                command[1:1] = ["--batch", "--pinentry-mode", "loopback", "--passphrase-fd", "0"]
+                subprocess.run(command, input=(passphrase + "\n").encode(), check=True)
             data = path.read_bytes()
             for algorithm in ("md5", "sha1", "sha256", "sha512"):
                 checksum = hashlib.new(algorithm, data).hexdigest()

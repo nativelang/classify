@@ -28,5 +28,10 @@
   "scripts": {
     "prepack": "node pack-files.js",
     "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nativelang/classify.git",
+    "directory": "bindings/node"
   }
 }
