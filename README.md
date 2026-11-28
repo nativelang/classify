@@ -13,6 +13,8 @@ classify("This is a terrible movie", categories=["positive", "negative", "neutra
 # The result is "negative".
 ```
 
+Turn a sentence into a value you can use in a `switch` statement. Classify runs locally, so you don’t need a large language model API.
+
 <a id="examples"></a>
 
 Try Classify in your language.
