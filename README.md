@@ -7,7 +7,7 @@
 
 Give Classify some text and a list of categories. It tells you which one fits, if any.
 
-First, [install and start the Classify server on your laptop or server](self-hosting/README.md). Then call it from your app.
+To use Classify over HTTP, first [install and start the Classify server on your laptop or server](self-hosting/README.md). Then call it from your app.
 
 ```text
 # Pseudocode
