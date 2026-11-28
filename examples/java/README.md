@@ -6,7 +6,7 @@ Add Classify under `<dependencies>` in your Maven `pom.xml`.
 <dependency>
   <groupId>io.github.nativelang</groupId>
   <artifactId>classify</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.2</version>
 </dependency>
 ```
 
