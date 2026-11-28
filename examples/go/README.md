@@ -1,6 +1,6 @@
 # Go
 
-[Start the Classify server](../../self-hosting/README.md). With Go installed, save this as `main.go`.
+[Start the local server](../../self-hosting/README.md). With Go installed, save this as `main.go`.
 
 ```go
 package main

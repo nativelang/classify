@@ -1,15 +1,15 @@
 # Install and start the Classify server
 
-Run these steps on the laptop or server where your app will run.
+Install Classify on the same computer as your app.
 
 ## 1. Install once
 
-With Python 3.8 or later installed, open a terminal in an empty folder. These commands download Classify and its model (about 1.6–2.5 GB).
+With Python 3.8 or later, run the installer in an empty folder. It selects the server for your computer and downloads it with the model (about 1.6–2.5 GB).
 
 **macOS 15+ or Debian 12-compatible Linux**
 
 ```sh
-curl -fLO https://raw.githubusercontent.com/nativelang/classify/a21ce7604c869e18e78145f2cd49a703346b56a9/self-hosting/start-classify.py && python3 start-classify.py install
+curl -fLO https://raw.githubusercontent.com/nativelang/classify/7856092ac26637fa7d1bac026df94b2020b3da10/self-hosting/start-classify.py && python3 start-classify.py install
 ```
 
 <details>
@@ -18,7 +18,7 @@ curl -fLO https://raw.githubusercontent.com/nativelang/classify/a21ce7604c869e18
 Install the [Microsoft Visual C++ v14 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) for your processor if needed.
 
 ```powershell
-curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/a21ce7604c869e18e78145f2cd49a703346b56a9/self-hosting/start-classify.py
+curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/7856092ac26637fa7d1bac026df94b2020b3da10/self-hosting/start-classify.py
 if ($LASTEXITCODE -eq 0) { py -3 start-classify.py install }
 ```
 
@@ -26,7 +26,7 @@ if ($LASTEXITCODE -eq 0) { py -3 start-classify.py install }
 
 ## 2. Start the server
 
-Run this command from the same folder.
+In the same folder, run the start command.
 
 ```sh
 python3 start-classify.py start
@@ -41,6 +41,6 @@ py -3 start-classify.py start
 
 </details>
 
-Leave the terminal open. When [the local health page](http://127.0.0.1:8080/health) says `ok` on that machine, run [your language example](../README.md#examples) in a second terminal. Press Ctrl+C to stop. To use Classify again, repeat step 2.
+When [the health page](http://127.0.0.1:8080/health) says `ok`, leave the server running and try [your language example](../README.md#examples) in another terminal. Press Ctrl+C in the server terminal to stop it. Repeat step 2 to restart.
 
 [Docker and manual installation](manual.md)

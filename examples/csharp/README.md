@@ -1,8 +1,6 @@
 # C#
 
-[Start the local server](../../self-hosting/README.md). Use the .NET 10 SDK.
-
-Save as `Classify.cs`.
+[Start the local server](../../self-hosting/README.md). With the .NET 10 SDK installed, save this as `Classify.cs`.
 
 ```csharp
 using System;
@@ -21,8 +19,8 @@ using var result = JsonDocument.Parse(await response.Content.ReadAsStringAsync()
 Console.WriteLine(result.RootElement.GetProperty("category").GetString() ?? "unknown");
 ```
 
-Run from the same folder. The example prints `negative`.
-
 ```sh
 dotnet run --file Classify.cs
 ```
+
+Prints `negative`.

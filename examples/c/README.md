@@ -1,6 +1,6 @@
 # C
 
-On Apple Silicon, [unpack the C SDK and model](../../PACKAGING.md#make-a-c-call-on-apple-silicon), then build and run the [example](classify.c) from the repository root.
+On Apple Silicon, [unpack the C SDK and model](../../RELEASES.md#make-a-c-call-on-apple-silicon), then build and run the [example](classify.c) from the repository root.
 
 ```sh
 cc -std=c11 -Isdk/include examples/c/classify.c -Lsdk/lib -lclassify_core \
