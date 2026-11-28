@@ -1,6 +1,6 @@
 # Docker and manual installation
 
-Use Docker if you want to manage Classify as a container. Download a native archive if you want to pick a specific model or build. Both include the model and can serve requests offline. For a local server that chooses the download for your computer, use the [server quick start](README.md).
+Use Docker if you want Classify to start whenever Docker starts. Download a native archive if you want to pick a specific model or build. Both include the model and can serve requests offline. For a local server that chooses the download for your computer, use the [server quick start](README.md).
 
 ## Choose and verify a download
 

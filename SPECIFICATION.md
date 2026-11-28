@@ -10,6 +10,12 @@ curl http://127.0.0.1:8080/v1/classify \
   -d '{"text":"This is a terrible movie","categories":["positive","negative","neutral"]}'
 ```
 
+The movie request returned this result on Apple Silicon with the Compact model.
+
+```json
+{"status":"matched","category":"negative","score":0.9844168916948893,"source":"self_hosted"}
+```
+
 <details>
 <summary>Send the same request in Windows PowerShell</summary>
 
@@ -19,12 +25,6 @@ Invoke-RestMethod -Uri http://127.0.0.1:8080/v1/classify -Method Post -ContentTy
 ```
 
 </details>
-
-The movie request returned this result on Apple Silicon with the Compact model.
-
-```json
-{"status":"matched","category":"negative","score":0.9844168916948893,"source":"self_hosted"}
-```
 
 | Field | Meaning |
 | --- | --- |
@@ -70,11 +70,13 @@ Asking for alternatives preserves the decision. On a match, the list excludes th
 
 On the first call, the package downloads the Compact model and the program that runs it (about 1.6 GB together). It checks the download and saves the files under `~/.nativelang/classify/` in your home folder. Projects using the same version under your account reuse that copy, even across languages. Later calls work offline.
 
-On a minimal Linux system, the first download needs `curl`, `tar`, `sha256sum`, and `flock`. On Debian 12, these come from the `curl`, `tar`, `coreutils`, and `util-linux` packages.
-
 <a id="deployment-options"></a>
 
 To share a model already loaded in memory, [run a local server](self-hosting/README.md). To load it directly in a C program, [use the C library](examples/c/).
+
+## Linux requirements
+
+The language packages run on ARM64 or x64 Linux with glibc and libstdc++ compatible with Debian 12 (Bookworm). On a minimal installation, the first download needs `curl`, `tar`, `sha256sum`, and `flock`. On Debian 12, these come from the `curl`, `tar`, `coreutils`, and `util-linux` packages.
 
 ## Errors
 

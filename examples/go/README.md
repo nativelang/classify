@@ -1,6 +1,6 @@
 # Classify a movie review in Go
 
-You’ll need Go 1.20 or later. Use an Apple Silicon Mac with macOS 15 or later, or [Debian 12-compatible Linux](../../SPECIFICATION.md#where-the-language-packages-store-the-model) on ARM64 or x64. On Windows or an Intel Mac, [run the local server](../../self-hosting/README.md).
+You’ll need Go 1.20 or later. Use an Apple Silicon Mac with macOS 15 or later, or [Debian 12-compatible Linux](../../SPECIFICATION.md#linux-requirements) on ARM64 or x64. On Windows or an Intel Mac, [run the local server](../../self-hosting/README.md).
 
 In an empty folder, create a module and install Classify.
 
