@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo loginctl enable-linger "$(id -un)"
           echo "XDG_RUNTIME_DIR=/run/user/$(id -u)" >> "$GITHUB_ENV"
-      - name: Verify non-elevated Windows startup and stop
+      - name: Verify Windows user task permissions
         if: runner.os == 'Windows'
         shell: pwsh
         working-directory: app
@@ -44,8 +44,18 @@ jobs:
           $sid = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
           icacls.exe $cli /grant "*${sid}:(RX)"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          & "$env:RUNNER_TEMP/winuser.exe" powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File tests/standard_windows.ps1 -Cli $cli
-          exit $LASTEXITCODE
+          $state = & $cli service start | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0 -or $state.phase -ne 'ready') { throw 'Service startup failed' }
+          try {
+            $xml = Export-ScheduledTask -TaskName "NativeLang.Classify.$($state.instance)"
+            $definition = Join-Path $env:USERPROFILE 'classify-ci-task.xml'
+            [IO.File]::WriteAllText($definition, $xml)
+            & "$env:RUNNER_TEMP/winuser.exe" powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File tests/standard_windows.ps1 -Definition $definition
+            if ($LASTEXITCODE -ne 0) { throw 'Non-elevated task probe failed' }
+          } finally {
+            & $cli service stop
+            if ($LASTEXITCODE -ne 0) { throw 'Service stop failed' }
+          }
       - name: Exercise OS-managed lifecycle
         shell: bash
         run: python app/tests/managed_quickstart.py "$RUNNER_TEMP/classify-test.exe"
