@@ -5,12 +5,14 @@
 Save it as `movie.mjs` and run `node movie.mjs`. For TypeScript, save it as `movie.mts` and run `node movie.mts`. Both print `negative`.
 
 ```javascript
+const CLASSIFY_URL = "http://127.0.0.1:8080/v1/classify";
+
 const request = {
   text: "This is a terrible movie",
   categories: ["positive", "negative", "neutral"],
 };
 
-const response = await fetch("http://127.0.0.1:8080/v1/classify", {
+const response = await fetch(CLASSIFY_URL, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify(request),

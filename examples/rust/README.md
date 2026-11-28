@@ -14,8 +14,10 @@ Replace `src/main.rs` with this example.
 ```rust
 use serde_json::{json, Value};
 
+const CLASSIFY_URL: &str = "http://127.0.0.1:8080/v1/classify";
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let result: Value = ureq::post("http://127.0.0.1:8080/v1/classify")
+    let result: Value = ureq::post(CLASSIFY_URL)
         .send_json(json!({
             "text": "This is a terrible movie",
             "categories": ["positive", "negative", "neutral"]

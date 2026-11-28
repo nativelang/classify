@@ -13,11 +13,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 class Classify {
+    private static final URI CLASSIFY_ENDPOINT = URI.create("http://127.0.0.1:8080/v1/classify");
+
     public static void main(String[] args) throws Exception {
         String review = """
             {"text":"This is a terrible movie","categories":["positive","negative","neutral"]}
             """;
-        var request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:8080/v1/classify"))
+        var request = HttpRequest.newBuilder(CLASSIFY_ENDPOINT)
             .header("Content-Type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(review))
             .build();
@@ -37,7 +39,7 @@ Run it from the directory containing both files.
 java --class-path gson-2.15.0.jar Classify.java
 ```
 
-Output with Compact r3
+Output
 
 ```text
 negative

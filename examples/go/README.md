@@ -13,9 +13,11 @@ import (
 	"strings"
 )
 
+const classifyURL = "http://127.0.0.1:8080/v1/classify"
+
 func main() {
 	request := strings.NewReader(`{"text":"This is a terrible movie","categories":["positive","negative","neutral"]}`)
-	response, err := http.Post("http://127.0.0.1:8080/v1/classify", "application/json", request)
+	response, err := http.Post(classifyURL, "application/json", request)
 	if err != nil {
 		log.Fatal(err)
 	}
