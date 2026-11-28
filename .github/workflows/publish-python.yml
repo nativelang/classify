@@ -1,4 +1,4 @@
-name: Publish Python 0.2.2 to PyPI
+name: Publish Python 0.2.3 to PyPI
 
 on:
   workflow_dispatch:
@@ -21,10 +21,10 @@ jobs:
         run: |
           mkdir dist
           cd dist
-          wheel=nativelang_classify-0.2.2-py3-none-any.whl
+          wheel=nativelang_classify-0.2.3-py3-none-any.whl
           curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
-            "https://github.com/nativelang/classify/releases/download/v0.2.2/$wheel" --output "$wheel"
-          printf '%s  %s\n' '220497ae41581c32e1533922e730d60bb2cafb7bb3ea665b78096a2d9c78a046' "$wheel" | sha256sum --check --strict -
+            "https://github.com/nativelang/classify/releases/download/v0.2.3/$wheel" --output "$wheel"
+          printf '%s  %s\n' 'e7396ecc57019a1fd6c5227b477f039ad96dd7c96cd56eeb1becad2a98d294d7' "$wheel" | sha256sum --check --strict -
 
       - name: Publish the verified wheel
         uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # release/v1
