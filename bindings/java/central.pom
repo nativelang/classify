@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>io.github.nativelang</groupId>
+  <artifactId>classify</artifactId>
+  <version>0.2.0</version>
+  <name>Classify</name>
+  <description>Classify text into a supplied set of categories locally from Java.</description>
+  <url>https://github.com/nativelang/classify</url>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://github.com/nativelang/classify/blob/v0.2.0/LICENSE</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>nativelang</id>
+      <name>NativeLang contributors</name>
+      <url>https://github.com/nativelang</url>
+      <organization>NativeLang</organization>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:https://github.com/nativelang/classify.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/nativelang/classify.git</developerConnection>
+    <url>https://github.com/nativelang/classify</url>
+    <tag>v0.2.0</tag>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.15.0</version>
+    </dependency>
+  </dependencies>
+</project>
