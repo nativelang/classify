@@ -34,10 +34,8 @@ func main() {
 }
 ```
 
-Run it in a second terminal.
-
 ```sh
 go run main.go
 ```
 
-Output: `negative`
+Prints `negative`.

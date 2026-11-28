@@ -5,7 +5,8 @@
 ```sh
 cargo new classify-example
 cd classify-example
-cargo add ureq@2 serde_json@1 --features ureq/json
+cargo add ureq@2 --features json
+cargo add serde_json@1
 ```
 
 Save this as `src/main.rs`.
@@ -31,4 +32,4 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 cargo run
 ```
 
-Output: `negative`
+Prints `negative`.
