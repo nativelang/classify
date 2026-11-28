@@ -13,6 +13,7 @@ Windows/AMD64,x86_64-pc-windows-msvc,0.1.0,standard-r1,2,fa7fddf19ed3ee54294d9c7
 '@ | ConvertFrom-Csv
 $cpu = (Get-CimInstance Win32_Processor)[0].Architecture
 $platform = switch ($cpu) { 9 { 'Windows/AMD64' } 12 { 'Windows/ARM64' } }
+$nativeSystem = if ([Environment]::Is64BitProcess) { "$env:SystemRoot\System32" } else { "$env:SystemRoot\Sysnative" }
 $release = $releases | Where-Object platform -eq $platform
 if (!$release -or ![Environment]::Is64BitOperatingSystem) { throw 'Classify requires x64 or ARM64 Windows.' }
 $model = "dm-classify-$($release.model)"
@@ -29,7 +30,7 @@ function Test-Install($dir) {
     return $true
 }
 function Get-Download($url, $file) {
-    & curl.exe -q --fail --location --silent --show-error --retry 2 --proto '=https' --proto-redir '=https' --output $file $url
+    & "$nativeSystem\curl.exe" -q --fail --location --silent --show-error --retry 2 --proto '=https' --proto-redir '=https' --output $file $url
     if ($LASTEXITCODE -ne 0) { throw "Download failed for $url" }
 }
 function Test-Digest($file, $expected) {
@@ -79,7 +80,7 @@ try {
     Test-Digest $archive $release.sha256
     $unpacked = Join-Path $stage 'unpacked'
     [void][IO.Directory]::CreateDirectory($unpacked)
-    & tar.exe -xf $archive -C $unpacked
+    & "$nativeSystem\tar.exe" -xf $archive -C $unpacked
     if ($LASTEXITCODE -ne 0 -or !(Test-Install $unpacked)) { throw 'Incomplete Classify archive.' }
     if ($Server) {
         $launcher = Join-Path $unpacked 'start.cmd'
