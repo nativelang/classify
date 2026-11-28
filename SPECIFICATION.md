@@ -78,6 +78,12 @@ To share a model already loaded in memory, [run a local server](self-hosting/REA
 
 The Python package requires Python 3.9 or later. Its local runtime supports Apple Silicon on macOS 15 or later and [Debian 12-compatible Linux](#linux-requirements) on ARM64 or x64. On Windows and Intel Macs, applications can call the [local HTTP server](self-hosting/README.md).
 
+## Node.js platform support
+
+Use Node.js 22.18 or later on an Apple Silicon Mac with macOS 15 or later, or on [Debian 12-compatible Linux](#linux-requirements) on ARM64 or x64. On Windows or an Intel Mac, use the [local HTTP server](self-hosting/README.md).
+
+For TypeScript, save the [JavaScript example](examples/node/) as `movie.mts` and run `node movie.mts`.
+
 ## Linux requirements
 
 The language packages run on ARM64 or x64 Linux with glibc and libstdc++ compatible with Debian 12 (Bookworm). On a minimal installation, the first download needs `curl`, `tar`, `sha256sum`, and `flock`. On Debian 12, these come from the `curl`, `tar`, `coreutils`, and `util-linux` packages.
