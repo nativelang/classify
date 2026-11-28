@@ -13,15 +13,16 @@ classify("This is a terrible movie", categories=["positive", "negative", "neutra
 # The result is "negative".
 ```
 
-[Install and start Classify](self-hosting/README.md).
-
 Your app can label reviews or sort support tickets locally, without calling a hosted language model or paying per token.
 
 <a id="examples"></a>
 
 Try Classify in your language.
 
-[Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/) · [C](examples/c/)
+1. [Install and start Classify](self-hosting/README.md).
+2. Run an example in your language.
+
+   [Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/) · [C](examples/c/)
 
 [API reference](SPECIFICATION.md)
 
