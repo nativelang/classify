@@ -17,12 +17,10 @@ The result is `"negative"`.
 
 ## Examples
 
-Pick your language for setup instructions and a working example.
+[Start Classify on your computer](self-hosting/README.md), then pick your language. Each example shows how to call the server from your app.
 
-[Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/) · [C](examples/c/)
+[Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/)
 
-## Run it on your computer
-
-The free version works offline on your computer after setup. [Set up the server](self-hosting/README.md) or [use the C library in your app](PACKAGING.md#free-downloads).
+To run Classify directly inside a C app, follow the [C example](examples/c/). Both ways work offline after setup.
 
 The large model and its GPU server are available under an [enterprise license](PACKAGING.md#enterprise-licensing).
