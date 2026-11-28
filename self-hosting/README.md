@@ -7,7 +7,7 @@ Open a terminal on the computer where your app will run. In an empty folder, run
 **macOS 15+ or Debian 12-compatible Linux**
 
 ```sh
-curl -fLO https://raw.githubusercontent.com/nativelang/classify/5ce35e00d97c2d89f97d91e094a094e9e310d08c/self-hosting/install.sh && sh install.sh
+curl -fLO https://raw.githubusercontent.com/nativelang/classify/120966b8f282730af7f3e22b7e09c3e742a64c3c/self-hosting/install.sh && sh install.sh
 ```
 
 <details>
@@ -16,7 +16,7 @@ curl -fLO https://raw.githubusercontent.com/nativelang/classify/5ce35e00d97c2d89
 In PowerShell, run the installer.
 
 ```powershell
-curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/5ce35e00d97c2d89f97d91e094a094e9e310d08c/self-hosting/install.cmd
+curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/120966b8f282730af7f3e22b7e09c3e742a64c3c/self-hosting/install.cmd
 if ($LASTEXITCODE -eq 0) { .\install.cmd }
 ```
 
@@ -26,34 +26,43 @@ If Windows reports a missing Visual C++ runtime DLL, install the [Microsoft Visu
 
 ## 2. Start the server
 
-Run the server from the same folder.
+From the same folder, start the server. It listens at `http://127.0.0.1:8080` by default.
 
 ```sh
-./classify-server/classify serve
+./classify-server/start
 ```
 
+On Windows, run `.\classify-server\start.cmd`. The launcher starts the native executable (`classify serve` or `classify.exe serve`).
+
+When [the health page](http://127.0.0.1:8080/health) says `ok`, [send a request](../SPECIFICATION.md#call-and-result) in another terminal. Press Ctrl+C in the server terminal to stop it.
+
+### Use a different port
+
+```sh
+./classify-server/start --port 9090
+```
+
+On Windows, run `.\classify-server\start.cmd --port 9090`. Check [the health page on port 9090](http://127.0.0.1:9090/health) and use `http://127.0.0.1:9090/v1/classify` for requests.
+
 <details>
-<summary>Windows</summary>
+<summary>Already installed Classify?</summary>
+
+If your server folder is missing `start` or `start.cmd`, add just the launcher. Run this from the folder containing `classify-server`.
+
+**macOS or Linux**
+
+```sh
+curl -fL https://raw.githubusercontent.com/nativelang/classify/90bbb5b0921ae8f013af100e08a100cf0dcdf45b/self-hosting/start -o classify-server/start && chmod +x classify-server/start
+```
+
+**Windows**
 
 ```powershell
-.\classify-server\classify.exe serve
+curl.exe -fL https://raw.githubusercontent.com/nativelang/classify/90bbb5b0921ae8f013af100e08a100cf0dcdf45b/self-hosting/start.cmd -o classify-server/start.cmd
 ```
+
+For a manually extracted archive, the native executable accepts `--listen`. For example, on macOS or Linux run `./classify-server/classify serve --listen 127.0.0.1:9090`.
 
 </details>
 
-When [the health page](http://127.0.0.1:8080/health) says `ok`, try [your language example](../README.md#examples) in another terminal. Press Ctrl+C in the server terminal to stop it.
-
-<details>
-<summary>Use a different port</summary>
-
-The default port is `8080`. To use `9090`, add `--listen 127.0.0.1:9090` to the start command.
-
-```sh
-./classify-server/classify serve --listen 127.0.0.1:9090
-```
-
-Check [the health page on port 9090](http://127.0.0.1:9090/health) and use `http://127.0.0.1:9090/v1/classify` in your app.
-
-</details>
-
-[Docker and manual installation](manual.md)
+For the larger **Standard r1** model, [choose a server for your platform](manual.md#standard-r1). To keep Classify running across restarts, [run it as a Docker service](manual.md#run-across-restarts).
