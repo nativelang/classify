@@ -1,0 +1,132 @@
+name: Publish Classify
+run-name: Publish Classify ${{ inputs.version }}
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Package version (for example 0.3.0)
+        required: true
+        type: string
+
+permissions: {}
+concurrency:
+  group: classify-registry-release
+  cancel-in-progress: false
+env:
+  VERSION: ${{ inputs.version }}
+  GH_TOKEN: ${{ github.token }}
+  RUSTUP_TOOLCHAIN: 1.88.0
+
+jobs:
+  prepare:
+    if: github.repository == 'nativelang/classify' && github.ref == 'refs/heads/main'
+    environment: registry-release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
+        with:
+          go-version: '1.26.11'
+          cache: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install release compilers
+        run: |
+          rustup toolchain install "$RUSTUP_TOOLCHAIN" --profile minimal
+          cd "$RUNNER_TEMP"
+          curl -fsSL --retry 3 -o jdk.tar.gz 'https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13.1%2B2/OpenJDK21U-jdk_x64_linux_hotspot_21.0.13.1_2.tar.gz'
+          echo 'bb8a93f9ae6e7a693b2b721e85dbeff26ae1a77447985a8d7afcdd9c7cf6222e  jdk.tar.gz' | sha256sum -c -
+          mkdir jdk
+          tar -xzf jdk.tar.gz -C jdk --strip-components=1
+          echo "$RUNNER_TEMP/jdk/bin" >> "$GITHUB_PATH"
+          install -d -m 700 "$RUNNER_TEMP/release-gpg"
+      - name: Build, sign and stage release assets
+        run: python3 release/prepare.py "$VERSION"
+        env:
+          SOURCE_DATE_EPOCH: '1577836800'
+          GNUPGHOME: ${{ runner.temp }}/release-gpg
+          CENTRAL_SIGNING_KEY: ${{ secrets.CENTRAL_SIGNING_KEY }}
+          CENTRAL_SIGNING_PASSPHRASE: ${{ secrets.CENTRAL_SIGNING_PASSPHRASE }}
+      - name: Clear ephemeral signing material
+        if: always()
+        run: |
+          gpgconf --homedir "$RUNNER_TEMP/release-gpg" --kill gpg-agent
+          rm -rf -- "$RUNNER_TEMP/release-gpg"
+
+  registry:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        registry: [npm, cargo, nuget]
+    environment: registry-release
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        if: matrix.registry == 'npm'
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - if: matrix.registry == 'cargo'
+        run: rustup toolchain install "$RUSTUP_TOOLCHAIN" --profile minimal
+      - if: matrix.registry == 'cargo'
+        id: cargo
+        uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9
+      - if: matrix.registry == 'nuget'
+        id: nuget
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841
+        with:
+          user: sdasan
+      - name: Publish verified package
+        run: python3 release/registry.py "$REGISTRY" "$VERSION"
+        env:
+          REGISTRY: ${{ matrix.registry }}
+          CARGO_REGISTRY_TOKEN: ${{ steps.cargo.outputs.token }}
+          NUGET_API_KEY: ${{ steps.nuget.outputs.NUGET_API_KEY }}
+
+  maven:
+    needs: prepare
+    environment: registry-release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - run: python3 release/registry.py maven "$VERSION"
+        env:
+          CENTRAL_PORTAL_TOKEN: ${{ secrets.CENTRAL_PORTAL_TOKEN }}
+
+  python:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Dispatch the workflow trusted by PyPI
+        run: gh workflow run publish-python.yml --repo "$GITHUB_REPOSITORY" --ref main -f version="$VERSION"
+
+  verify:
+    needs: [registry, maven, python]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - run: python3 release/verify.py "$VERSION"

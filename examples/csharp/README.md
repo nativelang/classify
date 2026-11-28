@@ -13,6 +13,4 @@ string? category = model.Classify("This is a terrible movie", "positive", "negat
 Console.WriteLine(category); // negative
 ```
 
-The first call downloads the model. Later calls work offline.
-
-[Platforms, download sizes and Windows setup](../../SPECIFICATION.md#language-package-platform-support)
+[Speed up startup with the local API service](../../docs/service.md).

@@ -4,7 +4,7 @@ To embed Classify in a C app, follow the [native C setup guide](examples/c/BUILD
 
 ## Free downloads
 
-The standalone installer selects Compact on macOS, Linux and Windows. For the model used by each language package, see [platforms and download sizes](SPECIFICATION.md#language-package-platform-support). For a C app, download one model ZIP and its matching SDK. The language packages and server installer download the files they need automatically.
+The standalone installer selects Compact on macOS, Linux and Windows. For the model used by each language package, see [platforms and download sizes](docs/platforms.md). For a C app, download one model ZIP and its matching SDK. The language packages and server installer download the files they need automatically.
 
 | Model ZIP (single file) | Bytes | SHA-256 |
 | --- | ---: | --- |

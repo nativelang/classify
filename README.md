@@ -20,4 +20,4 @@ classify("This is a terrible movie", categories=["positive", "negative", "neutra
 
 The first call downloads the model for your platform. Later calls work offline. Your text stays on your computer, and there’s no per-token fee.
 
-[Platforms and download sizes](SPECIFICATION.md#language-package-platform-support) · [Other ways to run Classify](self-hosting/README.md) · [API reference](SPECIFICATION.md#call-and-result)
+[Platforms and download sizes](docs/platforms.md) · [Other ways to run Classify](self-hosting/README.md) · [API reference](docs/API.md)

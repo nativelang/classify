@@ -1,6 +1,6 @@
 {
   "name": "@nativelang/classify",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Classify text into your own categories locally in a Node.js app.",
   "license": "MIT",
   "type": "module",
@@ -28,5 +28,10 @@
   "scripts": {
     "prepack": "node pack-files.js",
     "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nativelang/classify.git",
+    "directory": "bindings/node"
   }
 }

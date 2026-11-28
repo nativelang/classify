@@ -1,6 +1,37 @@
 #!/bin/sh
 # Start the published local CLI. Requests and responses are JSON Lines.
 set -eu
+if [ "${NATIVELANG_CLASSIFY_SERVICE:-}" = 1 ]; then
+    case "$(uname -s)/$(uname -m)" in
+        Darwin/arm64) target=darwin-arm64; sha=b1519efc9e4f29bb5596d610b56df22397187e81ed024ec46cc59e66b9f91a7e ;;
+        Darwin/x86_64) target=darwin-amd64; sha=410b4aaa1a0028182305c3d400c03493f8eff486a57bd4be2ae5f2fe1cf3c264 ;;
+        Linux/aarch64|Linux/arm64) target=linux-arm64; sha=5e9511157280cba16a60dc34353338f95403d55d208610c894dbca72b56c4161 ;;
+        Linux/x86_64) target=linux-amd64; sha=441f5fdca5564c62a889af7da7d81001c88ae0a65693ff8125c24590ca270dd4 ;;
+        *) echo 'Unsupported Classify service platform' >&2; exit 1 ;;
+    esac
+    umask 077
+    bin="${HOME:?}/.nativelang/classify/bin"
+    cli="$bin/classify"
+    mkdir -p "$bin"
+    # The executable is replaced atomically. Concurrent installs verify the same bytes.
+    if [ ! -x "$cli" ] || [ "$(cat "$bin/service.version" 2>/dev/null)" != "$sha" ]; then
+        tmp=$(mktemp -d "$bin/.install.XXXXXXXX")
+        trap 'rm -rf "$tmp"' EXIT
+        curl -q -fsSL --proto '=https' --proto-redir '=https' --retry 2 -o "$tmp/sdk.tgz" \
+          "https://github.com/nativelang/classify/releases/download/service-v1.0.0/classify-service-$target.tar.gz"
+        case "$target" in darwin-*) digest="shasum -a 256" ;; *) digest=sha256sum ;; esac
+        (cd "$tmp" && printf '%s  sdk.tgz\n' "$sha" | $digest -c - >&2)
+        tar -xzf "$tmp/sdk.tgz" -C "$tmp"
+        chmod 700 "$tmp/classify"
+        mv "$tmp/LICENSE.txt" "$bin/service-LICENSE.txt"
+        mv "$tmp/classify" "$cli"
+        printf '%s\n' "$sha" > "$tmp/version"
+        mv "$tmp/version" "$bin/service.version"
+        rm -rf "$tmp"
+        trap - EXIT
+    fi
+    exec "$cli" infer
+fi
 
 platform="$(uname -s)/$(uname -m)"
 [ "$platform" != Linux/arm64 ] || platform=Linux/aarch64
@@ -77,4 +108,5 @@ if ! ready; then (
     test -f "$stage/unpacked/model/model.gguf"
     mv "$stage/unpacked" "$install"
 ); fi
+if [ "${1:-}" = --locate ]; then printf '%s\n' "$install/classify"; exit 0; fi
 exec "$install/classify" infer --profile "$install/model/profile.json"

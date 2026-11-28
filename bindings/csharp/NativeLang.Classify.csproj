@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
     <PackageId>NativeLang.Classify</PackageId>
-    <Version>0.2.2</Version>
+    <Version>0.3.0</Version>
     <Authors>NativeLang contributors</Authors>
     <Description>Classify text locally using categories supplied by your application.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -12,6 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="../../app/bootstrap.sh" LogicalName="NativeLang.Classify.bootstrap.sh" />
+    <EmbeddedResource Include="../../app/install.ps1" LogicalName="NativeLang.Classify.install.ps1" />
     <None Include="../../LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

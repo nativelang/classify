@@ -149,4 +149,4 @@ For Compact, verify `downloads.json` using the [Compact accelerated index checks
 
 ## Try a request
 
-When [the local health page](http://127.0.0.1:8080/health) shows `ok`, the server accepts `POST /v1/classify`. In a second terminal, [send the movie request](../SPECIFICATION.md#call-and-result) and look for `negative` in the `category` field.
+When [the local health page](http://127.0.0.1:8080/health) shows `ok`, the server accepts `POST /v1/classify`. In a second terminal, [send the movie request](../docs/api/http.md) and look for `negative` in the `category` field.

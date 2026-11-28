@@ -1,6 +1,8 @@
-# Classify
+# Classify a movie review in Rust
 
-Give `classify` some text and the categories your app uses.
+```sh
+cargo add nativelang-classify
+```
 
 ```rust
 use classify::classify;
@@ -14,4 +16,4 @@ fn main() -> std::io::Result<()> {
 }
 ```
 
-[Rust quickstart](https://github.com/nativelang/classify/tree/main/examples/rust)
+[Speed up startup with the local API service](https://github.com/nativelang/classify/blob/main/docs/service.md).

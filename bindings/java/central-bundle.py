@@ -1,7 +1,8 @@
-"""Assemble a signed Maven Central bundle of Classify's v0.2.2 Java release."""
+"""Assemble a signed Maven Central bundle of Classify's v0.3.0 Java release."""
 
 import argparse
 import hashlib
+import os
 from pathlib import Path
 import re
 import shutil
@@ -25,8 +26,8 @@ def main():
     root = java.parent.parent
     gson = args.gson.resolve()
     package = Path("io/nativelang/classify")
-    artifact = "classify-0.2.2"
-    prefix = "io/github/nativelang/classify/0.2.2"
+    artifact = "classify-0.3.0"
+    prefix = "io/github/nativelang/classify/0.3.0"
 
     with tempfile.TemporaryDirectory(dir=args.output.resolve().parent) as tmp:
         work = Path(tmp)
@@ -34,20 +35,21 @@ def main():
         subprocess.run(["sh", java / "build.sh", gson, files], check=True)
         binary = files / f"{artifact}.jar"
         if hashlib.sha256(binary.read_bytes()).hexdigest() != (
-            "2623d81cfd2e447b28850b70ac05630f570b2a50c27339cb3aa2d55ce22ee951"
+            "dcf7a2c93bd4f4d2ac390bf6571bf72cdcf379cbe33a38d9c2bdc552912ca29d"
         ):
-            raise SystemExit("Binary differs from the v0.2.2 release. Use the documented JDK and source.")
+            raise SystemExit("Binary differs from the v0.3.0 release. Use the documented JDK and source.")
 
         date = "--date=2020-01-01T00:00:00Z"
         sources = work / "sources"
         (sources / package).mkdir(parents=True)
         source = java / "src" / package / "Classifier.java"
         if hashlib.sha256(source.read_bytes()).hexdigest() != (
-            "2062e238897f30af3c4a0e600a6bb8d3d86348c4ead2e25df3401fef0ba3eaae"
+            "10a029de340f0d5e7cf4ec67e3c61e278cea0d4fe9ccfa3f68f9cc4bd4179069"
         ):
-            raise SystemExit("Java source differs from the v0.2.2 release.")
+            raise SystemExit("Java source differs from the v0.3.0 release.")
         shutil.copyfile(source, sources / package / "Classifier.java")
-        shutil.copyfile(root / "app/bootstrap.sh", sources / package / "bootstrap.sh")
+        for resource in ("bootstrap.sh", "install.ps1"):
+            shutil.copyfile(root / "app" / resource, sources / package / resource)
         docs = work / "docs"
         subprocess.run(["javadoc", "-quiet", "-notimestamp", "--release", "21",
                         "-classpath", gson, "-d", docs, sources / package / "Classifier.java"], check=True)
@@ -58,8 +60,13 @@ def main():
         shutil.copyfile(java / "central.pom", files / f"{artifact}.pom")
 
         for path in sorted(files.iterdir()):
-            subprocess.run(["gpg", "--armor", "--local-user", args.fingerprint,
-                            "--detach-sign", path], check=True)
+            command = ["gpg", "--armor", "--local-user", args.fingerprint, "--detach-sign", str(path)]
+            passphrase = os.environ.get("CENTRAL_SIGNING_PASSPHRASE")
+            if passphrase is None:
+                subprocess.run(command, check=True)
+            else:
+                command[1:1] = ["--batch", "--pinentry-mode", "loopback", "--passphrase-fd", "0"]
+                subprocess.run(command, input=(passphrase + "\n").encode(), check=True)
             data = path.read_bytes()
             for algorithm in ("md5", "sha1", "sha256", "sha512"):
                 checksum = hashlib.new(algorithm, data).hexdigest()

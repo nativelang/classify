@@ -1,30 +1,32 @@
-name: Publish Python 0.2.3 to PyPI
-
+name: Publish Python to PyPI
+run-name: Publish Python ${{ inputs.version }} to PyPI
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: GitHub release version
+        required: true
+        type: string
 
 permissions: {}
-
 concurrency: publish-python-to-pypi
 
 jobs:
   publish:
     if: github.repository == 'nativelang/classify' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment: pypi
     permissions:
+      contents: read
       id-token: write
     steps:
-      - name: Download and verify the released wheel
-        shell: bash
-        run: |
-          mkdir dist
-          cd dist
-          wheel=nativelang_classify-0.2.3-py3-none-any.whl
-          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
-            "https://github.com/nativelang/classify/releases/download/v0.2.3/$wheel" --output "$wheel"
-          printf '%s  %s\n' 'e7396ecc57019a1fd6c5227b477f039ad96dd7c96cd56eeb1becad2a98d294d7' "$wheel" | sha256sum --check --strict -
-
-      - name: Publish the verified wheel
-        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # release/v1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - name: Verify the released wheel
+        run: python3 release/registry.py python "$VERSION"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086
+        with:
+          skip-existing: true
