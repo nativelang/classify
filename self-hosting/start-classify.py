@@ -1,5 +1,6 @@
 """Download the local Classify server once and run it in the foreground."""
 
+import argparse
 import hashlib
 import os
 import platform
@@ -55,6 +56,10 @@ def install(model, target, digest, destination, executable):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("action", choices=("install", "start"), nargs="?",
+                        help="install the server and model, or start the installed server")
+    action = parser.parse_args().action
     system = platform.system()
     machine = platform.machine().lower()
     machine = {"aarch64": "arm64", "amd64": "x86_64"}.get(machine, machine)
@@ -62,12 +67,17 @@ def main():
         sys.exit(f"No server download for {system} {machine}. See the manual installation guide.")
     model, target, digest = SERVERS[system, machine]
     cache = Path.home() / ".nativelang" / "classify"
-    cache.mkdir(parents=True, exist_ok=True, mode=0o700)
     destination = cache / digest
     executable = "classify.exe" if system == "Windows" else "classify"
     server = destination / executable
     if not server.is_file():
+        if action == "start":
+            sys.exit("Install Classify first: run this script with 'install'.")
+        cache.mkdir(parents=True, exist_ok=True, mode=0o700)
         install(model, target, digest, destination, executable)
+    if action == "install":
+        print("Classify is installed.")
+        return
     print("Starting Classify. Open http://127.0.0.1:8080/health to check it is ready.", flush=True)
     if system == "Windows":
         sys.exit(subprocess.run([str(server), "serve"]).returncode)
