@@ -34,6 +34,8 @@ def render():
     for name in ("go", "rust", "python/nativelang_classify"):
         yield ROOT / "bindings" / name / "bootstrap.sh", shell
     yield ROOT / "bindings/python/nativelang_classify/install.ps1", ps.encode()
+    example = (ROOT / "examples/rust/README.md").read_text()
+    yield ROOT / "bindings/rust/README.md", example.replace("../../docs/", "https://github.com/nativelang/classify/blob/main/docs/").encode()
     for name in ("go", "rust"):
         yield ROOT / "bindings" / name / "install.ps1", ps.encode()
 

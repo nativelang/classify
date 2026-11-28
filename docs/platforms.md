@@ -6,7 +6,9 @@
 | Debian 12-compatible Linux | ARM64, x64 | Compact selects compatible CPU instructions at startup, including AVX2 on supported x64 processors. |
 | Windows | ARM64, x64 | Native CPU runtime. If a runtime DLL is missing, install the Microsoft Visual C++ v14 Redistributable for the app’s architecture. |
 
-Python requires 3.9 or later. JavaScript and TypeScript require Node.js 22.18 or later. A minimal Linux installation needs compatible glibc and libstdc++, plus `curl`, `tar`, `sha256sum`, and `flock` for the first download.
+Python requires 3.9 or later. JavaScript and TypeScript require Node.js 22.18 or later. The Java package targets Java 21, the C# package targets .NET 10, and the Go module requires Go 1.20 or later.
+
+A minimal Linux installation needs compatible glibc and libstdc++, plus `curl`, `tar`, `sha256sum`, and `flock` for the first download.
 
 ## Model downloads
 
