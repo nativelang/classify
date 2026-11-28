@@ -7,13 +7,13 @@
 
 Give Classify some text and a list of categories. It tells you which one fits, if any.
 
-[Install and start Classify](self-hosting/README.md).
-
 ```text
 # Pseudocode
 classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
 # The result is "negative".
 ```
+
+[Install and start Classify](self-hosting/README.md).
 
 Your app can label reviews or sort support tickets locally, without calling a hosted language model or paying per token.
 
