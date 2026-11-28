@@ -1,24 +1,12 @@
 ---
 name: review-classify-writing
-description: Write or review a Classify explanation so a first-time reader can see the idea before learning the details.
+description: Review Classify documentation for a developer making a first call.
 ---
 
-# Give the reader a useful first example
+# Review Classify writing
 
-Describe the product in one sentence that also holds for a different use case. Put the concrete scenario in a labeled example below it. If the user gives you an example that answers it, keep the words and values that make it clear. Change it only if the change makes the idea clearer or corrects a misleading result.
-
-*Example (pseudocode)*
-
-```text
-classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
-```
-
-The result is `"negative"`.
-
-**Review the example on its own.** Cover the surrounding paragraphs. Can you point to the text, name the categories, and say the answer? Keep real values inline. End the first example at the answer. Put ambiguous inputs and error cases in the reference where readers handle them.
-
-When the user has suggested a simpler version, compare it with the draft before merging. Keep a detail only if it helps the reader understand, decide, or act here. Move it to the step where it matters, or cut it.
-
-Check shared pseudocode against the behavior promised to customers. Keep internal data structures out of it. For a language-specific example, install the stated package version in a clean environment, run the published code exactly as shown, and check the result. Use labeled pseudocode while a binding is still planned. [API specification](../../../SPECIFICATION.md) · [Releases](https://github.com/nativelang/classify/releases)
-
-For a setup guide, open with what will be running and where the reader’s text goes. Then give the command and what they should see when it works.
+- Read the opening as a first-time user. Can you tell what Classify does and what to do first?
+- Read the example on its own. Keep the user’s movie review, the three categories, and the answer together. Label pseudocode and put its result in a comment.
+- Follow setup from a clean folder. Check prerequisites, commands, links, and expected output. Run language examples as written.
+- Keep optional settings and error cases in the [API reference](../../../SPECIFICATION.md). Describe upcoming features separately from working instructions.
+- Cut sentences that repeat a command or explain a detail the reader can ignore.

@@ -1,6 +1,6 @@
 # Python
 
-[Start Classify](../../self-hosting/README.md) and install Requests.
+[Start the local server](../../self-hosting/README.md) and install Requests.
 
 ```sh
 pip install requests

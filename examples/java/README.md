@@ -1,8 +1,6 @@
 # Java
 
-[Start the local server](../../self-hosting/README.md). Use JDK 21 or later and download [Gson 2.15.0](https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.15.0/gson-2.15.0.jar) to your example folder.
-
-Save as `Classify.java`.
+[Start the local server](../../self-hosting/README.md). With JDK 21 or later, download [Gson 2.15.0](https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.15.0/gson-2.15.0.jar) to your working folder. Save the code as `Classify.java` there.
 
 ```java
 import com.google.gson.JsonParser;
@@ -30,8 +28,8 @@ class Classify {
 }
 ```
 
-Run from the same folder. The example prints `negative`.
-
 ```sh
 java --class-path gson-2.15.0.jar Classify.java
 ```
+
+Prints `negative`.

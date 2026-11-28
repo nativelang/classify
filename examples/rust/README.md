@@ -1,6 +1,6 @@
 # Rust
 
-[Start the Classify server](../../self-hosting/README.md). With Rust and Cargo installed, open a second terminal.
+[Start the local server](../../self-hosting/README.md). With Rust and Cargo installed, open a second terminal.
 
 ```sh
 cargo new classify-example
