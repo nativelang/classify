@@ -4,7 +4,7 @@ To embed Classify in a C app, follow the [native C setup guide](examples/c/BUILD
 
 ## Free downloads
 
-The Node.js and Python packages select Compact on Apple Silicon and Linux, and Standard on Intel Macs and Windows. For a C app, download one model ZIP and its matching SDK. The language packages and server installer download the files they need automatically.
+The Node.js and Python packages select Compact on macOS, Linux and Windows. For a C app, download one model ZIP and its matching SDK. The language packages and server installer download the files they need automatically.
 
 | Model ZIP (single file) | Bytes | SHA-256 |
 | --- | ---: | --- |
@@ -16,6 +16,7 @@ GitHub also carries the [Compact ZIP](https://github.com/nativelang/classify-art
 | Portable C SDK | Supported platforms | Manifest SHA-256 |
 | --- | --- | --- |
 | [Compact manifest](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/manifest.json) | Apple Silicon with macOS 15+, or Linux ARM64 or x64 | `68f080308b42e6df3587b98a22340b12c0419ffef7417decb33edf91a1134ac6` |
+| [Compact desktop manifest](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-desktop/manifest.json) | Intel Macs with macOS 15+, or Windows ARM64 or x64 | `57a2cc107c059f7809b4497e5c40fbf9f5a6be76ad4402c268043a9de5fc08ee` |
 | [Standard manifest](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1/manifest.json) | macOS 15+, Linux, or Windows on ARM64 or x64 | `256d64d3f8a62fb103ce9ed59eda419fb4284f2ef53281a550ee2d2de5a43d05` |
 
 Compact 0.1.1 selects the available CPU instructions at startup and uses Metal on Apple Silicon. To run on the Mac CPU, launch your app with `CLASSIFY_DEVICE=cpu`.

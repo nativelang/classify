@@ -8,19 +8,19 @@ To load the model directly in a C program, follow the [C example](../examples/c/
 
 Open a terminal in an empty folder. The installer creates a `classify-server` folder and downloads the model for your computer.
 
-**macOS or Linux.** Use macOS 15 or later, or Debian 12-compatible Linux on ARM64 or x64. The installer downloads Compact (about 1.6 GB) on Apple Silicon and Linux, or Standard (about 2.5 GB) on Intel Macs.
+**macOS or Linux.** Use macOS 15 or later, or Debian 12-compatible Linux on ARM64 or x64. The installer downloads Compact (about 1.6 GB) on Intel Macs, Apple Silicon and Linux.
 
 ```sh
-curl -fLO https://raw.githubusercontent.com/nativelang/classify/2c393f1d1b6d5fb72b2e0821db3a5e8d6b962997/self-hosting/install.sh && sh install.sh
+curl -fLO https://raw.githubusercontent.com/nativelang/classify/df1003c024ff9db2cb203589ed671c142d59f7bb/self-hosting/install.sh && sh install.sh
 ```
 
 <details>
 <summary>Windows</summary>
 
-On x64 or ARM64 Windows, run this in PowerShell to install Standard (about 2.5 GB).
+On x64 or ARM64 Windows, run this in PowerShell to install Compact (about 1.6 GB).
 
 ```powershell
-curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/2c393f1d1b6d5fb72b2e0821db3a5e8d6b962997/self-hosting/install.cmd
+curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/df1003c024ff9db2cb203589ed671c142d59f7bb/self-hosting/install.cmd
 if ($LASTEXITCODE -eq 0) { .\install.cmd }
 ```
 
