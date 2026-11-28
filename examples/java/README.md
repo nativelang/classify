@@ -1,6 +1,6 @@
 # Classify a movie review in Java
 
-Add Classify to the dependencies in your `pom.xml`.
+Add Classify under `<dependencies>` in your Maven `pom.xml`.
 
 ```xml
 <dependency>
@@ -17,16 +17,12 @@ public class Movie {
     public static void main(String[] args) throws Exception {
         try (var model = new Classifier()) {
             String category = model.classify("This is a terrible movie", "positive", "negative", "neutral");
-            System.out.println(category == null ? "unknown" : category); // negative
+            System.out.println(category); // negative
         }
     }
 }
 ```
 
-With JDK 21 or later, run the example from the directory containing its [pom.xml](pom.xml).
+The first run downloads the model (about 1.6 GB). Later calls use the cached model.
 
-```sh
-mvn -q compile exec:java
-```
-
-The first run downloads the model (about 1.6 GB). Later calls use the cached model. If no category fits, the classifier returns `null` and this example prints `unknown`.
+[Maven example project](pom.xml)

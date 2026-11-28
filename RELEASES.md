@@ -1,6 +1,6 @@
 # Releases and downloads
 
-To embed Classify in a C app, follow the [native C setup guide](examples/c/README.md). For HTTP, use the [server installer](self-hosting/README.md). For Docker, see [manual installation](self-hosting/manual.md#docker).
+To embed Classify in a C app, follow the [native C setup guide](examples/c/BUILD.md). For HTTP, use the [server installer](self-hosting/README.md). For Docker, see [manual installation](self-hosting/manual.md#docker).
 
 ## Free downloads
 
@@ -35,7 +35,7 @@ Accelerated SDKs use the same model ZIPs. Metal requires Apple Silicon, a compat
 
 ## Build the C example
 
-Download the SDK and model for your platform, then [build and run the C example](examples/c/README.md).
+Download the SDK and model for your platform, then [build and run the C example](examples/c/BUILD.md).
 
 ## Licenses
 
