@@ -1,46 +1,46 @@
 # Install and start the Classify server
 
-Install Classify on the same computer as your app.
-
 ## 1. Install once
 
-With Python 3.8 or later, run the installer in an empty folder. It selects the server for your computer and downloads it with the model (about 1.6–2.5 GB).
+Open a terminal on the computer where your app will run. In an empty folder, run the installer. It downloads the server and model (about 1.6–2.5 GB) into `classify-server`.
 
 **macOS 15+ or Debian 12-compatible Linux**
 
 ```sh
-curl -fLO https://raw.githubusercontent.com/nativelang/classify/7856092ac26637fa7d1bac026df94b2020b3da10/self-hosting/start-classify.py && python3 start-classify.py install
+curl -fLO https://raw.githubusercontent.com/nativelang/classify/70c1ac58ce7695b5ae6497a0c645207f71f4120d/self-hosting/install.sh && sh install.sh
 ```
 
 <details>
-<summary>Windows (PowerShell)</summary>
+<summary>Windows</summary>
 
-Install the [Microsoft Visual C++ v14 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) for your processor if needed.
+In PowerShell, run the installer.
 
 ```powershell
-curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/7856092ac26637fa7d1bac026df94b2020b3da10/self-hosting/start-classify.py
-if ($LASTEXITCODE -eq 0) { py -3 start-classify.py install }
+curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/70c1ac58ce7695b5ae6497a0c645207f71f4120d/self-hosting/install.cmd
+if ($LASTEXITCODE -eq 0) { .\install.cmd }
 ```
+
+If Windows reports a missing Visual C++ runtime DLL, install the [Microsoft Visual C++ v14 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) for your processor.
 
 </details>
 
 ## 2. Start the server
 
-In the same folder, run the start command.
+Run the server from the same folder.
 
 ```sh
-python3 start-classify.py start
+./classify-server/classify serve
 ```
 
 <details>
-<summary>Windows (PowerShell)</summary>
+<summary>Windows</summary>
 
 ```powershell
-py -3 start-classify.py start
+.\classify-server\classify.exe serve
 ```
 
 </details>
 
-When [the health page](http://127.0.0.1:8080/health) says `ok`, leave the server running and try [your language example](../README.md#examples) in another terminal. Press Ctrl+C in the server terminal to stop it. Repeat step 2 to restart.
+When [the health page](http://127.0.0.1:8080/health) says `ok`, try [your language example](../README.md#examples) in another terminal. Press Ctrl+C in the server terminal to stop it.
 
 [Docker and manual installation](manual.md)

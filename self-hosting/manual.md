@@ -22,8 +22,37 @@ Run `shasum -a 256 FILENAME` on macOS or `sha256sum FILENAME` on Linux, replacin
 
 Standard supports native Windows, macOS and Linux on x64 and ARM64, and Linux containers on AMD64 and ARM64. Its archives come in two parts.
 
-1. From the [standard release](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-manual), save `downloads.json`, `reassemble.py` and both parts of **one** archive in an empty folder. Choose `classify-server-` to run directly or `classify-image-` for Docker. Allow space for the parts, the restored archive and the extracted files.
-2. With Python 3.8 or later, follow the [Unix or PowerShell reassembly commands](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1-manual/README.txt). Supply the archive name from `downloads.json` and the index SHA-256 `01430ddd1a9ba0d319e561c95be4dfbe978b3f27686b6fd5b67acd091e59bf67`. The commands check the index and helper before running the helper, then check both parts and the complete archive.
+For the [standard servers and Docker images](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-manual), use this SHA-256 for `downloads.json`: `01430ddd1a9ba0d319e561c95be4dfbe978b3f27686b6fd5b67acd091e59bf67`. Choose a `classify-server-` archive to run directly or a `classify-image-` archive for Docker. The [accelerated server releases](#optional-accelerated-servers) have their own index checksums.
+
+### Join the two parts
+
+1. In an empty folder, save `downloads.json` and both parts of your chosen archive **from the same release**. Allow space for the parts, the complete archive and its extracted contents.
+2. Check `downloads.json` with `shasum -a 256 downloads.json` on macOS, `sha256sum downloads.json` on Linux, or `Get-FileHash downloads.json -Algorithm SHA256` in PowerShell. Continue only if the result matches the index checksum listed for that release.
+3. Open the verified index. In `archives`, find your archive’s `name` and its own `sha256` (the digest for the complete file). Set the first two variables below to those values. The examples join part 1 followed by part 2 and give the output its final name only after the complete file passes verification.
+
+**macOS or Linux** (example for the Apple Silicon server). On Linux, use `sha256sum -c -` in place of `shasum -a 256 -c -`.
+
+```sh
+archive='classify-server-0.1.0-dm-classify-standard-r1-aarch64-apple-darwin.tar.gz'
+expected='3eedbb8f729369754ace0d6daa83aea26d322723d0d499956c011b320701ba88'
+cat "$archive.part-0001-of-0002" "$archive.part-0002-of-0002" > "$archive.partial" &&
+  printf '%s  %s\n' "$expected" "$archive.partial" | shasum -a 256 -c - &&
+  mv "$archive.partial" "$archive"
+```
+
+<details>
+<summary>Windows (PowerShell, example for the x64 server)</summary>
+
+```powershell
+$Archive = 'classify-server-0.1.0-dm-classify-standard-r1-x86_64-pc-windows-msvc.zip'
+$Expected = 'fa7fddf19ed3ee54294d9c791a0a9f8009954cdd7dee2b00532731d524bcea0b'
+cmd.exe /d /c "copy /y /b $Archive.part-0001-of-0002+$Archive.part-0002-of-0002 $Archive.partial"
+if ($LASTEXITCODE -ne 0) { throw 'Could not join both parts' }
+if ((Get-FileHash "$Archive.partial" -Algorithm SHA256).Hash -ne $Expected) { throw 'Archive verification failed' }
+Move-Item -LiteralPath "$Archive.partial" -Destination $Archive
+```
+
+</details>
 
 ## Docker
 
@@ -75,7 +104,7 @@ Use Metal on Apple Silicon with a compatible GPU and macOS 26 or later. Use the 
 | Apple Silicon | [Metal](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-compact-r3-metal) | [Metal, two parts](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-metal-manual) | `295399c5c82803f87ed131022e7d8302256bf50e3461712c0c35fd1d75a118f7` |
 | Linux x64 | [x86-64-v3](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-compact-r3-v3) | [x86-64-v3, two parts](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-v3-manual) | `878b71990eafc1b223d29d546a4ddb84f4f3c0864a4a6fb18e6205234bf971e4` |
 
-For compact, verify `downloads.json` using the [compact accelerated index checksums](../RELEASES.md#free-downloads), then check the server archive against its entry. For standard, use the reassembly commands in the **chosen release** and its index checksum above. Start the extracted server with the same native command.
+For compact, verify `downloads.json` using the [compact accelerated index checksums](../RELEASES.md#free-downloads), then check the server archive against its entry. For standard, [join the two parts](#join-the-two-parts) using the index checksum for that server above. Start the extracted server with the same native command.
 
 ## Try a request
 
