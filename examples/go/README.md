@@ -1,6 +1,6 @@
-# Classify text from Go
+# Go
 
-[Start the local Classify server](../../self-hosting/README.md), then open a second terminal. This example uses only the Go standard library. Save it as `main.go`.
+[Start the Classify server](../../self-hosting/README.md). With Go installed, save this as `main.go`.
 
 ```go
 package main
@@ -26,24 +26,18 @@ func main() {
 		log.Fatal(response.Status)
 	}
 
-	var result struct {
-		Category *string `json:"category"`
-	}
+	var result map[string]any
 	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
 		log.Fatal(err)
 	}
-	if result.Category == nil {
-		fmt.Println("unknown")
-		return
-	}
-	fmt.Println(*result.Category)
+	fmt.Println(result["category"])
 }
 ```
 
-Run it with Go installed.
+Run it in a second terminal.
 
 ```sh
 go run main.go
 ```
 
-The example prints `negative`.
+Output: `negative`

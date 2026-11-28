@@ -1,12 +1,10 @@
 # Python
 
-[Start the local Classify server](../../self-hosting/README.md). In a second terminal, install Requests.
+[Start Classify](../../self-hosting/README.md) and install Requests.
 
 ```sh
 pip install requests
 ```
-
-Save this as `movie.py` and run `python movie.py`. It prints `negative`.
 
 ```python
 import requests
@@ -22,3 +20,5 @@ def classify(text, categories):
 
 print(classify("This is a terrible movie", ["positive", "negative", "neutral"]))
 ```
+
+Save as `movie.py` and run `python movie.py`. It prints `negative`.

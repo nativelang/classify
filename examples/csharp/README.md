@@ -1,8 +1,8 @@
-# Classify text from C#
+# C#
 
-[Start the local Classify server](../../self-hosting/README.md) and install the .NET 10 SDK. This example sends a movie review with `HttpClient` and reads the category with `System.Text.Json`. Both libraries are included in .NET.
+[Start the local server](../../self-hosting/README.md). Use the .NET 10 SDK.
 
-Save this as `Classify.cs`.
+Save as `Classify.cs`.
 
 ```csharp
 using System;
@@ -21,14 +21,8 @@ using var result = JsonDocument.Parse(await response.Content.ReadAsStringAsync()
 Console.WriteLine(result.RootElement.GetProperty("category").GetString() ?? "unknown");
 ```
 
-Run it from the directory containing the file.
+Run from the same folder. The example prints `negative`.
 
 ```sh
 dotnet run --file Classify.cs
-```
-
-Output
-
-```text
-negative
 ```
