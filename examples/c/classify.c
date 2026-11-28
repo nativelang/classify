@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
     classify_handle *model = classify_open(argv[1], &error);
     char *result = NULL;
     if (model != NULL) {
-        result = classify_infer(model, request, &error);
+        result = classify_infer(model, request, &error);  // JSON includes "category":"negative" and "source":"local".
     }
 
     int failed = result == NULL;

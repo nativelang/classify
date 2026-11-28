@@ -14,19 +14,13 @@ using NativeLang.Classify;
 
 using var model = new Classifier();
 string? category = model.Classify("This is a terrible movie", "positive", "negative", "neutral");
-Console.WriteLine(category ?? "unknown");
+Console.WriteLine(category ?? "unknown"); // negative
 ```
 
 The first run downloads the model (about 1.6 GB). Later runs work offline.
 
 ```sh
 dotnet run
-```
-
-Expected output
-
-```text
-negative
 ```
 
 If no category fits, the classifier returns `null` and this example prints `unknown`. Reuse the same `Classifier` for multiple calls.

@@ -14,7 +14,7 @@ use classify::classify;
 fn main() -> std::io::Result<()> {
     let label = classify("This is a terrible movie", &["positive", "negative", "neutral"])?;
     if let Some(label) = label {
-        println!("{label}");
+        println!("{label}"); // negative
     }
     Ok(())
 }
@@ -24,12 +24,6 @@ The first run downloads the model (about 1.6 GB). Later runs work offline.
 
 ```sh
 cargo run
-```
-
-Expected output
-
-```text
-negative
 ```
 
 If no category fits, `classify` returns `Ok(None)`.

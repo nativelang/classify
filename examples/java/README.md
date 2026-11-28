@@ -17,7 +17,7 @@ public class Movie {
     public static void main(String[] args) throws Exception {
         try (var model = new Classifier()) {
             String category = model.classify("This is a terrible movie", "positive", "negative", "neutral");
-            System.out.println(category == null ? "unknown" : category);
+            System.out.println(category == null ? "unknown" : category); // negative
         }
     }
 }
@@ -29,4 +29,4 @@ With JDK 21 or later, run the example from the directory containing its [pom.xml
 mvn -q compile exec:java
 ```
 
-The first run downloads the model (about 1.6 GB) and prints `negative`. Later calls use the cached model. If no category fits, the classifier returns `null` and this example prints `unknown`.
+The first run downloads the model (about 1.6 GB). Later calls use the cached model. If no category fits, the classifier returns `null` and this example prints `unknown`.
