@@ -1,7 +1,7 @@
 <h1 id="classify-by-nativelang">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/classify-dark.png">
-    <img src="assets/classify-light.png" width="201" height="76" alt="Classify by NativeLang">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark-mode.png">
+    <img src="assets/logo-light-mode.png" width="201" height="76" alt="Classify by NativeLang">
   </picture>
 </h1>
 
