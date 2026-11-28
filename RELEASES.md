@@ -1,6 +1,6 @@
 # Releases and downloads
 
-To embed Classify in a C app, choose an SDK and model below. For HTTP, use the [server installer](self-hosting/README.md). For Docker, see [manual installation](self-hosting/manual.md#docker).
+To embed Classify in a C app, follow the [native C setup guide](examples/c/README.md). For HTTP, use the [server installer](self-hosting/README.md). For Docker, see [manual installation](self-hosting/manual.md#docker).
 
 ## Free downloads
 
@@ -31,28 +31,11 @@ Accelerated SDKs use the same model ZIPs. Metal requires Apple Silicon, a compat
 | [Compact r3 · Linux x86-64-v3](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-v3/downloads.json) | `c4eca4254259073724ffcd530002e7945aa5ba6e211d537bb612b9dcbd65853d` |
 | [Standard r1 · Linux x86-64-v3](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1-v3/downloads.json) | `fa23357c598ed0d52572b5b54b1adb7a0e340d6abce41e5f9383b33d065762b5` |
 
-## Make a C call on Apple Silicon
+<a id="make-a-c-call-on-apple-silicon"></a>
 
-Save the compact model ZIP and the [Apple Silicon portable SDK](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-runtime-0.1.0-aarch64-apple-darwin.tar.gz) in the root of your Classify checkout. First verify the two archives.
+## Build the C example
 
-```sh
-shasum -a 256 -c - <<'SUMS'
-37f6090c9760d46543fff5587ba1cdeef84cf55e02723a5923a3c866364deaa9  dm-classify-compact-r3.zip
-3b4d801ea490fe149ed15ce441269caba2541ae7c16da0f3ed236a6bcbb1ada8  classify-runtime-0.1.0-aarch64-apple-darwin.tar.gz
-SUMS
-```
-
-When both files report `OK`, unpack them.
-
-```sh
-mkdir sdk
-tar -xzf classify-runtime-0.1.0-aarch64-apple-darwin.tar.gz -C sdk
-unzip -q dm-classify-compact-r3.zip -d model
-```
-
-Keep the model files and notices together. [Compile and run the C example](examples/c/README.md) using the extracted SDK and `model/profile.json`.
-
-On Linux, use the SDK for your CPU and change the linker option to `'-Wl,-rpath,$ORIGIN/sdk/lib'`. On Windows, use the matching MSVC developer shell, include `sdk\include`, link `sdk\lib\classify_core.lib`, and place `sdk\bin\classify_core.dll` beside your executable.
+Download the SDK and model for your platform, then [build and run the C example](examples/c/README.md).
 
 ## Licenses
 
