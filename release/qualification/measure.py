@@ -173,6 +173,9 @@ def run(args):
             try:
                 command = client(language, args.version, args.release, work, install)
                 result["clients"][language] = measure(language, command, env, args.output / (language + ".log"), args.eval)
+                profiles = list((work / "home").rglob("model/profile.json"))
+                if profiles != [install / "model/profile.json"]:
+                    raise RuntimeError(f"{language} installed a different runtime in the test home")
                 print(args.runner, args.model, language, "OK", flush=True)
             except Exception as exc:
                 result["errors"][language] = str(exc)
