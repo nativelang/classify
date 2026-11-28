@@ -10,7 +10,7 @@ Python requires 3.9 or later. JavaScript and TypeScript require Node.js 22.18 or
 
 ## Model downloads
 
-The standalone installer and the bindings in this checkout use Compact (about 1.6 GB). The first call verifies and caches the download under `~/.nativelang/classify/`. Projects under the same account reuse it offline.
+The standalone installer and the 0.3.0 bindings use Compact (about 1.6 GB). The first call verifies and caches the download under `~/.nativelang/classify/`. Projects under the same account reuse it offline.
 
 Python and Node.js 0.2.3 use Compact on all six targets. Java, C#, Go and Rust 0.2.2 use Standard (about 2.5 GB) on Intel Macs and require the [standalone HTTP server](../self-hosting/README.md) on Windows.
 

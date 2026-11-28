@@ -45,6 +45,9 @@ def main():
             assert result.returncode and "Unset NATIVELANG_CLASSIFY_PORT" in result.stderr, result
             foreign.getsockname()
         print("Passed concurrent startup, warm reuse, stop, and explicit port conflict.")
+    except BaseException:
+        print(control("logs").stdout, file=sys.stderr)
+        raise
     finally:
         result = control("stop")
         if result.returncode:

@@ -87,7 +87,11 @@ func failure(msg string) []byte {
 func (s service) bridge() error {
 	r, i, e := s.ensure(nil)
 	if errors.Is(e, errManager) {
-		s.log("OS manager unavailable; using the per-process runtime: " + e.Error())
+		reason := "OS manager unavailable; using the per-process runtime: " + e.Error()
+		s.log(reason)
+		if err := save(s.path("fallback.json"), reason); err != nil {
+			return err
+		}
 		return s.direct()
 	}
 	if e != nil {
@@ -147,6 +151,7 @@ func (s service) serve(id string) error {
 	if e = save(s.path("endpoint.json"), r); e != nil {
 		return e
 	}
+	os.Remove(s.path("fallback.json"))
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	model := newModel(s)

@@ -36,3 +36,18 @@ jobs:
       - name: Exercise OS-managed lifecycle
         shell: bash
         run: python app/tests/managed_quickstart.py "$RUNNER_TEMP/classify-test.exe"
+      - name: Exercise service-enabled language packages
+        if: runner.os == 'Windows' || runner.os == 'Linux'
+        shell: bash
+        run: |
+          languages="python node go"
+          if [[ "$RUNNER_OS" == "Windows" && "$RUNNER_ARCH" == "X64" ]]; then
+            export JAVA_HOME="$JAVA_HOME_21_X64"
+            export PATH="$(cygpath -u "$JAVA_HOME")/bin:$PATH"
+            languages="$languages java csharp rust"
+          fi
+          python app/tests/binding_service.py "$RUNNER_TEMP/classify-test.exe" $languages
+      - name: Read service diagnostics on failure
+        if: failure()
+        shell: bash
+        run: cat ~/.nativelang/classify/service/service.log || true

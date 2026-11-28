@@ -5,14 +5,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.nativelang</groupId>
   <artifactId>classify</artifactId>
-  <version>0.2.2</version>
+  <version>0.3.0</version>
   <name>Classify</name>
-  <description>Classify text locally with Java 21+ on Apple Silicon macOS or ARM64/x64 Linux. The first call downloads about 1.6 GB.</description>
+  <description>Classify text locally with Java 21 or later on macOS, Linux and Windows.</description>
   <url>https://github.com/nativelang/classify</url>
   <licenses>
     <license>
       <name>MIT License</name>
-      <url>https://github.com/nativelang/classify/blob/v0.2.2/LICENSE</url>
+      <url>https://github.com/nativelang/classify/blob/v0.3.0/LICENSE</url>
     </license>
   </licenses>
   <developers>
@@ -27,7 +27,7 @@
     <connection>scm:git:https://github.com/nativelang/classify.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/nativelang/classify.git</developerConnection>
     <url>https://github.com/nativelang/classify</url>
-    <tag>v0.2.2</tag>
+    <tag>v0.3.0</tag>
   </scm>
   <dependencies>
     <dependency>

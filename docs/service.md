@@ -1,8 +1,8 @@
 # Speed up startup with the local API service
 
-In service-enabled bindings, set `NATIVELANG_CLASSIFY_SERVICE=1` and use the usual classification call. The first call starts the service, downloads the model if needed, and waits for it to load. Later processes under the same user account reuse that model. The service releases it after 15 minutes with no requests.
+With a 0.3.0 binding, set `NATIVELANG_CLASSIFY_SERVICE=1` and use the usual classification call. The first call starts the service, downloads the model if needed, and waits for it to load. Later processes under the same user account reuse that model. The service releases it after 15 minutes with no requests.
 
-The packages currently listed in [platforms](platforms.md#model-downloads) predate managed service support. The [standalone HTTP server](../self-hosting/README.md) is available with those releases.
+For the 0.2.x bindings, use the [standalone HTTP server](../self-hosting/README.md).
 
 ## Start, stop or check the service
 

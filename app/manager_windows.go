@@ -43,21 +43,50 @@ func windowsStart(pid int) (string, error) {
 	return strconv.FormatUint(uint64(start.HighDateTime)<<32|uint64(start.LowDateTime), 10), nil
 }
 
-const scheduler = `$ErrorActionPreference='Stop';$ts=New-Object -ComObject Schedule.Service;$ts.Connect();$folder=$ts.GetFolder('\');$name='NativeLang.Classify.'+$env:CLASSIFY_INSTANCE;`
+const scheduler = `
+$ErrorActionPreference = 'Stop'
+$ts = New-Object -ComObject Schedule.Service
+$ts.Connect()
+$folder = $ts.GetFolder('\')
+$name = 'NativeLang.Classify.' + $env:CLASSIFY_INSTANCE
+`
 
 func task(i instance, exe, script string) (string, error) {
 	return managerCommand([]string{"CLASSIFY_INSTANCE=" + i.ID, "CLASSIFY_EXECUTABLE=" + exe}, powershell(), "-NoProfile", "-NonInteractive", "-Command", scheduler+script)
 }
 func register(s service, i instance, exe string) error {
-	_, e := task(i, exe, `$d=$ts.NewTask(0);$sid=[Security.Principal.WindowsIdentity]::GetCurrent().User.Value;$d.Principal.UserId=$sid;$d.Principal.LogonType=3;$d.Principal.RunLevel=0;$d.Settings.ExecutionTimeLimit='PT0S';$d.Settings.DisallowStartIfOnBatteries=$false;$d.Settings.StopIfGoingOnBatteries=$false;$a=$d.Actions.Create(0);$a.Path=$env:CLASSIFY_EXECUTABLE;$a.Arguments='daemon '+$env:CLASSIFY_INSTANCE;$t=$folder.RegisterTaskDefinition($name,$d,2,$sid,$null,3,$null);[void]$t.Run($null)`)
+	_, e := task(i, exe, `
+$d = $ts.NewTask(0)
+$sid = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+$d.Principal.UserId = $sid
+$d.Principal.LogonType = 3   # Interactive token
+$d.Principal.RunLevel = 0   # Least privilege
+$d.Settings.ExecutionTimeLimit = 'PT0S'
+$d.Settings.DisallowStartIfOnBatteries = $false
+$d.Settings.StopIfGoingOnBatteries = $false
+$a = $d.Actions.Create(0)
+$a.Path = $env:CLASSIFY_EXECUTABLE
+$a.Arguments = 'daemon ' + $env:CLASSIFY_INSTANCE
+$t = $folder.RegisterTaskDefinition($name, $d, 2, $sid, $null, 3, $null)
+[void]$t.Run($null)`)
 	return e
 }
 func managerOwns(s service, i instance, pid int) bool {
-	v, e := task(i, "", fmt.Sprintf(`$t=$folder.GetTask($name);$action=$t.Definition.Actions.Item(1);$p=Get-CimInstance Win32_Process -Filter 'ProcessId=%d';if($t.State -eq 4 -and $p.ExecutablePath -eq $action.Path -and $p.CommandLine.EndsWith('daemon '+$env:CLASSIFY_INSTANCE)){Write-Output owned}`, pid))
+	v, e := task(i, "", fmt.Sprintf(`
+$t = $folder.GetTask($name)
+$action = $t.Definition.Actions.Item(1)
+$p = Get-CimInstance Win32_Process -Filter 'ProcessId=%d'
+if ($t.State -eq 4 -and $p.ExecutablePath -eq $action.Path -and $p.CommandLine.EndsWith('daemon ' + $env:CLASSIFY_INSTANCE)) {
+    Write-Output owned
+}`, pid))
 	return e == nil && strings.TrimSpace(v) == "owned"
 }
 func unregister(s service, i instance) error {
-	_, e := task(i, "", `try{$t=$folder.GetTask($name)}catch{if(($_.Exception.HResult -band 65535) -eq 2){return};throw};$t.Stop(0);$folder.DeleteTask($name,0)`)
+	_, e := task(i, "", `
+try { $t = $folder.GetTask($name) }
+catch { if (($_.Exception.HResult -band 65535) -eq 2) { return }; throw }
+if ($t.State -eq 4) { $t.Stop(0) }
+$folder.DeleteTask($name, 0)`)
 	return e
 }
 

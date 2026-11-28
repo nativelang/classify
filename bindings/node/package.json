@@ -1,6 +1,6 @@
 {
   "name": "@nativelang/classify",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Classify text into your own categories locally in a Node.js app.",
   "license": "MIT",
   "type": "module",

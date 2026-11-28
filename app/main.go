@@ -110,7 +110,14 @@ func (s service) native(ctx context.Context) (string, error) {
 	} else {
 		cmd = exec.CommandContext(ctx, "/bin/sh", "-c", nativeSH, "classify", "--locate")
 	}
-	cmd.Stderr = os.Stderr
+	// Installers emit progress and download failures on stderr, never requests.
+	// OS-managed jobs have no attached terminal.
+	diagnostics, err := os.OpenFile(s.path("service.log"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		return "", err
+	}
+	defer diagnostics.Close()
+	cmd.Stderr = diagnostics
 	b, e := cmd.Output()
 	return strings.TrimSpace(string(b)), e
 }
@@ -156,6 +163,11 @@ func (s service) report() error {
 		if owned(s, i, r) {
 			return fmt.Errorf("Classify PID %d is unresponsive; see classify service logs", r.PID)
 		}
+	}
+	var fallback string
+	if s.read("fallback.json", &fallback) == nil {
+		fmt.Println("stopped: " + fallback)
+		return nil
 	}
 	fmt.Println("stopped")
 	return nil

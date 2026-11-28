@@ -1,4 +1,4 @@
-"""Assemble a signed Maven Central bundle of Classify's v0.2.2 Java release."""
+"""Assemble a signed Maven Central bundle of Classify's v0.3.0 Java release."""
 
 import argparse
 import hashlib
@@ -25,8 +25,8 @@ def main():
     root = java.parent.parent
     gson = args.gson.resolve()
     package = Path("io/nativelang/classify")
-    artifact = "classify-0.2.2"
-    prefix = "io/github/nativelang/classify/0.2.2"
+    artifact = "classify-0.3.0"
+    prefix = "io/github/nativelang/classify/0.3.0"
 
     with tempfile.TemporaryDirectory(dir=args.output.resolve().parent) as tmp:
         work = Path(tmp)
@@ -34,20 +34,21 @@ def main():
         subprocess.run(["sh", java / "build.sh", gson, files], check=True)
         binary = files / f"{artifact}.jar"
         if hashlib.sha256(binary.read_bytes()).hexdigest() != (
-            "2623d81cfd2e447b28850b70ac05630f570b2a50c27339cb3aa2d55ce22ee951"
+            "55c10d2a7d425fd0be5b34bc1a91c26dba1cafe9e1a435a8569659794e5592e6"
         ):
-            raise SystemExit("Binary differs from the v0.2.2 release. Use the documented JDK and source.")
+            raise SystemExit("Binary differs from the v0.3.0 release. Use the documented JDK and source.")
 
         date = "--date=2020-01-01T00:00:00Z"
         sources = work / "sources"
         (sources / package).mkdir(parents=True)
         source = java / "src" / package / "Classifier.java"
         if hashlib.sha256(source.read_bytes()).hexdigest() != (
-            "2062e238897f30af3c4a0e600a6bb8d3d86348c4ead2e25df3401fef0ba3eaae"
+            "10a029de340f0d5e7cf4ec67e3c61e278cea0d4fe9ccfa3f68f9cc4bd4179069"
         ):
-            raise SystemExit("Java source differs from the v0.2.2 release.")
+            raise SystemExit("Java source differs from the v0.3.0 release.")
         shutil.copyfile(source, sources / package / "Classifier.java")
-        shutil.copyfile(root / "app/bootstrap.sh", sources / package / "bootstrap.sh")
+        for resource in ("bootstrap.sh", "install.ps1"):
+            shutil.copyfile(root / "app" / resource, sources / package / resource)
         docs = work / "docs"
         subprocess.run(["javadoc", "-quiet", "-notimestamp", "--release", "21",
                         "-classpath", gson, "-d", docs, sources / package / "Classifier.java"], check=True)
