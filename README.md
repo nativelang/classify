@@ -7,20 +7,19 @@
 
 Give Classify some text and a list of categories. It tells you which one fits, if any.
 
-*Example (pseudocode)*
-
 ```text
+# Pseudocode
 classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
 ```
 
 The result is `"negative"`.
 
-## Examples
+<a id="examples"></a>
 
-[Start Classify on your computer](self-hosting/README.md), then pick your language. Each example shows how to call the server from your app.
+Pick your language for setup instructions and a working example.
 
-[Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/)
+[Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/) · [C](examples/c/)
 
-To run Classify directly inside a C app, follow the [C example](examples/c/). Both ways work offline after setup.
+These examples work offline after setup.
 
 The large model and its GPU server are available under an [enterprise license](PACKAGING.md#enterprise-licensing).
