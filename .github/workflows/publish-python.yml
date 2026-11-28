@@ -24,7 +24,7 @@ jobs:
           wheel=nativelang_classify-0.2.1-py3-none-any.whl
           curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
             "https://github.com/nativelang/classify/releases/download/v0.2.1/$wheel" --output "$wheel"
-          printf '%s  %s\n' 'e0fcc14dea49c31267d12ab78e12298a3011ecc5105a08eefac005750cf01154' "$wheel" | sha256sum --check --strict -
+          printf '%s  %s\n' '17b8d520858fb9abfe4141f3c1602906a3d9151420e1451cf08ba3fcfa45e40d' "$wheel" | sha256sum --check --strict -
 
       - name: Publish the verified wheel
         uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # release/v1
