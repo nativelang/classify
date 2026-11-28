@@ -34,7 +34,7 @@ def main():
         subprocess.run(["sh", java / "build.sh", gson, files], check=True)
         binary = files / f"{artifact}.jar"
         if hashlib.sha256(binary.read_bytes()).hexdigest() != (
-            "55c10d2a7d425fd0be5b34bc1a91c26dba1cafe9e1a435a8569659794e5592e6"
+            "989d87728c82a79e90e252244d7a1cdfb432ee8a0dbc8e26afbf668578ef4abe"
         ):
             raise SystemExit("Binary differs from the v0.3.0 release. Use the documented JDK and source.")
 

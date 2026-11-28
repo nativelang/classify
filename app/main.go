@@ -164,6 +164,10 @@ func (s service) report() error {
 			return fmt.Errorf("Classify PID %d is unresponsive; see classify service logs", r.PID)
 		}
 	}
+	var startup startFailure
+	if i.ID != "" && s.read("startup-error.json", &startup) == nil && startup.ID == i.ID {
+		return fmt.Errorf("service startup failed: %s", startup.Message)
+	}
 	var fallback string
 	if s.read("fallback.json", &fallback) == nil {
 		fmt.Println("stopped: " + fallback)

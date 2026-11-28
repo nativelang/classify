@@ -31,10 +31,40 @@ func lock(path string) (func(), error) {
 	}
 	return func() { f.Close() }, nil
 }
-func windowsStart(int) (string, error) { return "", errors.New("Windows only") }
-func label(i instance) string          { return "org.nativelang.classify." + i.ID }
-func domain() string                   { return fmt.Sprintf("gui/%d", os.Getuid()) }
-func escape(s string) string           { var b strings.Builder; xml.EscapeText(&b, []byte(s)); return b.String() }
+func processStart(pid int) (string, error) {
+	if pid <= 0 {
+		return "", errors.New("invalid PID")
+	}
+	if runtime.GOOS == "linux" {
+		// /proc/PID/stat field 22 is the immutable start tick within a boot.
+		// The command name in field 2 may itself contain spaces and parentheses.
+		data, err := os.ReadFile(fmt.Sprintf("/proc/%d/stat", pid))
+		if err != nil {
+			return "", err
+		}
+		end := strings.LastIndex(string(data), ")")
+		if end < 0 {
+			return "", errors.New("invalid process record")
+		}
+		fields := strings.Fields(string(data[end+1:]))
+		if len(fields) < 20 || fields[0] == "Z" {
+			return "", errors.New("process unavailable")
+		}
+		boot, err := os.ReadFile("/proc/sys/kernel/random/boot_id")
+		if err != nil {
+			return "", err
+		}
+		return strings.TrimSpace(string(boot)) + ":" + fields[19], nil
+	}
+	return managerCommand([]string{"LC_ALL=C", "TZ=UTC"}, "/bin/ps", "-p", strconv.Itoa(pid), "-o", "lstart=")
+}
+func label(i instance) string { return "org.nativelang.classify." + i.ID }
+func domain() string          { return fmt.Sprintf("gui/%d", os.Getuid()) }
+func escape(s string) string {
+	var b strings.Builder
+	xml.EscapeText(&b, []byte(s))
+	return b.String()
+}
 func register(s service, i instance, exe string) error {
 	name := label(i)
 	if runtime.GOOS == "linux" {

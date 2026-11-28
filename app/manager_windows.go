@@ -29,7 +29,10 @@ func lock(path string) (func(), error) {
 		time.Sleep(100 * time.Millisecond)
 	}
 }
-func windowsStart(pid int) (string, error) {
+func processStart(pid int) (string, error) {
+	if pid <= 0 {
+		return "", errors.New("invalid PID")
+	}
 	h, e := syscall.OpenProcess(0x1000, false, uint32(pid))
 	if e != nil {
 		return "", e
@@ -40,11 +43,15 @@ func windowsStart(pid int) (string, error) {
 	if e != nil {
 		return "", e
 	}
+	if exit.HighDateTime != 0 || exit.LowDateTime != 0 {
+		return "", errors.New("process exited")
+	}
 	return strconv.FormatUint(uint64(start.HighDateTime)<<32|uint64(start.LowDateTime), 10), nil
 }
 
 const scheduler = `
 $ErrorActionPreference = 'Stop'
+[Console]::Error.WriteLine('Connecting to Task Scheduler')
 $ts = New-Object -ComObject Schedule.Service
 $ts.Connect()
 $folder = $ts.GetFolder('\')
@@ -67,7 +74,9 @@ $d.Settings.StopIfGoingOnBatteries = $false
 $a = $d.Actions.Create(0)
 $a.Path = $env:CLASSIFY_EXECUTABLE
 $a.Arguments = 'daemon ' + $env:CLASSIFY_INSTANCE
+[Console]::Error.WriteLine('Registering the user task')
 $t = $folder.RegisterTaskDefinition($name, $d, 2, $sid, $null, 3, $null)
+[Console]::Error.WriteLine('Starting the user task')
 [void]$t.Run($null)`)
 	return e
 }
@@ -79,7 +88,7 @@ $p = Get-CimInstance Win32_Process -Filter 'ProcessId=%d'
 if ($t.State -eq 4 -and $p.ExecutablePath -eq $action.Path -and $p.CommandLine.EndsWith('daemon ' + $env:CLASSIFY_INSTANCE)) {
     Write-Output owned
 }`, pid))
-	return e == nil && strings.TrimSpace(v) == "owned"
+	return e == nil && strings.HasSuffix(strings.TrimSpace(v), "owned")
 }
 func unregister(s service, i instance) error {
 	_, e := task(i, "", `

@@ -169,14 +169,14 @@ func (m *model) classify(w http.ResponseWriter, r *http.Request) {
 	timer := time.AfterFunc(stallLimit, func() { m.cmd.Process.Kill() })
 	reply, e := m.exchange(line)
 	timer.Stop()
-	var result struct{ Error json.RawMessage }
+	var result map[string]json.RawMessage
 	if e == nil {
 		e = json.Unmarshal(reply, &result)
 	}
 	m.mu.Lock()
 	m.st.Requests++
 	m.st.InferenceMS += time.Since(start).Milliseconds()
-	if e != nil || result.Error != nil {
+	if e != nil || result["error"] != nil {
 		m.st.Errors++
 	}
 	m.mu.Unlock()
@@ -185,8 +185,17 @@ func (m *model) classify(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "native worker did not reply", 503)
 		return
 	}
-	if result.Error != nil {
-		w.WriteHeader(400)
+	if result["error"] != nil {
+		var detail struct{ Code string }
+		json.Unmarshal(result["error"], &detail)
+		if detail.Code == "invalid_argument" {
+			w.WriteHeader(http.StatusBadRequest)
+		} else {
+			w.WriteHeader(http.StatusServiceUnavailable)
+		}
+		w.Write(reply)
+		return
 	}
-	w.Write(reply)
+	result["source"] = json.RawMessage(`"self_hosted"`)
+	json.NewEncoder(w).Encode(result)
 }

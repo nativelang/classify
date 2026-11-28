@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -16,15 +15,23 @@ import (
 var errManager = errors.New("user service manager unavailable")
 
 func managerCommand(extra []string, name string, args ...string) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	// Task Scheduler can take longer on a cold Windows desktop.
+	timeout := 20 * time.Second
+	if filepath.Base(name) == "powershell.exe" {
+		timeout = 60 * time.Second
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, name, args...)
 	cmd.Env = append(os.Environ(), extra...)
 	b, e := cmd.CombinedOutput()
-	if e != nil {
-		return "", fmt.Errorf("%s: %w: %s", filepath.Base(name), e, cleanOutput(b))
+	if ctx.Err() != nil {
+		e = ctx.Err()
 	}
-	return cleanOutput(b), nil
+	if e != nil {
+		return "", fmt.Errorf("%s: %w: %s", filepath.Base(name), e, strings.TrimSpace(string(b)))
+	}
+	return strings.TrimSpace(string(b)), nil
 }
 func (s service) stop() error {
 	var i instance
@@ -49,7 +56,20 @@ func (s service) stop() error {
 	if e = unregister(s, i); e != nil {
 		return e
 	}
-	for _, p := range []string{"endpoint.json", "instance.json", "startup-error.json"} {
+	if r.ID == i.ID {
+		deadline := time.Now().Add(12 * time.Second)
+		for {
+			started, err := processStart(r.PID)
+			if err != nil || started != r.Started {
+				break
+			}
+			if time.Now().After(deadline) {
+				return errors.New("the OS is still stopping the Classify service; see classify service logs")
+			}
+			time.Sleep(100 * time.Millisecond)
+		}
+	}
+	for _, p := range []string{"endpoint.json", "instance.json", "startup-error.json", "fallback.json"} {
 		if e = os.Remove(s.path(p)); e != nil && !os.IsNotExist(e) {
 			return e
 		}
@@ -179,13 +199,4 @@ func (s service) waitReady(i instance) (record, instance, error) {
 		time.Sleep(200 * time.Millisecond)
 	}
 	return r, i, fmt.Errorf("%w; see classify service logs", errStalled)
-}
-func processStart(pid int) (string, error) {
-	if pid <= 0 {
-		return "", errors.New("invalid PID")
-	}
-	if runtime.GOOS == "windows" {
-		return windowsStart(pid)
-	}
-	return managerCommand([]string{"LC_ALL=C", "TZ=UTC"}, "/bin/ps", "-p", strconv.Itoa(pid), "-o", "lstart=")
 }

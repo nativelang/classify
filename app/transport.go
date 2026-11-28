@@ -19,7 +19,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 )
 
@@ -49,7 +48,7 @@ func call(r record, i instance, path string, body []byte, timeout time.Duration)
 		}
 		return errors.New("Classify service identity changed")
 	}}
-	transport := &http.Transport{TLSClientConfig: cfg, DisableKeepAlives: true, DialContext: (&net.Dialer{Timeout: time.Second}).DialContext}
+	transport := &http.Transport{TLSClientConfig: cfg, TLSHandshakeTimeout: 2 * time.Second, DisableKeepAlives: true, DialContext: (&net.Dialer{Timeout: time.Second}).DialContext}
 	client := http.Client{Transport: transport, Timeout: timeout, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}
 	method := http.MethodGet
 	if body != nil {
@@ -69,7 +68,8 @@ func call(r record, i instance, path string, body []byte, timeout time.Duration)
 	if resp.StatusCode != 200 && !(path == "/v1/classify" && resp.StatusCode == 400) {
 		return nil, fmt.Errorf("Classify returned HTTP %d", resp.StatusCode)
 	}
-	return io.ReadAll(io.LimitReader(resp.Body, maxRequest+1))
+	data, err := io.ReadAll(io.LimitReader(resp.Body, maxRequest+1))
+	return bytes.TrimSpace(data), err
 }
 func probe(r record, i instance) (status, error) {
 	var st status
@@ -94,26 +94,31 @@ func (s service) bridge() error {
 		}
 		return s.direct()
 	}
-	if e != nil {
-		return e
-	}
 	scanner := scanLines(os.Stdin)
+	retryStartup := false
 	for scanner.Scan() {
-		reply, err := call(r, i, "/v1/classify", scanner.Bytes(), stallLimit+15*time.Second)
-		if err != nil {
-			// Classification has no side effects. Retry once after coordinating recovery.
-			old := r
-			r, i, err = s.ensure(&old)
-			if err == nil {
-				reply, err = call(r, i, "/v1/classify", scanner.Bytes(), stallLimit+15*time.Second)
+		if retryStartup {
+			r, i, e = s.ensure(nil)
+		}
+		var reply []byte
+		if e == nil {
+			reply, e = call(r, i, "/v1/classify", scanner.Bytes(), stallLimit+15*time.Second)
+			if e != nil {
+				// Classification has no side effects. Coordinate one recovery and retry.
+				old := r
+				r, i, e = s.ensure(&old)
+				if e == nil {
+					reply, e = call(r, i, "/v1/classify", scanner.Bytes(), stallLimit+15*time.Second)
+				}
 			}
-			if err != nil {
-				reply = failure(err.Error())
-			}
+		}
+		if e != nil {
+			reply = failure(e.Error())
 		}
 		if _, err := fmt.Fprintln(os.Stdout, string(reply)); err != nil {
 			return err
 		}
+		retryStartup = e != nil
 	}
 	return scanner.Err()
 }
@@ -186,5 +191,4 @@ func (s service) serve(id string) error {
 	}
 	return e
 }
-func validID(id string) bool      { _, err := hex.DecodeString(id); return len(id) == 32 && err == nil }
-func cleanOutput(b []byte) string { return strings.TrimSpace(string(b)) }
+func validID(id string) bool { _, err := hex.DecodeString(id); return len(id) == 32 && err == nil }
