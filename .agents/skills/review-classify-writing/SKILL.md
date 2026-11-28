@@ -10,10 +10,10 @@ Describe the product in one sentence that also holds for a different use case. P
 *Example (pseudocode)*
 
 ```text
-classify("This is a terrible movie", categories=["good", "bad"])
+classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
 ```
 
-The result is `"bad"`.
+The result is `"negative"`.
 
 **Review the example on its own.** Cover the surrounding paragraphs. Can you point to the text, name the categories, and say the answer? Keep real values inline. End the first example at the answer. Put ambiguous inputs and error cases in the reference where readers handle them.
 
