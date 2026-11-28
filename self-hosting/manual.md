@@ -63,7 +63,7 @@ docker load -i classify-image-0.1.0-dm-classify-compact-r3-linux-arm64.oci.tar
 docker run --rm -d --name classify-server -p 127.0.0.1:8080:8080 classify:0.1.0-dm-classify-compact-r3-linux-arm64
 ```
 
-To use port `9090` on your computer, change the Docker port mapping to `-p 127.0.0.1:9090:8080` and use port `9090` in your app.
+To use port `9090` on your computer, use `-p 127.0.0.1:9090:8080`. Check [the health page on port 9090](http://127.0.0.1:9090/health) and use port `9090` in your app.
 
 For AMD64 or standard r1, substitute your image filename in the first command and the name printed after `Loaded image:` in the second. [Try a request](#try-a-request), then stop the server with `docker stop classify-server`.
 
