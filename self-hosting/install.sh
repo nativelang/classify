@@ -4,7 +4,7 @@ set -eu
 
 fail() { printf '%s\n' "$1" >&2; exit 1; }
 if [ -e classify-server ] || [ -L classify-server ]; then
-    fail "The classify-server folder already exists. To start the server, run ./classify-server/classify serve."
+    fail "classify-server already exists. To install a new copy, choose an empty folder."
 fi
 
 model=compact-r3
