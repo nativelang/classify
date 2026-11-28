@@ -16,7 +16,10 @@ WINDOWS = os.name == "nt"
 ENV = dict(os.environ, NATIVELANG_CLASSIFY_SERVICE="1")
 
 def run(args, cwd, **settings):
-    return subprocess.check_output(args, cwd=cwd, env=dict(ENV, **settings), text=True, timeout=360).strip()
+    result = subprocess.run(args, cwd=cwd, env=dict(ENV, **settings), text=True, stdout=subprocess.PIPE, timeout=360)
+    if result.returncode:
+        raise RuntimeError(f"{args[0]} failed ({result.returncode}): {result.stdout[-2000:]}")
+    return result.stdout.strip()
 
 def example(key, folder):
     markdown = (ROOT / f"examples/{key}/README.md").read_text()
@@ -49,7 +52,7 @@ def example(key, folder):
         with urllib.request.urlopen("https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.15.0/gson-2.15.0.jar") as source:
             gson.write_bytes(source.read())
         assert hashlib.sha256(gson.read_bytes()).hexdigest() == "96d3dd843dc2911de01cdabcd50064cb9e860353102a0a78c96fd833d396fc7d"
-        run(["bash", (ROOT / "bindings/java/build.sh").as_posix(), "gson.jar", "pkg"], folder)
+        run([os.environ.get("CLASSIFY_TEST_BASH", "bash"), (ROOT / "bindings/java/build.sh").as_posix(), "gson.jar", "pkg"], folder)
         (folder / "Movie.java").write_text(code)
         cp = os.pathsep.join([str(next((folder / "pkg").glob("*.jar"))), str(gson), "."])
         run(["javac", "-cp", cp, "Movie.java"], folder)

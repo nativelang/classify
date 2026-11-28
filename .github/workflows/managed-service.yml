@@ -42,6 +42,7 @@ jobs:
         run: |
           languages="python node go"
           if [[ "$RUNNER_OS" == "Windows" && "$RUNNER_ARCH" == "X64" ]]; then
+            export CLASSIFY_TEST_BASH="$(cygpath -w /usr/bin/bash)"
             export JAVA_HOME="$JAVA_HOME_21_X64"
             export PATH="$(cygpath -u "$JAVA_HOME")/bin:$PATH"
             languages="$languages java csharp rust"
