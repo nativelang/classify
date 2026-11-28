@@ -49,13 +49,21 @@ try {
     while (!(Test-Path "$work/result.txt") -and (Get-Date) -lt $deadline) {
         Start-Sleep -Seconds 2
         $info = Get-ScheduledTaskInfo -TaskName $name
-        if ($info.LastTaskResult -ne 267009 -and (Get-ScheduledTask -TaskName $name).State -eq 'Ready' -and !(Test-Path "$work/result.txt")) {
+        if ($info.LastTaskResult -notin 267008, 267009, 267010, 267011, 267045 -and (Get-ScheduledTask -TaskName $name).State -eq 'Ready' -and !(Test-Path "$work/result.txt")) {
             throw "The standard-account harness exited with task result $($info.LastTaskResult)"
         }
+    }
+    if (!(Test-Path "$work/result.txt")) {
+        $info = Get-ScheduledTaskInfo -TaskName $name
+        throw "Standard-account harness timed out: $($info.LastTaskResult)"
     }
     $resultText = [IO.File]::ReadAllText("$work/result.txt")
     if ($resultText -ne 'passed') { throw $resultText }
     Write-Output 'Started and stopped the service using a standard local account.'
+} catch {
+    Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-TaskScheduler/Operational'; StartTime=(Get-Date).AddMinutes(-10)} -ErrorAction SilentlyContinue |
+        Where-Object { $_.Message -like "*$name*" } | Select-Object -First 8 -ExpandProperty Message | Write-Output
+    throw
 } finally {
     Unregister-ScheduledTask -TaskName $name -Confirm:$false -ErrorAction SilentlyContinue
     if ($user) { Remove-LocalUser -SID $user.SID }
