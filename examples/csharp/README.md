@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 
-using var client = new HttpClient();
+using var client = new HttpClient { Timeout = TimeSpan.FromMinutes(30) };
 using var review = new StringContent(
     """{"text":"This is a terrible movie","categories":["positive","negative","neutral"]}""",
     Encoding.UTF8, "application/json");
