@@ -2,9 +2,15 @@
 
 The [language packages](README.md#examples) return the matching category or an empty result when Classify is unsure. If the cached installation is damaged, move its platform folder out of `~/.nativelang/classify/` and call Classify again to download a fresh copy.
 
-To call Classify from multiple apps over HTTP, [start the server](self-hosting/README.md). It listens on `127.0.0.1:8080` by default. You can [change the port](self-hosting/README.md#use-a-different-port) with `--port`.
+## Deployment options
+
+**Share one loaded model across apps.** Loading a model takes time and memory. If several apps or short-lived scripts use Classify on the same machine, keep a server running. It loads the model once, and each app sends it text over HTTP. This also works on Windows and Intel Macs. [Install and start the server](self-hosting/README.md)
+
+**Call Classify inside a C program.** Link the C library when you want your program to load the model itself. Open it at startup, classify as many texts as you need, and close it when you’re done. This works without a separate server. [Build the C example for your platform](examples/c/)
 
 ## Call and result
+
+The server listens on `127.0.0.1:8080` by default. To use another port, [start it with `--port`](self-hosting/README.md#use-a-different-port).
 
 ```sh
 curl http://127.0.0.1:8080/v1/classify \

@@ -21,8 +21,8 @@ Try Classify in your language.
 
 [Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/)
 
-Your first call downloads the small model (about 1.6 GB). Your other apps reuse it under `~/.nativelang/classify/`. Requires macOS 15+ on Apple Silicon or Debian 12-compatible Linux on ARM64 or x64.
+These packages run on macOS 15+ on Apple Silicon or Debian 12-compatible Linux on ARM64 or x64. Your first call downloads the small model (about 1.6 GB). Other apps can use the same download.
 
-[Embed in C](examples/c/) · [Run a shared server, including on Windows and Intel Macs](self-hosting/README.md) · [API reference](SPECIFICATION.md)
+[Advanced options](SPECIFICATION.md#deployment-options) · [API reference](SPECIFICATION.md#call-and-result)
 
 A hosted service and a more powerful model with an enterprise license are coming soon.
