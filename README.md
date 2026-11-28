@@ -7,15 +7,14 @@
 
 Give Classify some text and a list of categories. It tells you which one fits, if any.
 
-*Example (pseudocode)*
-
 ```text
+# Pseudocode
 classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
 ```
 
 The result is `"negative"`.
 
-## Examples
+<a id="examples"></a>
 
 Pick your language for setup instructions and a working example.
 
