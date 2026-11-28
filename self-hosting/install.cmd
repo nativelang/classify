@@ -37,7 +37,7 @@ curl.exe -q --fail --location --retry 2 --output "%stage%\server\start.cmd" "htt
 powershell.exe -NoProfile -Command "if ((Get-FileHash -LiteralPath '%stage%\server\start.cmd' -Algorithm SHA256 -ErrorAction Stop).Hash -ne 'f892d07461aaa995f6befd45c54e1e38b81d656a5f4ac30f92c0dc5de7d7ae5c') { throw 'Launcher checksum failed.' }" || goto failed
 powershell.exe -NoProfile -Command "$ErrorActionPreference = 'Stop'; [IO.Directory]::Move('%stage%\server', 'classify-server')" || goto failed
 rmdir /s /q "%stage%"
-echo Installed. Start the server with .\classify-server\classify.exe serve
+echo Installed. Start the server with .\classify-server\start.cmd
 exit /b 0
 
 :failed

@@ -57,4 +57,4 @@ verify "$work/classify-server/start" 4a664420a21529ff201f5c036199920a466dd3bd4be
 chmod +x "$work/classify-server/start"
 mv -n "$work/classify-server" .
 [ ! -d "$work/classify-server" ] || fail "classify-server already exists. The existing folder was kept."
-printf '%s\n' 'Installed. Start the server with ./classify-server/classify serve'
+printf '%s\n' 'Installed. Start the server with ./classify-server/start'
