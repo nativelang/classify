@@ -1,7 +1,5 @@
 # Classify a movie review in Python
 
-You’ll need Python 3.9 or later. Use an Apple Silicon Mac with macOS 15 or later, or [Debian 12-compatible Linux](../../SPECIFICATION.md#linux-requirements) on ARM64 or x64. On Windows or an Intel Mac, [run the local server](../../self-hosting/README.md).
-
 ```sh
 pip install nativelang-classify
 ```
@@ -27,3 +25,5 @@ negative
 ```
 
 If none of your categories fit, `classify` returns `None`.
+
+[Supported platforms](../../SPECIFICATION.md#python-platform-support)
