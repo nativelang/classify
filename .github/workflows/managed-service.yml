@@ -36,7 +36,11 @@ jobs:
       - name: Verify non-elevated Windows startup and stop
         if: runner.os == 'Windows'
         shell: pwsh
-        run: ./app/tests/standard_windows.ps1 -Cli "$env:RUNNER_TEMP/classify-test.exe"
+        working-directory: app
+        run: |
+          go build -o "$env:RUNNER_TEMP/winuser.exe" ./tests/winuser
+          & "$env:RUNNER_TEMP/winuser.exe" powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File tests/standard_windows.ps1 -Cli "$env:RUNNER_TEMP/classify-test.exe"
+          exit $LASTEXITCODE
       - name: Exercise OS-managed lifecycle
         shell: bash
         run: python app/tests/managed_quickstart.py "$RUNNER_TEMP/classify-test.exe"
