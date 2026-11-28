@@ -1,41 +1,33 @@
 # Go
 
-[Start the local server](../../self-hosting/README.md). With Go installed, save this as `main.go`.
+In an empty folder, create a module and install Classify.
+
+```sh
+go mod init movie
+go get github.com/nativelang/classify/bindings/go@v0.2.0
+```
+
+Save this as `main.go`.
 
 ```go
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
-	"strings"
+
+	"github.com/nativelang/classify/bindings/go"
 )
 
-const classifyURL = "http://127.0.0.1:8080/v1/classify"
-
 func main() {
-	request := strings.NewReader(`{"text":"This is a terrible movie","categories":["positive","negative","neutral"]}`)
-	response, err := http.Post(classifyURL, "application/json", request)
+	label, err := classify.Classify("This is a terrible movie", []string{"positive", "negative", "neutral"})
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer response.Body.Close()
-	if response.StatusCode != http.StatusOK {
-		log.Fatal(response.Status)
+	if label != nil {
+		fmt.Println(*label)
 	}
-
-	var result map[string]any
-	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(result["category"])
 }
 ```
 
-```sh
-go run main.go
-```
-
-Prints `negative`.
+Run `go run main.go`. It prints `negative`. The first call downloads the model and runtime. Later calls use the local cache. A successful call returns a nil label when no category fits.

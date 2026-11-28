@@ -1,35 +1,25 @@
 # Rust
 
-[Start the local server](../../self-hosting/README.md). With Rust and Cargo installed, open a second terminal.
+Create a project and install Classify.
 
 ```sh
-cargo new classify-example
-cd classify-example
-cargo add ureq@2 --features json
-cargo add serde_json@1
+cargo new movie
+cd movie
+cargo add classify --git https://github.com/nativelang/classify --tag v0.2.0
 ```
 
 Save this as `src/main.rs`.
 
 ```rust
-use serde_json::{json, Value};
+use classify::classify;
 
-const CLASSIFY_URL: &str = "http://127.0.0.1:8080/v1/classify";
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let result: Value = ureq::post(CLASSIFY_URL)
-        .send_json(json!({
-            "text": "This is a terrible movie",
-            "categories": ["positive", "negative", "neutral"]
-        }))?
-        .into_json()?;
-    println!("{}", result["category"].as_str().unwrap_or("unknown"));
+fn main() -> std::io::Result<()> {
+    let label = classify("This is a terrible movie", &["positive", "negative", "neutral"])?;
+    if let Some(label) = label {
+        println!("{label}");
+    }
     Ok(())
 }
 ```
 
-```sh
-cargo run
-```
-
-Prints `negative`.
+Run `cargo run`. It prints `negative`. The first call downloads the model and runtime. Later calls use the local cache. A successful call returns `None` when no category fits.
