@@ -1,6 +1,6 @@
 # Classify
 
-Classify text locally on Apple Silicon macOS or Debian 12-compatible ARM64 and x64 Linux. The first call downloads Compact r3 and its runtime, about 1.6 GB. Later calls use the local cache.
+Classify text locally on macOS 15+ on Apple Silicon or Debian 12-compatible ARM64 and x64 Linux. The first call downloads Compact r3 and its runtime, about 1.6 GB. Later calls use the local cache.
 
 ```rust
 use classify::classify;
