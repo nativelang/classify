@@ -23,4 +23,4 @@ The first release is in development. Downloads and install commands will appear 
 - **Run Classify on your machine.** [Set up the server with Docker or directly on Windows, macOS, or Linux](self-hosting/README.md) · [Send a request](self-hosting/README.md#try-a-request)
 - **Run the large model on your infrastructure.** The model and its GPU serving software are available under an enterprise license. [Enterprise licensing](PACKAGING.md#enterprise-licensing)
 
-Local use will be free and won’t require an API key. The [planned hosted service](SPECIFICATION.md#opt-in-fallback-and-paid-offerings) will use an API key.
+The free edition will run locally without an API key. The [planned hosted service](SPECIFICATION.md#opt-in-fallback-and-paid-offerings) will use an API key.

@@ -38,6 +38,6 @@ If you want NativeLang to run Classify for you, the planned paid service will of
 
 ### Enterprise licensing
 
-NativeLang offers the large classification model and its GPU serving software under an enterprise license for deployment on your infrastructure. Contact NativeLang to discuss terms and arrange private delivery.
+NativeLang offers the large classification model and its GPU serving software under an enterprise license for deployment on your infrastructure. To discuss terms and private delivery, [open a licensing inquiry](https://github.com/nativelang/classify/issues/new). Issues are public, so keep the initial inquiry general.
 
 The public code and guides use the [MIT License](LICENSE). Model and binary downloads carry their own terms and third-party notices.
