@@ -18,7 +18,7 @@ curl http://127.0.0.1:8080/v1/classify \
   -d '{"text":"This is a terrible movie","categories":["positive","negative","neutral"]}'
 ```
 
-The movie request returned this result on Apple Silicon with the compact model.
+The movie request returned this result on Apple Silicon with the Compact model.
 
 ```json
 {"status":"matched","category":"negative","score":0.9844168916948893,"source":"self_hosted"}

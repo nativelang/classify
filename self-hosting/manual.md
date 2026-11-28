@@ -4,7 +4,9 @@ Use this guide to load Classify into Docker or install a specific server archive
 
 ## Choose and verify a download
 
-### Compact r3
+<a id="compact-r3"></a>
+
+### Compact
 
 Download one file into an empty folder. For Docker, choose the processor used by your Linux containers. For a native server, choose the processor and operating system of the computer that will run it.
 
@@ -18,11 +20,13 @@ Download one file into an empty folder. For Docker, choose the processor used by
 
 Run `shasum -a 256 FILENAME` on macOS or `sha256sum FILENAME` on Linux, replacing `FILENAME` with the downloaded name. In PowerShell, use `Get-FileHash FILENAME -Algorithm SHA256`. Continue only if the result matches the table.
 
-### Standard r1
+<a id="standard-r1"></a>
+
+### Standard
 
 Standard supports native Windows, macOS and Linux on x64 and ARM64, and Linux containers on AMD64 and ARM64. Its archives come in two parts.
 
-For the [standard servers and Docker images](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-manual), use this SHA-256 for `downloads.json`: `01430ddd1a9ba0d319e561c95be4dfbe978b3f27686b6fd5b67acd091e59bf67`. Choose a `classify-server-` archive to run directly or a `classify-image-` archive for Docker. The [accelerated server releases](#optional-accelerated-servers) have their own index checksums.
+For the [Standard servers and Docker images](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-manual), use this SHA-256 for `downloads.json`: `01430ddd1a9ba0d319e561c95be4dfbe978b3f27686b6fd5b67acd091e59bf67`. Choose a `classify-server-` archive to run directly or a `classify-image-` archive for Docker. The [accelerated server releases](#optional-accelerated-servers) have their own index checksums.
 
 ### Join the two parts
 
@@ -56,7 +60,7 @@ Move-Item -LiteralPath "$Archive.partial" -Destination $Archive
 
 ## Docker
 
-Use Docker in Linux container mode. In the download folder, load your verified `.oci.tar` file. This example starts compact r3 on ARM64.
+Use Docker in Linux container mode. In the download folder, load your verified `.oci.tar` file. This example starts Compact on ARM64.
 
 ```sh
 docker load -i classify-image-0.1.0-dm-classify-compact-r3-linux-arm64.oci.tar
@@ -65,7 +69,7 @@ docker run --rm -d --name classify-server -p 127.0.0.1:8080:8080 classify:0.1.0-
 
 To use port `9090` on your computer, use `-p 127.0.0.1:9090:8080`. Check [the health page on port 9090](http://127.0.0.1:9090/health) and use port `9090` in your app.
 
-For AMD64 or standard r1, substitute your image filename in the first command and the name printed after `Loaded image:` in the second. [Try a request](#try-a-request), then stop the server with `docker stop classify-server`.
+For AMD64 or Standard, substitute your image filename in the first command and the name printed after `Loaded image:` in the second. [Try a request](#try-a-request), then stop the server with `docker stop classify-server`.
 
 ### Run across restarts
 
@@ -93,7 +97,7 @@ cd classify-server
 <details>
 <summary>Windows (PowerShell)</summary>
 
-Install the current [Microsoft Visual C++ v14 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) for your server architecture. Follow the [standard r1 download and verification steps](#standard-r1) first. From the folder containing the restored ZIP, run the following commands. On ARM64, change `x86_64` to `aarch64` in the filename.
+Install the current [Microsoft Visual C++ v14 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) for your server architecture. Follow the [Standard download and verification steps](#standard) first. From the folder containing the restored ZIP, run the following commands. On ARM64, change `x86_64` to `aarch64` in the filename.
 
 ```powershell
 mkdir classify-server
@@ -111,12 +115,12 @@ Keep the extracted files together and leave the terminal open while serving. Pre
 
 Use Metal on Apple Silicon with a compatible GPU and macOS 26 or later. Use the Linux x86-64-v3 build on a processor that supports that instruction set.
 
-| Platform | Compact r3 server | Standard r1 server | Standard `downloads.json` SHA-256 |
+| Platform | Compact server | Standard server | Standard `downloads.json` SHA-256 |
 | --- | --- | --- | --- |
 | Apple Silicon | [Metal](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-compact-r3-metal) | [Metal, two parts](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-metal-manual) | `295399c5c82803f87ed131022e7d8302256bf50e3461712c0c35fd1d75a118f7` |
 | Linux x64 | [x86-64-v3](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-compact-r3-v3) | [x86-64-v3, two parts](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-v3-manual) | `878b71990eafc1b223d29d546a4ddb84f4f3c0864a4a6fb18e6205234bf971e4` |
 
-For compact, verify `downloads.json` using the [compact accelerated index checksums](../RELEASES.md#free-downloads), then check the server archive against its entry. For standard, [join the two parts](#join-the-two-parts) using the index checksum for that server above. Start the extracted server with the same native command.
+For Compact, verify `downloads.json` using the [Compact accelerated index checksums](../RELEASES.md#free-downloads), then check the server archive against its entry. For Standard, [join the two parts](#join-the-two-parts) using the index checksum for that server above. Start the extracted server with the same native command.
 
 ## Try a request
 
