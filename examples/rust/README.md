@@ -1,21 +1,23 @@
-# Classify text from Rust
+# Rust
 
-[Start the local Classify server](../../self-hosting/README.md), then open a second terminal. With Rust and Cargo installed, create a project and add the HTTP and JSON dependencies.
+[Start the Classify server](../../self-hosting/README.md). With Rust and Cargo installed, open a second terminal.
 
 ```sh
-cargo new --bin classify-example
+cargo new classify-example
 cd classify-example
-cargo add ureq@=2.12.1 --no-default-features --features json
-cargo add serde_json@=1.0.150
+cargo add ureq@2 --features json
+cargo add serde_json@1
 ```
 
-Replace `src/main.rs` with this example.
+Save this as `src/main.rs`.
 
 ```rust
 use serde_json::{json, Value};
 
+const CLASSIFY_URL: &str = "http://127.0.0.1:8080/v1/classify";
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let result: Value = ureq::post("http://127.0.0.1:8080/v1/classify")
+    let result: Value = ureq::post(CLASSIFY_URL)
         .send_json(json!({
             "text": "This is a terrible movie",
             "categories": ["positive", "negative", "neutral"]
@@ -26,10 +28,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-Run it from the project directory.
-
 ```sh
-cargo run --quiet
+cargo run
 ```
 
-The example prints `negative`.
+Prints `negative`.

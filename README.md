@@ -20,6 +20,4 @@ Pick your language for setup instructions and a working example.
 
 [Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/) · [C](examples/c/)
 
-These examples work offline after setup.
-
-The large model and its GPU server are available under an [enterprise license](PACKAGING.md#enterprise-licensing).
+[Run Classify locally](self-hosting/README.md) today. A hosted service and a more powerful model with an [enterprise license](PACKAGING.md#enterprise-licensing) are coming soon.
