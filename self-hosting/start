@@ -1,0 +1,9 @@
+#!/bin/sh
+case $# in
+    0) exec "$(dirname "$0")/classify" serve ;;
+    2) if [ "$1" = --port ]; then
+           exec "$(dirname "$0")/classify" serve --listen "127.0.0.1:$2"
+       fi ;;
+esac
+echo 'Usage: start [--port PORT]' >&2
+exit 2
