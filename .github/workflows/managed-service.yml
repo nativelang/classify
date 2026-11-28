@@ -48,6 +48,10 @@ jobs:
             languages="$languages java csharp rust"
           fi
           python app/tests/binding_service.py "$RUNNER_TEMP/classify-test.exe" $languages
+      - name: Verify non-elevated Windows startup and stop
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./app/tests/standard_windows.ps1 -Cli "$env:RUNNER_TEMP/classify-test.exe"
       - name: Read service diagnostics on failure
         if: failure()
         shell: bash
