@@ -7,8 +7,6 @@
 
 Give Classify some text and a list of categories. It tells you which one fits, if any.
 
-<a id="examples"></a>
-
 First, [install and start the Classify server on your laptop or server](self-hosting/README.md). Then call it from your app.
 
 ```text
@@ -16,6 +14,8 @@ First, [install and start the Classify server on your laptop or server](self-hos
 classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
 # The result is "negative".
 ```
+
+<a id="examples"></a>
 
 Try it in your language.
 
