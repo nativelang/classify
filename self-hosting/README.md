@@ -65,4 +65,4 @@ For a manually extracted archive, the native executable accepts `--listen`. For 
 
 </details>
 
-For the larger **Standard r1** model, [choose a server for your platform](manual.md#standard-r1). To keep Classify running across restarts, [run it as a Docker service](manual.md#run-across-restarts).
+For the larger **Standard** model, [choose a server for your platform](manual.md#standard). To keep Classify running across restarts, [run it as a Docker service](manual.md#run-across-restarts).

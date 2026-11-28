@@ -8,10 +8,10 @@ Start in the root of a fresh Classify checkout. Download **only the SDK archive 
 
 | Platform | Portable C SDK | Model ZIP |
 | --- | --- | --- |
-| Linux | [ARM64 SDK][linux-arm] · [x64 SDK][linux-x64] | [Compact r3][compact] |
-| macOS 15+ on Apple Silicon | [ARM64 SDK][mac-arm] | [Compact r3][compact] |
-| macOS 15+ on Intel | [x64 SDK][mac-x64] | [Standard r1][standard] |
-| Windows | [ARM64 SDK][win-arm] · [x64 SDK][win-x64] | [Standard r1][standard] |
+| Linux | [ARM64 SDK][linux-arm] · [x64 SDK][linux-x64] | [Compact][compact] |
+| macOS 15+ on Apple Silicon | [ARM64 SDK][mac-arm] | [Compact][compact] |
+| macOS 15+ on Intel | [x64 SDK][mac-x64] | [Standard][standard] |
+| Windows | [ARM64 SDK][win-arm] · [x64 SDK][win-x64] | [Standard][standard] |
 
 Check the model ZIP against its published SHA-256. For the SDK, check the archive against the runtime entry for your platform in that model’s verified manifest. [Checksums and manifests](../../RELEASES.md#free-downloads)
 
@@ -28,7 +28,7 @@ cc -std=c11 -Isdk/include examples/c/classify.c -Lsdk/lib -lclassify_core \
 ./classify-example model/profile.json
 ```
 
-Keep the single quotes around the linker flag so Linux looks for the library relative to the executable. The compact model returned `"category":"negative"` and `"source":"local"` on both ARM64 and x64.
+Keep the single quotes around the linker flag so Linux looks for the library relative to the executable. The Compact model returned `"category":"negative"` and `"source":"local"` on both ARM64 and x64.
 
 ## macOS
 
@@ -43,7 +43,7 @@ cc -std=c11 -Isdk/include examples/c/classify.c -Lsdk/lib -lclassify_core \
 ./classify-example model/profile.json
 ```
 
-On Apple Silicon the compact model returned `"category":"negative"`.
+On Apple Silicon the Compact model returned `"category":"negative"`.
 
 ## Windows
 
