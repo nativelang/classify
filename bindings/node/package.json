@@ -1,0 +1,30 @@
+{
+  "name": "@nativelang/classify",
+  "version": "0.2.0",
+  "description": "Classify text into your own categories locally in a Node.js app.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "bootstrap.sh",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "scripts": {
+    "prepack": "node pack-files.js",
+    "test": "node --test"
+  }
+}

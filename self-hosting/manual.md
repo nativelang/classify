@@ -67,6 +67,16 @@ To use port `9090` on your computer, use `-p 127.0.0.1:9090:8080`. Check [the he
 
 For AMD64 or standard r1, substitute your image filename in the first command and the name printed after `Loaded image:` in the second. [Try a request](#try-a-request), then stop the server with `docker stop classify-server`.
 
+### Run across restarts
+
+To start Classify whenever Docker starts, use a named container with a restart policy. After loading the ARM64 image, run this command in place of the temporary container command above.
+
+```sh
+docker run -d --name classify-server --restart unless-stopped -p 127.0.0.1:8080:8080 classify:0.1.0-dm-classify-compact-r3-linux-arm64
+```
+
+Configure Docker to start on boot or login. To pause the service, use `docker stop classify-server`. Resume with `docker start classify-server`.
+
 ## Native server
 
 <a id="native-macos-or-linux"></a>

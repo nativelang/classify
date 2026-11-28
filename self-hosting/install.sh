@@ -40,15 +40,21 @@ else
     curl -q -fL "$url/$name" -o "$archive"
 fi
 
-if [ "$(uname -s)" = Darwin ]; then
-    actual=$(shasum -a 256 "$archive")
-else
-    actual=$(sha256sum "$archive")
-fi
-[ "${actual%% *}" = "$sha" ] || fail "Download did not match its checksum. Run the installer again."
+verify() {
+    if [ "$(uname -s)" = Darwin ]; then
+        actual=$(shasum -a 256 "$1")
+    else
+        actual=$(sha256sum "$1")
+    fi
+    [ "${actual%% *}" = "$2" ] || fail "Download did not match its checksum. Run the installer again."
+}
+verify "$archive" "$sha"
 mkdir "$work/classify-server"
 tar -xzf "$archive" -C "$work/classify-server"
 [ -x "$work/classify-server/classify" ] || fail "The archive is missing the server."
+curl -q -fL https://raw.githubusercontent.com/nativelang/classify/90bbb5b0921ae8f013af100e08a100cf0dcdf45b/self-hosting/start -o "$work/classify-server/start"
+verify "$work/classify-server/start" 4a664420a21529ff201f5c036199920a466dd3bd4be5d8078bfc4554ea946ff9
+chmod +x "$work/classify-server/start"
 mv -n "$work/classify-server" .
 [ ! -d "$work/classify-server" ] || fail "classify-server already exists. The existing folder was kept."
-printf '%s\n' 'Installed. Start the server with ./classify-server/classify serve'
+printf '%s\n' 'Installed. Start the server with ./classify-server/start'

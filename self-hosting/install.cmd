@@ -33,9 +33,11 @@ del "%stage%\0001" "%stage%\0002" || goto failed
 powershell.exe -NoProfile -Command "if ((Get-FileHash -LiteralPath '%stage%\server.zip' -Algorithm SHA256 -ErrorAction Stop).Hash -ne '%digest%') { throw 'Archive checksum failed.' }" || goto failed
 mkdir "%stage%\server" || goto failed
 tar.exe -xf "%stage%\server.zip" -C "%stage%\server" || goto failed
+curl.exe -q --fail --location --retry 2 --output "%stage%\server\start.cmd" "https://raw.githubusercontent.com/nativelang/classify/90bbb5b0921ae8f013af100e08a100cf0dcdf45b/self-hosting/start.cmd" || goto failed
+powershell.exe -NoProfile -Command "if ((Get-FileHash -LiteralPath '%stage%\server\start.cmd' -Algorithm SHA256 -ErrorAction Stop).Hash -ne 'f892d07461aaa995f6befd45c54e1e38b81d656a5f4ac30f92c0dc5de7d7ae5c') { throw 'Launcher checksum failed.' }" || goto failed
 powershell.exe -NoProfile -Command "$ErrorActionPreference = 'Stop'; [IO.Directory]::Move('%stage%\server', 'classify-server')" || goto failed
 rmdir /s /q "%stage%"
-echo Installed. Start the server with .\classify-server\classify.exe serve
+echo Installed. Start the server with .\classify-server\start.cmd
 exit /b 0
 
 :failed

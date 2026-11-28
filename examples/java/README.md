@@ -1,35 +1,29 @@
-# Java
+# Classify text in Java
 
-[Start the local server](../../self-hosting/README.md). With JDK 21 or later, download [Gson 2.15.0](https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.15.0/gson-2.15.0.jar) to your working folder. Save the code as `Classify.java` there.
+Use the local classifier with JDK 21 or later on Apple Silicon macOS or compatible ARM64/x64 Linux. The first call downloads the compact model and runtime to your user cache. Later calls work offline. Run these commands from this example’s directory.
+
+```sh
+curl -fLO https://github.com/nativelang/classify/releases/download/v0.2.0/classify-0.2.0.jar
+curl -fLO https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.15.0/gson-2.15.0.jar
+```
+
+[Movie.java](Movie.java)
 
 ```java
-import com.google.gson.JsonParser;
-import java.net.URI;
-import java.net.http.*;
+import io.nativelang.classify.Classifier;
 
-class Classify {
-    private static final URI CLASSIFY_ENDPOINT = URI.create("http://127.0.0.1:8080/v1/classify");
-
+class Movie {
     public static void main(String[] args) throws Exception {
-        String review = """
-            {"text":"This is a terrible movie","categories":["positive","negative","neutral"]}
-            """;
-        var request = HttpRequest.newBuilder(CLASSIFY_ENDPOINT)
-            .header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(review))
-            .build();
-        var response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() != 200) {
-            throw new IllegalStateException("Classify returned HTTP " + response.statusCode());
+        try (var model = new Classifier()) {
+            String category = model.classify("This is a terrible movie", "positive", "negative", "neutral");
+            System.out.println(category == null ? "unknown" : category);
         }
-        var category = JsonParser.parseString(response.body()).getAsJsonObject().get("category");
-        System.out.println(category.isJsonNull() ? "unknown" : category.getAsString());
     }
 }
 ```
 
 ```sh
-java --class-path gson-2.15.0.jar Classify.java
+java -cp 'classify-0.2.0.jar:gson-2.15.0.jar' Movie.java
 ```
 
-Prints `negative`.
+Prints `negative`. The classifier returns `null` when it declines. Reuse the instance for multiple requests.

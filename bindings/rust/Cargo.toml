@@ -1,0 +1,11 @@
+[package]
+name = "classify"
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+description = "Classify text locally using categories you choose"
+repository = "https://github.com/nativelang/classify"
+publish = false
+
+[dependencies]
+serde_json = "1"

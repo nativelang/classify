@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+    <PackageId>NativeLang.Classify</PackageId>
+    <Version>0.2.0</Version>
+    <Authors>NativeLang contributors</Authors>
+    <Description>Classify text locally using categories supplied by your application.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/nativelang/classify</RepositoryUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../../app/bootstrap.sh" LogicalName="NativeLang.Classify.bootstrap.sh" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>

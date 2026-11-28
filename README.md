@@ -19,11 +19,10 @@ Turn a sentence into a value you can use in a `switch` statement. Classify runs 
 
 Try Classify in your language.
 
-1. [Install and start Classify](self-hosting/README.md) for the server examples.
-2. Run an example in your language.
+[Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/)
 
-   [Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/) · [C](examples/c/)
+Your first call downloads the small model (about 1.6 GB). Your other apps reuse it under `~/.nativelang/classify/`. Requires macOS 15+ on Apple Silicon or Debian 12-compatible Linux on ARM64 or x64.
 
-[API reference](SPECIFICATION.md)
+[Embed in C](examples/c/) · [Run a shared server, including on Windows and Intel Macs](self-hosting/README.md) · [API reference](SPECIFICATION.md)
 
 A hosted service and a more powerful model with an enterprise license are coming soon.
