@@ -18,6 +18,7 @@ import (
 
 type model struct {
 	s      service
+	id     string
 	mu     sync.Mutex
 	st     status
 	active int
@@ -28,8 +29,8 @@ type model struct {
 	out    *bufio.Scanner
 }
 
-func newModel(s service) *model {
-	return &model{s: s, st: status{Phase: "downloading"}, last: time.Now(), lane: make(chan struct{}, 1)}
+func newModel(s service, id string) *model {
+	return &model{s: s, id: id, st: status{Phase: "downloading"}, last: time.Now(), lane: make(chan struct{}, 1)}
 }
 func (m *model) snapshot() status {
 	m.mu.Lock()
@@ -128,6 +129,10 @@ func (m *model) load(ctx context.Context) {
 	m.mu.Lock()
 	m.st.LoadMS = time.Since(begin).Milliseconds()
 	m.mu.Unlock()
+	if err := save(m.s.path("ready.json"), m.id); err != nil {
+		m.phase("failed", err.Error())
+		return
+	}
 	m.phase("ready", "")
 	m.lane <- struct{}{}
 	<-ctx.Done()

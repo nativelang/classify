@@ -159,7 +159,7 @@ func (s service) serve(id string) error {
 	os.Remove(s.path("fallback.json"))
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	model := newModel(s)
+	model := newModel(s, id)
 	go model.load(ctx)
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {

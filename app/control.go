@@ -69,7 +69,7 @@ func (s service) stop() error {
 			time.Sleep(100 * time.Millisecond)
 		}
 	}
-	for _, p := range []string{"endpoint.json", "instance.json", "startup-error.json", "fallback.json"} {
+	for _, p := range []string{"endpoint.json", "instance.json", "startup-error.json", "fallback.json", "ready.json"} {
 		if e = os.Remove(s.path(p)); e != nil && !os.IsNotExist(e) {
 			return e
 		}
@@ -85,6 +85,7 @@ func owned(s service, i instance, r record) bool {
 }
 
 var errStalled = errors.New("Classify startup stopped making progress")
+var errReplaced = errors.New("Classify service was replaced")
 
 // Hold the control lock only for registration changes. Status and stop stay
 // usable during a first download, and every waiting client observes the same job.
@@ -100,6 +101,13 @@ func (s service) ensure(previous *record) (record, instance, error) {
 			return record{}, i, err
 		}
 		r, _, err := s.waitReady(i)
+		if errors.Is(err, errReplaced) {
+			// Another caller won the recovery lock. Join its instance.
+			if err = s.read("instance.json", &i); err != nil {
+				return r, i, err
+			}
+			r, _, err = s.waitReady(i)
+		}
 		if err == nil && port != 0 && !strings.HasSuffix(r.Address, ":"+strconv.Itoa(port)) {
 			return r, i, fmt.Errorf("Classify already runs at %s; unset NATIVELANG_CLASSIFY_PORT or stop the service before changing ports", r.Address)
 		}
@@ -129,6 +137,17 @@ func (s service) selectInstance(port int, previous *record, stalled string) (ins
 			if err == nil && (st.Phase == "ready" || (i.ID != stalled && (st.Phase == "loading" || st.Phase == "downloading"))) {
 				return i, nil
 			}
+			if err != nil && i.ID != stalled {
+				var readyID string
+				if s.read("ready.json", &readyID) != nil || readyID != i.ID {
+					// Publishing an endpoint and accepting the first TLS handshake
+					// are separate steps. Never evict a starting instance on one probe.
+					return i, nil
+				}
+				if _, retryErr := probe(r, i); retryErr == nil {
+					return i, nil
+				}
+			}
 			if previous != nil && previous.ID != i.ID {
 				return i, errors.New("replacement service did not respond; see classify service logs")
 			}
@@ -136,7 +155,7 @@ func (s service) selectInstance(port int, previous *record, stalled string) (ins
 			var f startFailure
 			if s.read("startup-error.json", &f) != nil || f.ID != i.ID {
 				// Registration was committed before starting the OS job.
-				if info, e := os.Stat(s.path("instance.json")); e == nil && time.Since(info.ModTime()) < 30*time.Second {
+				if info, e := os.Stat(s.path("instance.json")); e == nil && time.Since(info.ModTime()) < stallLimit {
 					return i, nil
 				}
 			}
@@ -173,8 +192,11 @@ func (s service) waitReady(i instance) (record, instance, error) {
 	last := time.Now()
 	for time.Since(last) < stallLimit+10*time.Second {
 		var current instance
-		if e := s.read("instance.json", &current); e != nil || current.ID != i.ID {
-			return r, i, errors.New("service stopped or replaced during startup")
+		if e := s.read("instance.json", &current); e != nil {
+			return r, i, errors.New("service stopped during startup")
+		}
+		if current.ID != i.ID {
+			return r, i, errReplaced
 		}
 		var f startFailure
 		if s.read("startup-error.json", &f) == nil && f.ID == i.ID {

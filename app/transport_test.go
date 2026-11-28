@@ -44,7 +44,7 @@ func TestPortAndIdle(t *testing.T) {
 	if _, e := requestedPort(); e == nil {
 		t.Fatal("accepted invalid port")
 	}
-	m := newModel(service{t.TempDir()})
+	m := newModel(service{t.TempDir()}, secret(16))
 	m.last = time.Now().Add(-2 * idleLimit)
 	if m.idle() {
 		t.Fatal("stopped during startup")
@@ -72,5 +72,29 @@ func TestPortConflictPreservesOwner(t *testing.T) {
 	}
 	if _, e := os.Stat(filepath.Join(s.dir, "endpoint.json")); !os.IsNotExist(e) {
 		t.Fatal("claimed foreign endpoint")
+	}
+}
+
+func TestColdRegistrationIsSharedBeforeTLSIsReady(t *testing.T) {
+	s := service{t.TempDir()}
+	i := instance{secret(16), 0, secret(32)}
+	if err := save(s.path("instance.json"), i); err != nil {
+		t.Fatal(err)
+	}
+	cold := time.Now().Add(-time.Minute)
+	if err := os.Chtimes(s.path("instance.json"), cold, cold); err != nil {
+		t.Fatal(err)
+	}
+	selected, err := s.selectInstance(0, nil, "")
+	if err != nil || selected.ID != i.ID {
+		t.Fatalf("replaced cold registration: %v", err)
+	}
+	r := record{ID: i.ID, Address: "127.0.0.1:1", PID: os.Getpid(), Fingerprint: secret(32)}
+	if err := save(s.path("endpoint.json"), r); err != nil {
+		t.Fatal(err)
+	}
+	selected, err = s.selectInstance(0, nil, "")
+	if err != nil || selected.ID != i.ID {
+		t.Fatalf("replaced starting listener: %v", err)
 	}
 }

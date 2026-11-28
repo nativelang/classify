@@ -22,7 +22,7 @@ def main():
     def client():
         result = subprocess.run([cli, "infer"], env=env, input=request+"\n", text=True, capture_output=True, timeout=420)
         assert result.returncode == 0, result.stderr
-        assert json.loads(result.stdout)["category"] == "negative", result.stdout
+        assert json.loads(result.stdout).get("category") == "negative", result.stdout
     try:
         with concurrent.futures.ThreadPoolExecutor(2) as pool:
             list(pool.map(lambda _: client(), range(2)))

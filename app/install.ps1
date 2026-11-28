@@ -5,8 +5,8 @@ $ErrorActionPreference = 'Stop'
 if (!$Server -and $env:NATIVELANG_CLASSIFY_SERVICE -eq '1') {
     $cpu = (Get-CimInstance Win32_Processor)[0].Architecture
     switch ($cpu) {
-        12 { $target = 'windows-arm64'; $sha = 'fc9192b1191b2b535df778fdff9bfcfd0263aeb15d8b2b6f9b178b345180e667' }
-        9 { $target = 'windows-amd64'; $sha = '5c07766c07f180213beca97486d2de09c908c037e365dc5cfd55fcf8f54644ba' }
+        12 { $target = 'windows-arm64'; $sha = '99519421a468ba933382f55e0700983331e40eb4a984939d6b28372eaab22645' }
+        9 { $target = 'windows-amd64'; $sha = 'd918b2055e456568ddafd82318baa607cb0e4cba3be4bff668b724baa45ab31f' }
         default { throw 'Unsupported Classify service platform' }
     }
     $bin = Join-Path $env:USERPROFILE '.nativelang\classify\bin'

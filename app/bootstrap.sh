@@ -3,10 +3,10 @@
 set -eu
 if [ "${NATIVELANG_CLASSIFY_SERVICE:-}" = 1 ]; then
     case "$(uname -s)/$(uname -m)" in
-        Darwin/arm64) target=darwin-arm64; sha=042d4c09f767199735fb4090e6211b56595482cd83aa064f5cc10383684b46e6 ;;
-        Darwin/x86_64) target=darwin-amd64; sha=be75b6d00f84e249b3646e08a19984deb83960b00104ebc48d416d73297876d8 ;;
-        Linux/aarch64|Linux/arm64) target=linux-arm64; sha=a24e2fd431afdefccc26fb838cf3972b8ce7eac2b0857fe16ed9b13974e9f111 ;;
-        Linux/x86_64) target=linux-amd64; sha=49aaf2f139a2bba4964441e4bda1e7870113db3b3340e9420d069fc14617abb4 ;;
+        Darwin/arm64) target=darwin-arm64; sha=b1519efc9e4f29bb5596d610b56df22397187e81ed024ec46cc59e66b9f91a7e ;;
+        Darwin/x86_64) target=darwin-amd64; sha=410b4aaa1a0028182305c3d400c03493f8eff486a57bd4be2ae5f2fe1cf3c264 ;;
+        Linux/aarch64|Linux/arm64) target=linux-arm64; sha=5e9511157280cba16a60dc34353338f95403d55d208610c894dbca72b56c4161 ;;
+        Linux/x86_64) target=linux-amd64; sha=441f5fdca5564c62a889af7da7d81001c88ae0a65693ff8125c24590ca270dd4 ;;
         *) echo 'Unsupported Classify service platform' >&2; exit 1 ;;
     esac
     umask 077
