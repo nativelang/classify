@@ -1,6 +1,6 @@
 # Classify API
 
-[Start the server](self-hosting/README.md), then send it text and the categories your app accepts.
+The [language packages](README.md#examples) return the matching category or an empty result when Classify is unsure. To call Classify from multiple apps over HTTP, [start the server](self-hosting/README.md). It listens on `127.0.0.1:8080` by default. You can [change the port](self-hosting/README.md#use-a-different-port) with `--port`.
 
 ## Call and result
 
