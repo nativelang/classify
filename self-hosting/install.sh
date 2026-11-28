@@ -49,5 +49,6 @@ fi
 mkdir "$work/classify-server"
 tar -xzf "$archive" -C "$work/classify-server"
 [ -x "$work/classify-server/classify" ] || fail "The archive is missing the server."
-mv "$work/classify-server" .
+mv -n "$work/classify-server" .
+[ ! -d "$work/classify-server" ] || fail "classify-server already exists. The existing folder was kept."
 printf '%s\n' 'Installed. Start the server with ./classify-server/classify serve'
