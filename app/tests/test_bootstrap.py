@@ -20,6 +20,15 @@ TARGETS = {
 }
 
 
+class EmbeddedBootstrapTests(unittest.TestCase):
+    def test_packages_ship_canonical_bootstrap(self):
+        bindings = SCRIPT.parents[1] / "bindings"
+        canonical = SCRIPT.read_bytes()
+        for name in ("rust", "go", "python/nativelang_classify"):
+            with self.subTest(package=name):
+                self.assertEqual((bindings / name / "bootstrap.sh").read_bytes(), canonical)
+
+
 class BootstrapTests(unittest.TestCase):
     def setUp(self):
         host = (platform.system(), platform.machine())
