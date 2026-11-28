@@ -7,6 +7,10 @@
 
 Give Classify some text and a list of categories. It tells you which one fits, if any.
 
+<a id="examples"></a>
+
+First, [install and start the Classify server on your laptop or server](self-hosting/README.md). Then call it from your app.
+
 ```text
 # Pseudocode
 classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
@@ -14,10 +18,8 @@ classify("This is a terrible movie", categories=["positive", "negative", "neutra
 
 The result is `"negative"`.
 
-<a id="examples"></a>
-
-Pick your language for setup instructions and a working example.
+Try it in your language.
 
 [Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/) · [C](examples/c/)
 
-[Run Classify locally](self-hosting/README.md) today. A hosted service and a more powerful model with an [enterprise license](PACKAGING.md#enterprise-licensing) are coming soon.
+A hosted service and a more powerful model with an [enterprise license](PACKAGING.md#enterprise-licensing) are coming soon.
