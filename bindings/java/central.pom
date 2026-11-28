@@ -7,7 +7,7 @@
   <artifactId>classify</artifactId>
   <version>0.2.0</version>
   <name>Classify</name>
-  <description>Classify text into a supplied set of categories locally from Java.</description>
+  <description>Classify text locally with Java 21+ on Apple Silicon macOS or ARM64/x64 Linux. The first call downloads about 1.6 GB.</description>
   <url>https://github.com/nativelang/classify</url>
   <licenses>
     <license>

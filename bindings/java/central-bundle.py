@@ -41,7 +41,12 @@ def main():
         date = "--date=2020-01-01T00:00:00Z"
         sources = work / "sources"
         (sources / package).mkdir(parents=True)
-        shutil.copyfile(java / "src" / package / "Classifier.java", sources / package / "Classifier.java")
+        source = java / "src" / package / "Classifier.java"
+        if hashlib.sha256(source.read_bytes()).hexdigest() != (
+            "2062e238897f30af3c4a0e600a6bb8d3d86348c4ead2e25df3401fef0ba3eaae"
+        ):
+            raise SystemExit("Java source differs from the v0.2.0 release.")
+        shutil.copyfile(source, sources / package / "Classifier.java")
         shutil.copyfile(root / "app/bootstrap.sh", sources / package / "bootstrap.sh")
         docs = work / "docs"
         subprocess.run(["javadoc", "-quiet", "-notimestamp", "--release", "21",
