@@ -8,8 +8,11 @@ from pathlib import Path
 
 from build import LANGUAGES
 
-RUNNERS = {"ubuntu-24.04", "ubuntu-24.04-arm", "macos-15", "macos-15-intel",
-           "windows-2022", "windows-11-arm"}
+RUNNERS = {
+    "ubuntu-24.04": "Linux/x86_64", "ubuntu-24.04-arm": "Linux/aarch64",
+    "macos-15": "Darwin/arm64", "macos-15-intel": "Darwin/x86_64",
+    "windows-2022": "Windows/AMD64", "windows-11-arm": "Windows/ARM64",
+}
 MODELS = ("compact", "standard")
 
 
@@ -23,7 +26,7 @@ def select(directory, version, csv_path):
             data = json.loads(path.read_text())
             runner, model = data["runner"], data["model"]
             if (data["version"] != version or data["errors"] or set(data["clients"]) != set(LANGUAGES)
-                    or runner not in RUNNERS or model not in MODELS):
+                    or RUNNERS.get(runner) != data["platform"] or model not in MODELS):
                 raise ValueError(f"Incomplete or unexpected result in {path}")
             for lang, metrics in data["clients"].items():
                 key = (runner, lang, model)
@@ -34,6 +37,10 @@ def select(directory, version, csv_path):
                 writer.writerow([runner, lang, model, data["native_load_ms"], metrics["first_call_ms"],
                                  metrics["median_ms"], metrics["p95_ms"], speed])
     # Equal-sized evaluations on both models: minimize combined warm time per pair.
+    expected = {(runner, lang, model) for runner in RUNNERS for lang in LANGUAGES for model in MODELS}
+    missing = expected - rows.keys()
+    if missing:
+        raise ValueError(f"Missing benchmark measurements: {sorted(missing)}")
     ranked = sorted((sum(rows[runner, lang, model] for model in MODELS), runner, lang)
                     for runner in RUNNERS for lang in LANGUAGES)
     return ranked[0]

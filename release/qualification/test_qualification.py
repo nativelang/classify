@@ -30,14 +30,14 @@ class QualificationTests(unittest.TestCase):
                         if language == "java":
                             speed = 10
                     clients[language] = dict(calls_per_second=speed, median_ms=1, p95_ms=1, first_call_ms=2)
-                data = dict(version="1.0.0", runner=runner, model=model, native_load_ms=2, clients=clients, errors={})
+                data = dict(version="1.0.0", runner=runner, platform=RUNNERS[runner], model=model, native_load_ms=2, clients=clients, errors={})
                 path = self.folder / f"bench-{runner}-{model}.json"
                 path.write_text(json.dumps(data))
                 paths.append(path)
         args = self.folder, "1.0.0", self.folder / "summary.csv"
         self.assertEqual(select(*args), (200, "windows-11-arm", "java"))
         paths[-1].unlink()
-        with self.assertRaises((KeyError, ValueError)):
+        with self.assertRaisesRegex(ValueError, "Missing benchmark"):
             select(*args)
 
     def test_scoring_distinguishes_abstentions_and_wrong_categories(self):
