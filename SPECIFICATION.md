@@ -68,7 +68,7 @@ Asking for alternatives preserves the decision. On a match, the list excludes th
 
 ## Where the language packages store the model
 
-On the first call, the package downloads the model and the program that runs it. Python and Node.js select Standard on Intel Macs and Windows (about 2.5 GB) and Compact on Apple Silicon and Linux (about 1.6 GB). It checks the download and saves the files under `~/.nativelang/classify/` in your home folder. Projects using the same version under your account reuse that copy, even across languages. Later calls work offline.
+On the first call, the package downloads the model and the program that runs it. Python and Node.js select Compact (about 1.6 GB) for your operating system and processor. It checks the download and saves the files under `~/.nativelang/classify/` in your home folder. Projects using the same version under your account reuse that copy, even across languages. Later calls work offline.
 
 <a id="deployment-options"></a>
 

@@ -3,13 +3,13 @@ param([switch]$Server)
 $ErrorActionPreference = 'Stop'
 [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
 $releases = @'
-platform,target,version,model,parts,sha256
-Darwin/arm64,aarch64-apple-darwin,0.1.1,compact-r3,1,666b9583ff4794f1537af8b6d2b60e98c383ebb87892b990066c68a1c02d219b
-Darwin/x86_64,x86_64-apple-darwin,0.1.0,standard-r1,2,998aee9d4eb1d895222185243a0e0c6e9381c1b99f22dee74baf67dccc40d95c
-Linux/aarch64,aarch64-unknown-linux-gnu,0.1.1,compact-r3,1,2daf0fde2c1a663c31e9913b0563070087d6bc8e3a02e2bb3cd0bf3295c9894a
-Linux/x86_64,x86_64-unknown-linux-gnu,0.1.1,compact-r3,1,f245e326547df8a090ea6a2d551c0658409346451f764528b6f837dd391d74c5
-Windows/ARM64,aarch64-pc-windows-msvc,0.1.0,standard-r1,2,7463ae150d1aa12fa2ce0f6b2c1a9c8723b56de862d1fe87180684648bd63030
-Windows/AMD64,x86_64-pc-windows-msvc,0.1.0,standard-r1,2,fa7fddf19ed3ee54294d9c791a0a9f8009954cdd7dee2b00532731d524bcea0b
+platform,target,version,model,tag,parts,sha256
+Darwin/arm64,aarch64-apple-darwin,0.1.1,compact-r3,v0.1.1-dm-classify-compact-r3,1,666b9583ff4794f1537af8b6d2b60e98c383ebb87892b990066c68a1c02d219b
+Darwin/x86_64,x86_64-apple-darwin,0.1.0,compact-r3,v0.1.0-dm-classify-compact-r3-desktop,1,64f13c257f242d79348f75f8d5621ffb8a938d7ea4d88000a5dcf71ed0709988
+Linux/aarch64,aarch64-unknown-linux-gnu,0.1.1,compact-r3,v0.1.1-dm-classify-compact-r3,1,2daf0fde2c1a663c31e9913b0563070087d6bc8e3a02e2bb3cd0bf3295c9894a
+Linux/x86_64,x86_64-unknown-linux-gnu,0.1.1,compact-r3,v0.1.1-dm-classify-compact-r3,1,f245e326547df8a090ea6a2d551c0658409346451f764528b6f837dd391d74c5
+Windows/ARM64,aarch64-pc-windows-msvc,0.1.0,compact-r3,v0.1.0-dm-classify-compact-r3-desktop,1,b5ef5a9dbccef6f4a69de7bb1248f6f3cb6a1fe6ffb4b20c02b41254b24aa7a5
+Windows/AMD64,x86_64-pc-windows-msvc,0.1.0,compact-r3,v0.1.0-dm-classify-compact-r3-desktop,1,683798bee161c422bd97391bd8ed194f3922314609a703d0f3a048ea94dd99cb
 '@ | ConvertFrom-Csv
 $cpu = (Get-CimInstance Win32_Processor)[0].Architecture
 $platform = switch ($cpu) { 9 { 'Windows/AMD64' } 12 { 'Windows/ARM64' } }
@@ -17,7 +17,7 @@ $nativeSystem = if ([Environment]::Is64BitProcess) { "$env:SystemRoot\System32" 
 $release = $releases | Where-Object platform -eq $platform
 if (!$release -or ![Environment]::Is64BitOperatingSystem) { throw 'Classify requires x64 or ARM64 Windows.' }
 $model = "dm-classify-$($release.model)"
-$tag = "v$($release.version)-$model"
+$tag = $release.tag
 $root = if ($Server) { (Get-Location).ProviderPath } else { Join-Path $env:USERPROFILE ".nativelang\classify\$tag" }
 $target = $release.target
 $folder = if ($Server) { 'classify-server' } else { $target }

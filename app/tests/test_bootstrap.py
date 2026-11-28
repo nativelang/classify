@@ -39,11 +39,12 @@ class BootstrapTests(unittest.TestCase):
             self.skipTest("requires a supported local app platform")
         if intel:
             target = "x86_64-apple-darwin"
-            pin = "998aee9d4eb1d895222185243a0e0c6e9381c1b99f22dee74baf67dccc40d95c"
+            pin = "64f13c257f242d79348f75f8d5621ffb8a938d7ea4d88000a5dcf71ed0709988"
         else:
             target, pin = TARGETS[host]
-        tag = "v0.1.0-dm-classify-standard-r1" if intel else TAG
-        self.parts = 2 if intel else 1
+        archive_id = "0.1.0-dm-classify-compact-r3" if intel else TAG[1:]
+        tag = "v" + archive_id + ("-desktop" if intel else "")
+        self.parts = 2 if self.force_intel else 1
         directory = tempfile.TemporaryDirectory(prefix="classify app ")
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
@@ -63,6 +64,8 @@ class BootstrapTests(unittest.TestCase):
         with tarfile.open(self.archive, "w:gz") as package:
             package.add(source, arcname=".")
         script = SCRIPT.read_text()
+        if self.parts == 2:
+            script = script.replace(f"{tag},1,{pin}", f"{tag},2,{pin}")
         self.assertEqual(script.count(pin), 1)
         self.script = self.root / "bootstrap.sh"
         self.script.write_text(script.replace(pin, hashlib.sha256(self.archive.read_bytes()).hexdigest()))
@@ -98,8 +101,8 @@ esac
         self.env = dict(os.environ, HOME=str(self.home), PATH=str(utilities) + ":" + os.environ["PATH"],
                         FIXTURE_ARCHIVE=str(self.archive), FIXTURE_CALLS=str(self.calls),
                         FIXTURE_BARRIER=str(self.barrier),
-                        FIXTURE_URL=f"https://github.com/nativelang/classify-artifacts/releases/download/{tag}{'-manual' if intel else ''}/"
-                                    f"classify-server-{tag[1:]}-{target}.tar.gz")
+                        FIXTURE_URL=f"https://github.com/nativelang/classify-artifacts/releases/download/{tag}{'-manual' if self.parts == 2 else ''}/"
+                                    f"classify-server-{archive_id}-{target}.tar.gz")
         self.cmd = ["/bin/sh", str(self.script)]
 
     def run_once(self):

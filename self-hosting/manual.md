@@ -17,6 +17,9 @@ Compact is the smaller model used by the language packages. Download one file in
 | [Native server · Apple Silicon](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-server-0.1.1-dm-classify-compact-r3-aarch64-apple-darwin.tar.gz) | `666b9583ff4794f1537af8b6d2b60e98c383ebb87892b990066c68a1c02d219b` |
 | [Native server · Linux ARM64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-server-0.1.1-dm-classify-compact-r3-aarch64-unknown-linux-gnu.tar.gz) | `2daf0fde2c1a663c31e9913b0563070087d6bc8e3a02e2bb3cd0bf3295c9894a` |
 | [Native server · Linux x64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-server-0.1.1-dm-classify-compact-r3-x86_64-unknown-linux-gnu.tar.gz) | `f245e326547df8a090ea6a2d551c0658409346451f764528b6f837dd391d74c5` |
+| [Native server · Intel Mac](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-desktop/classify-server-0.1.0-dm-classify-compact-r3-x86_64-apple-darwin.tar.gz) | `64f13c257f242d79348f75f8d5621ffb8a938d7ea4d88000a5dcf71ed0709988` |
+| [Native server · Windows x64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-desktop/classify-server-0.1.0-dm-classify-compact-r3-x86_64-pc-windows-msvc.zip) | `683798bee161c422bd97391bd8ed194f3922314609a703d0f3a048ea94dd99cb` |
+| [Native server · Windows ARM64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-desktop/classify-server-0.1.0-dm-classify-compact-r3-aarch64-pc-windows-msvc.zip) | `b5ef5a9dbccef6f4a69de7bb1248f6f3cb6a1fe6ffb4b20c02b41254b24aa7a5` |
 
 Run `shasum -a 256 FILENAME` on macOS or `sha256sum FILENAME` on Linux, replacing `FILENAME` with the downloaded name. In PowerShell, use `Get-FileHash FILENAME -Algorithm SHA256`. Continue only if the result matches the table.
 
@@ -24,7 +27,7 @@ Run `shasum -a 256 FILENAME` on macOS or `sha256sum FILENAME` on Linux, replacin
 
 ### Standard
 
-Choose Standard for the larger model or to run the server directly on Windows or an Intel Mac. Standard also supports Apple Silicon, Linux x64 and ARM64, and Linux containers on AMD64 and ARM64. Download both parts of the archive you choose.
+Choose Standard for the larger model. Standard also supports Apple Silicon, Linux x64 and ARM64, and Linux containers on AMD64 and ARM64. Download both parts of the archive you choose.
 
 For the [Standard servers and Docker images](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-manual), the SHA-256 checksum for `downloads.json` is `01430ddd1a9ba0d319e561c95be4dfbe978b3f27686b6fd5b67acd091e59bf67`. Choose a `classify-server-` archive to run directly or a `classify-image-` archive for Docker. The [accelerated server releases](#optional-accelerated-servers) have their own index checksums.
 
@@ -118,11 +121,12 @@ cd classify-server
 <details>
 <summary>Windows (PowerShell)</summary>
 
-Install the current [Microsoft Visual C++ v14 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) for your server architecture. Follow the [Standard download and verification steps](#standard) first. From the folder containing the restored ZIP, run the following commands. On ARM64, change `x86_64` to `aarch64` in the filename.
+Install the current [Microsoft Visual C++ v14 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) for your server architecture. Download and verify the Compact or Standard server for your processor. From the folder containing the complete ZIP, run the following commands.
 
 ```powershell
 mkdir classify-server
-tar.exe -xf classify-server-0.1.0-dm-classify-standard-r1-x86_64-pc-windows-msvc.zip -C classify-server
+$archive = (Get-Item .\classify-server-*-pc-windows-msvc.zip).FullName
+tar.exe -xf $archive -C classify-server
 if ($LASTEXITCODE -ne 0) { throw 'Extraction failed' }
 cd classify-server
 .\classify.exe serve --listen 127.0.0.1:8080

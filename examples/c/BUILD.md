@@ -8,8 +8,8 @@ Start in the root of a fresh Classify checkout. Download **only the SDK archive 
 | --- | --- | --- |
 | Linux | [ARM64 SDK][linux-arm] · [x64 SDK][linux-x64] | [Compact][compact] |
 | macOS 15+ on Apple Silicon | [ARM64 SDK][mac-arm] | [Compact][compact] |
-| macOS 15+ on Intel | [x64 SDK][mac-x64] | [Standard][standard] |
-| Windows | [ARM64 SDK][win-arm] · [x64 SDK][win-x64] | [Standard][standard] |
+| macOS 15+ on Intel | [x64 SDK][mac-x64] | [Compact][compact] |
+| Windows | [ARM64 SDK][win-arm] · [x64 SDK][win-x64] | [Compact][compact] |
 
 Check the model ZIP against its published SHA-256. For the SDK, check the archive against the runtime entry for your platform in that model’s verified manifest. [Checksums and manifests](../../RELEASES.md#free-downloads)
 
@@ -49,7 +49,7 @@ Open a Visual Studio 2022 Developer PowerShell targeting the SDK architecture. I
 $sdkZip = (Get-Item .\classify-runtime-0.1.0-*-pc-windows-msvc.zip).FullName
 Expand-Archive -LiteralPath $sdkZip -DestinationPath sdk
 mkdir model
-tar.exe -xf dm-classify-standard-r1.zip -C model
+tar.exe -xf dm-classify-compact-r3.zip -C model
 cl /nologo /std:c11 /TC /Isdk\include examples\c\classify.c sdk\lib\classify_core.lib /Fe:classify-example.exe
 Copy-Item sdk\bin\classify_core.dll .
 .\classify-example.exe model\profile.json
@@ -60,8 +60,7 @@ The import library is used when building. The executable needs the DLL when it r
 [linux-arm]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-runtime-0.1.1-aarch64-unknown-linux-gnu.tar.gz
 [linux-x64]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-runtime-0.1.1-x86_64-unknown-linux-gnu.tar.gz
 [mac-arm]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-runtime-0.1.1-aarch64-apple-darwin.tar.gz
-[mac-x64]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1/classify-runtime-0.1.0-x86_64-apple-darwin.tar.gz
-[win-arm]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1/classify-runtime-0.1.0-aarch64-pc-windows-msvc.zip
-[win-x64]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-standard-r1/classify-runtime-0.1.0-x86_64-pc-windows-msvc.zip
+[mac-x64]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-desktop/classify-runtime-0.1.0-x86_64-apple-darwin.tar.gz
+[win-arm]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-desktop/classify-runtime-0.1.0-aarch64-pc-windows-msvc.zip
+[win-x64]: https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3-desktop/classify-runtime-0.1.0-x86_64-pc-windows-msvc.zip
 [compact]: https://huggingface.co/nativelang/classify-models/resolve/47ab2a3f4280647a64e6ac307f262a74a1b4694e/models/dm-classify-compact-r3.zip
-[standard]: https://huggingface.co/nativelang/classify-models/resolve/47ab2a3f4280647a64e6ac307f262a74a1b4694e/models/dm-classify-standard-r1.zip
