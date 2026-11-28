@@ -8,7 +8,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -49,8 +48,13 @@ def example(key, folder):
         output = run(["cargo", "run", "--quiet"], folder)
     elif key == "java":
         gson = folder / "gson.jar"
-        with urllib.request.urlopen("https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.15.0/gson-2.15.0.jar") as source:
-            gson.write_bytes(source.read())
+        artifact = "com/google/code/gson/gson/2.15.0/gson-2.15.0.jar"
+        mirrors = ("https://repo.maven.apache.org/maven2", "https://repo1.maven.org/maven2",
+                   "https://maven-central.storage-download.googleapis.com/maven2")
+        for mirror in mirrors:
+            fetched = subprocess.run(["curl", "-fsSL", "--retry", "2", "--max-time", "30", "-o", gson, f"{mirror}/{artifact}"])
+            if fetched.returncode == 0:
+                break
         assert hashlib.sha256(gson.read_bytes()).hexdigest() == "96d3dd843dc2911de01cdabcd50064cb9e860353102a0a78c96fd833d396fc7d"
         run([os.environ.get("CLASSIFY_TEST_BASH", "bash"), (ROOT / "bindings/java/build.sh").as_posix(), "gson.jar", "pkg"], folder)
         (folder / "Movie.java").write_text(code)
