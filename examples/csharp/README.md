@@ -30,3 +30,5 @@ negative
 ```
 
 If no category fits, the classifier returns `null` and this example prints `unknown`. Reuse the same `Classifier` for multiple calls.
+
+[Run Classify on Windows or an Intel Mac](../../self-hosting/README.md)
