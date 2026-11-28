@@ -1,10 +1,16 @@
-# Python
+# Classify a movie review in Python
 
-Install the package with Python 3.9 or later on an Apple Silicon Mac (macOS 15+) or Linux (ARM64 or x64 with Debian 12–compatible libraries).
+You’ll need Python 3.9 or later. Use an Apple Silicon Mac with macOS 15 or later, or [Debian 12-compatible Linux](../../SPECIFICATION.md#where-the-language-packages-store-the-model) on ARM64 or x64. On Windows or an Intel Mac, [run the local server](../../self-hosting/README.md).
+
+In an empty folder, create a virtual environment and install Classify. On Debian, install `python3-venv` if you need it.
 
 ```sh
-pip install https://github.com/nativelang/classify/releases/download/v0.2.0/nativelang_classify-0.2.0-py3-none-any.whl
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install https://github.com/nativelang/classify/releases/download/v0.2.0/nativelang_classify-0.2.0-py3-none-any.whl
 ```
+
+Save this as `movie.py`.
 
 ```python
 from nativelang_classify import classify
@@ -12,4 +18,16 @@ from nativelang_classify import classify
 print(classify("This is a terrible movie", ["positive", "negative", "neutral"]))
 ```
 
-Save as `movie.py` and run `python movie.py`. It prints `negative`. The first call downloads the model and runtime (about 1.6 GB); subsequent calls work offline. On a minimal Linux installation, the download requires `curl`, `tar`, `sha256sum`, and `flock`. If Classify declines to choose, it returns `None`.
+The first run downloads the model (about 1.6 GB). Later runs work offline.
+
+```sh
+python movie.py
+```
+
+Expected output
+
+```text
+negative
+```
+
+If none of your categories fit, `classify` returns `None`.

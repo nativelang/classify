@@ -1,6 +1,6 @@
 # Classify
 
-Classify text locally on macOS 15+ on Apple Silicon or Debian 12-compatible ARM64 and x64 Linux. The first call downloads Compact r3 and its runtime, about 1.6 GB. Later calls use the local cache.
+Give `classify` some text and the categories your app uses.
 
 ```rust
 use classify::classify;
@@ -15,3 +15,5 @@ fn main() -> std::io::Result<()> {
 ```
 
 This prints `negative`. When no category fits, `classify` returns `Ok(None)`.
+
+To install the package and run this example, follow the [Rust quick start](https://github.com/nativelang/classify/tree/main/examples/rust). It includes system requirements and first-run download details.

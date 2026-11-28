@@ -1,6 +1,6 @@
 # Docker and manual installation
 
-Use this guide to load Classify into Docker or install a specific server archive. Each download includes the model and runs offline at `127.0.0.1:8080` without an API key. For automatic native installation, use the [server quick start](README.md).
+Use Docker if you want to manage Classify as a container. Download a native archive if you want to pick a specific model or build. Both include the model and can serve requests offline. For a local server that chooses the download for your computer, use the [server quick start](README.md).
 
 ## Choose and verify a download
 
@@ -8,7 +8,7 @@ Use this guide to load Classify into Docker or install a specific server archive
 
 ### Compact
 
-Download one file into an empty folder. For Docker, choose the processor used by your Linux containers. For a native server, choose the processor and operating system of the computer that will run it.
+Compact is the smaller model used by the language packages. Download one file into an empty folder. For Docker, choose the processor used by your Linux containers. For a native server, choose the processor and operating system of the computer that will run it.
 
 | Download | SHA-256 |
 | --- | --- |
@@ -24,9 +24,9 @@ Run `shasum -a 256 FILENAME` on macOS or `sha256sum FILENAME` on Linux, replacin
 
 ### Standard
 
-Standard supports native Windows, macOS and Linux on x64 and ARM64, and Linux containers on AMD64 and ARM64. Its archives come in two parts.
+Choose Standard for the larger model or to run the server directly on Windows or an Intel Mac. Standard also supports Apple Silicon, Linux x64 and ARM64, and Linux containers on AMD64 and ARM64. Download both parts of the archive you choose.
 
-For the [Standard servers and Docker images](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-manual), use this SHA-256 for `downloads.json`: `01430ddd1a9ba0d319e561c95be4dfbe978b3f27686b6fd5b67acd091e59bf67`. Choose a `classify-server-` archive to run directly or a `classify-image-` archive for Docker. The [accelerated server releases](#optional-accelerated-servers) have their own index checksums.
+For the [Standard servers and Docker images](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-manual), the SHA-256 checksum for `downloads.json` is `01430ddd1a9ba0d319e561c95be4dfbe978b3f27686b6fd5b67acd091e59bf67`. Choose a `classify-server-` archive to run directly or a `classify-image-` archive for Docker. The [accelerated server releases](#optional-accelerated-servers) have their own index checksums.
 
 ### Join the two parts
 
@@ -34,13 +34,23 @@ For the [Standard servers and Docker images](https://github.com/nativelang/class
 2. Check `downloads.json` with `shasum -a 256 downloads.json` on macOS, `sha256sum downloads.json` on Linux, or `Get-FileHash downloads.json -Algorithm SHA256` in PowerShell. Continue only if the result matches the index checksum listed for that release.
 3. Open the verified index. In `archives`, find your archive’s `name` and its own `sha256` (the digest for the complete file). Set the first two variables below to those values. The examples join part 1 followed by part 2 and give the output its final name only after the complete file passes verification.
 
-**macOS or Linux** (example for the Apple Silicon server). On Linux, use `sha256sum -c -` in place of `shasum -a 256 -c -`.
+**macOS (Apple Silicon server)**
 
 ```sh
 archive='classify-server-0.1.0-dm-classify-standard-r1-aarch64-apple-darwin.tar.gz'
 expected='3eedbb8f729369754ace0d6daa83aea26d322723d0d499956c011b320701ba88'
 cat "$archive.part-0001-of-0002" "$archive.part-0002-of-0002" > "$archive.partial" &&
   printf '%s  %s\n' "$expected" "$archive.partial" | shasum -a 256 -c - &&
+  mv "$archive.partial" "$archive"
+```
+
+**Linux (x64 server)**
+
+```sh
+archive='classify-server-0.1.0-dm-classify-standard-r1-x86_64-unknown-linux-gnu.tar.gz'
+expected='bcfb9216007748678c417f517f19405c661c6e5d3fe48fc882690e5824c668fe'
+cat "$archive.part-0001-of-0002" "$archive.part-0002-of-0002" > "$archive.partial" &&
+  printf '%s  %s\n' "$expected" "$archive.partial" | sha256sum -c - &&
   mv "$archive.partial" "$archive"
 ```
 
@@ -85,11 +95,22 @@ Configure Docker to start on boot or login. To pause the service, use `docker st
 
 <a id="native-macos-or-linux"></a>
 
-**macOS or Linux.** Use macOS 15 or later, or Debian 12 or a Linux distribution with compatible glibc and C++ runtime libraries. Extract your verified archive and start the server. Substitute your filename if you chose a different build.
+From the folder containing your verified archive, follow the commands for your computer. Keep just one complete server archive in that folder so the filename pattern selects your download.
+
+**Linux ARM64 or x64.** Use Debian 12 or a distribution with compatible glibc and C++ runtime libraries.
 
 ```sh
 mkdir classify-server
-tar -xzf classify-server-0.1.0-dm-classify-compact-r3-aarch64-apple-darwin.tar.gz -C classify-server
+tar -xzf classify-server-*-unknown-linux-gnu*.tar.gz -C classify-server
+cd classify-server
+./classify serve --listen 127.0.0.1:8080
+```
+
+**macOS 15 or later.**
+
+```sh
+mkdir classify-server
+tar -xzf classify-server-*-apple-darwin*.tar.gz -C classify-server
 cd classify-server
 ./classify serve --listen 127.0.0.1:8080
 ```
@@ -124,4 +145,4 @@ For Compact, verify `downloads.json` using the [Compact accelerated index checks
 
 ## Try a request
 
-When [the local health page](http://127.0.0.1:8080/health) shows `ok`, the server accepts `POST /v1/classify`. See the [Classify examples](../README.md#examples) for calls in your language and the [API reference](../SPECIFICATION.md#call-and-result) for the request and response fields.
+When [the local health page](http://127.0.0.1:8080/health) shows `ok`, the server accepts `POST /v1/classify`. In a second terminal, [send the movie request](../SPECIFICATION.md#call-and-result) and look for `negative` in the `category` field.

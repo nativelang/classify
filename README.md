@@ -13,16 +13,12 @@ classify("This is a terrible movie", categories=["positive", "negative", "neutra
 # The result is "negative".
 ```
 
-Your app can make decisions based on what a sentence means. Classify runs locally, so you don’t need to call a large language model API or pay per token.
-
 <a id="examples"></a>
 
-Try Classify in your language.
+## Try Classify in your language
 
 [Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/)
 
-These packages run on macOS 15+ on Apple Silicon or Debian 12-compatible Linux on ARM64 or x64. Your first call downloads **Compact**, the small model (about 1.6 GB). Apps under your account share that download. [Standard](self-hosting/manual.md#standard) is the larger model available for self-hosting.
+The first time you run the example, Classify downloads its model (about 1.6 GB). After that, you can run it offline. Your text stays on your computer, and there’s no per-token fee.
 
-[Advanced options](SPECIFICATION.md#deployment-options) · [API reference](SPECIFICATION.md#call-and-result)
-
-A hosted service and a more powerful model with an enterprise license are coming soon.
+[Other ways to run Classify](self-hosting/README.md) · [API reference](SPECIFICATION.md#call-and-result)

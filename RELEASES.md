@@ -4,7 +4,7 @@ To embed Classify in a C app, follow the [native C setup guide](examples/c/READM
 
 ## Free downloads
 
-Compact is the smaller model used by the language packages. Standard is larger and also runs natively on Windows and Intel Macs. Choose a model ZIP and the matching runtime for your platform.
+Compact is the smaller model used by the language packages. Standard is larger and also runs natively on Windows and Intel Macs. For a C app, download one model ZIP and its matching SDK. The language packages and server installer download the files they need automatically.
 
 | Model ZIP (single file) | Bytes | SHA-256 |
 | --- | ---: | --- |
@@ -40,3 +40,7 @@ Download the SDK and model for your platform, then [build and run the C example]
 ## Licenses
 
 The public code and guides use the [MIT License](LICENSE). See each model or binary download for its terms and third-party notices.
+
+## Coming soon
+
+A hosted service and a more powerful model with an enterprise license are planned.

@@ -1,6 +1,6 @@
 # Classify from C
 
-The [C example](classify.c) asks whether “This is a terrible movie” is `positive`, `negative` or `neutral`. It loads the model in your program and prints a JSON result. You can run it offline after downloading two files.
+The [C example](classify.c) asks whether “This is a terrible movie” is `positive`, `negative` or `neutral`. It loads the model in your program and prints a JSON result with `negative` in the `category` field. You can run it offline after downloading two files.
 
 ## Download the SDK and model
 
