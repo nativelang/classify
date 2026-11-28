@@ -12,4 +12,4 @@ print(classify("This is a terrible movie", ["positive", "negative", "neutral"]))
 
 The first run downloads the Compact model and runtime (about 1.6 GB). Later runs work offline.
 
-[Supported platforms](../../SPECIFICATION.md#python-platform-support)
+[Supported platforms](../../SPECIFICATION.md#language-package-platform-support)

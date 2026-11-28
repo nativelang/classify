@@ -68,21 +68,27 @@ Asking for alternatives preserves the decision. On a match, the list excludes th
 
 ## Where the language packages store the model
 
-On the first call, the package downloads the model and the program that runs it. Python and Node.js select Compact (about 1.6 GB) for your operating system and processor. It checks the download and saves the files under `~/.nativelang/classify/` in your home folder. Projects using the same version under your account reuse that copy, even across languages. Later calls work offline.
+On the first call, the package downloads the model and the program that runs it. It checks the download and saves the files under `~/.nativelang/classify/` in your home folder. Projects using the same version under your account reuse that copy, even across languages. Later calls work offline.
 
 <a id="deployment-options"></a>
 
 To share a model already loaded in memory, [run a local server](self-hosting/README.md). To load it directly in a C program, [use the C library](examples/c/).
 
-## Python platform support
+<a id="python-platform-support"></a>
+<a id="nodejs-platform-support"></a>
 
-The Python package requires Python 3.9 or later. Use macOS 15 or later, x64 or ARM64 Windows, or [Debian 12-compatible Linux](#linux-requirements) on ARM64 or x64.
+## Language package platform support
 
-## Node.js platform support
+Use the same package install command on Apple Silicon and Intel Macs running macOS 15 or later. The package selects the model automatically. On Windows x64 and ARM64, Python and Node.js also install and run directly.
 
-Use Node.js 22.18 or later on macOS 15 or later, x64 or ARM64 Windows, or [Debian 12-compatible Linux](#linux-requirements) on ARM64 or x64.
+| Published package | Apple Silicon and [Linux ARM64/x64](#linux-requirements) | Intel Mac | Windows x64/ARM64 |
+| --- | --- | --- | --- |
+| Python and Node.js 0.2.3 | Compact | Compact | Compact |
+| Java, C#, Go and Rust 0.2.2 | Compact | Standard | Call the [local server](self-hosting/README.md) over [HTTP](#call-and-result) |
 
-For TypeScript, save the [JavaScript example](examples/node/) as `movie.mts` and run `node movie.mts`.
+The first download is about 1.6 GB for Compact or 2.5 GB for Standard. The standalone server installer selects Compact on all six targets.
+
+Python requires version 3.9 or later. Node.js requires version 22.18 or later. For TypeScript, the [JavaScript example](examples/node/) also works in a `.mts` file.
 
 ## Linux requirements
 

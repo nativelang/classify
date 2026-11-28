@@ -8,7 +8,7 @@ Use Docker if you want Classify to start whenever Docker starts. Download a nati
 
 ### Compact
 
-Compact is the smaller model used by the language packages. Download one file into an empty folder. For Docker, choose the processor used by your Linux containers. For a native server, choose the processor and operating system of the computer that will run it.
+Compact is the default for the native server installer. Download one file into an empty folder. For Docker, choose the processor used by your Linux containers. For a native server, choose the processor and operating system of the computer that will run it.
 
 | Download | SHA-256 |
 | --- | --- |
@@ -27,7 +27,7 @@ Run `shasum -a 256 FILENAME` on macOS or `sha256sum FILENAME` on Linux, replacin
 
 ### Standard
 
-Choose Standard for the larger model. Standard also supports Apple Silicon, Linux x64 and ARM64, and Linux containers on AMD64 and ARM64. Download both parts of the archive you choose.
+Choose Standard for the larger model. Native servers are available for macOS, Linux and Windows on x64 and ARM64. Docker images are available for Linux AMD64 and ARM64. Download both parts of the archive you choose.
 
 For the [Standard servers and Docker images](https://github.com/nativelang/classify-artifacts/releases/tag/v0.1.0-dm-classify-standard-r1-manual), the SHA-256 checksum for `downloads.json` is `01430ddd1a9ba0d319e561c95be4dfbe978b3f27686b6fd5b67acd091e59bf67`. Choose a `classify-server-` archive to run directly or a `classify-image-` archive for Docker. The [accelerated server releases](#optional-accelerated-servers) have their own index checksums.
 
@@ -138,7 +138,7 @@ Keep the extracted files together and leave the terminal open while serving. Pre
 
 ### Optional accelerated servers
 
-Use Metal on Apple Silicon with a compatible GPU and macOS 26 or later. Use the Linux x86-64-v3 build on a processor that supports that instruction set.
+The default Compact server selects Metal on supported Apple Silicon Macs and compatible CPU kernels on Linux. The separate Metal builds below require macOS 26 or later and a compatible Apple GPU. The x86-64-v3 builds require a Linux CPU and OS with x86-64-v3 support.
 
 | Platform | Compact server | Standard server | Standard `downloads.json` SHA-256 |
 | --- | --- | --- | --- |

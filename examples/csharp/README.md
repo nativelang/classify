@@ -13,6 +13,6 @@ string? category = model.Classify("This is a terrible movie", "positive", "negat
 Console.WriteLine(category); // negative
 ```
 
-The first run downloads the model (about 1.6 GB). Later runs work offline.
+The first call downloads the model. Later calls work offline.
 
-[Run Classify on Windows or an Intel Mac](../../self-hosting/README.md)
+[Platforms, download sizes and Windows setup](../../SPECIFICATION.md#language-package-platform-support)
