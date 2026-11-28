@@ -14,6 +14,4 @@ fn main() -> std::io::Result<()> {
 }
 ```
 
-When no category fits, `classify` returns `Ok(None)`.
-
-To install the package and run this example, follow the [Rust quick start](https://github.com/nativelang/classify/tree/main/examples/rust). It includes system requirements and first-run download details.
+[Rust quickstart](https://github.com/nativelang/classify/tree/main/examples/rust)

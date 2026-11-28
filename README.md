@@ -9,8 +9,7 @@ Give Classify some text and a list of categories. It tells you which one fits, i
 
 ```text
 # Pseudocode
-classify("This is a terrible movie", categories=["positive", "negative", "neutral"])
-# The result is "negative".
+classify("This is a terrible movie", categories=["positive", "negative", "neutral"])  # "negative"
 ```
 
 <a id="examples"></a>
