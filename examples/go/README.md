@@ -27,7 +27,7 @@ func main() {
 		log.Fatal(err)
 	}
 	if label != nil {
-		fmt.Println(*label)
+		fmt.Println(*label) // negative
 	}
 }
 ```
@@ -36,12 +36,6 @@ The first run downloads the model (about 1.6 GB). Later runs work offline.
 
 ```sh
 go run main.go
-```
-
-Expected output
-
-```text
-negative
 ```
 
 If no category fits, `Classify` returns a `nil` label and a `nil` error.

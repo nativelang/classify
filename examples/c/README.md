@@ -1,6 +1,10 @@
 # Classify from C
 
-The [C example](classify.c) asks whether “This is a terrible movie” is `positive`, `negative` or `neutral`. It loads the model in your program and prints a JSON result with `negative` in the `category` field. You can run it offline after downloading two files.
+The [C example](classify.c) asks whether “This is a terrible movie” is `positive`, `negative` or `neutral`. It loads the model in your program and prints the JSON result. You can run it offline after downloading two files.
+
+```c
+result = classify_infer(model, request, &error);  // JSON includes "category":"negative" and "source":"local".
+```
 
 ## Download the SDK and model
 
@@ -28,7 +32,7 @@ cc -std=c11 -Isdk/include examples/c/classify.c -Lsdk/lib -lclassify_core \
 ./classify-example model/profile.json
 ```
 
-Keep the single quotes around the linker flag so Linux looks for the library relative to the executable. The Compact model returned `"category":"negative"` and `"source":"local"` on both ARM64 and x64.
+Keep the single quotes around the linker flag so Linux looks for the library relative to the executable.
 
 ## macOS
 
@@ -42,8 +46,6 @@ cc -std=c11 -Isdk/include examples/c/classify.c -Lsdk/lib -lclassify_core \
   -Wl,-rpath,@executable_path/sdk/lib -o classify-example
 ./classify-example model/profile.json
 ```
-
-On Apple Silicon the Compact model returned `"category":"negative"`.
 
 ## Windows
 
