@@ -1,6 +1,6 @@
 # Install and start the Classify server
 
-## 1. Install once
+## 1. Install
 
 Open a terminal on the computer where your app will run. In an empty folder, run the installer. It downloads the server and model (about 1.6–2.5 GB) into `classify-server`.
 
