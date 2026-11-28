@@ -1,13 +1,9 @@
 # Classify a movie review in Rust
 
-You’ll need Rust and Cargo. Use an Apple Silicon Mac with macOS 15 or later, or [Debian 12-compatible Linux](../../SPECIFICATION.md#linux-requirements) on ARM64 or x64. On Windows or an Intel Mac, [run the local server](../../self-hosting/README.md).
-
-Create a project and add Classify.
+In your Rust project, add Classify.
 
 ```sh
-cargo new movie
-cd movie
-cargo add classify --git https://github.com/nativelang/classify --tag v0.2.0
+cargo add nativelang-classify
 ```
 
 Replace the contents of `src/main.rs` with this code.
@@ -37,3 +33,5 @@ negative
 ```
 
 If no category fits, `classify` returns `Ok(None)`.
+
+[Run Classify on Windows or an Intel Mac](../../self-hosting/README.md)
