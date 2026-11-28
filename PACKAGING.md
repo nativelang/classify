@@ -36,4 +36,8 @@ For a manual install, first check the manifest’s SHA-256 against the fingerpri
 
 If you want NativeLang to run Classify for you, the planned paid service will offer more powerful models. Pricing, features and the service address will be announced later. You can call the service directly or configure your app to ask it only when a local result is uncertain. [How fallback works](SPECIFICATION.md#opt-in-fallback-and-paid-offerings)
 
-If you want a premium model to run on your infrastructure, the planned license covers the delivery formats in your agreement, such as a container or a library and model bundle. The public code and guides use the [MIT License](LICENSE). Model and binary downloads carry their own terms and third-party notices.
+### Enterprise licensing
+
+NativeLang offers the large classification model and its GPU serving software under an enterprise license for deployment on your infrastructure. To discuss terms and private delivery, [open a licensing inquiry](https://github.com/nativelang/classify/issues/new). Issues are public, so keep the initial inquiry general.
+
+The public code and guides use the [MIT License](LICENSE). Model and binary downloads carry their own terms and third-party notices.
