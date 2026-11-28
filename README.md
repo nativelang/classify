@@ -21,7 +21,7 @@ Try Classify in your language.
 
 [Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/)
 
-These packages run on macOS 15+ on Apple Silicon or Debian 12-compatible Linux on ARM64 or x64. Your first call downloads the small model (about 1.6 GB). Other apps can use the same download.
+These packages run on macOS 15+ on Apple Silicon or Debian 12-compatible Linux on ARM64 or x64. The first call downloads the small model (about 1.6 GB) for apps run under your user account.
 
 [Advanced options](SPECIFICATION.md#deployment-options) · [API reference](SPECIFICATION.md#call-and-result)
 
