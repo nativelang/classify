@@ -1,14 +1,14 @@
 # Install and start the Classify server
 
-If several scripts use Classify, one server can keep the model loaded between runs. Each script sends its text and categories over HTTP and gets a result back. You can also use the server to try Classify on Windows or an Intel Mac.
+If several scripts use Classify, one server can keep the model loaded between runs. Each script sends its text and categories over HTTP and gets a result back.
 
 To load the model directly in a C program, follow the [C example](../examples/c/). To run the server in a container, follow the [Docker guide](manual.md#docker).
 
 ## 1. Install
 
-Open a terminal in an empty folder. The installer creates a `classify-server` folder and downloads the model for your computer.
+Open a terminal in an empty folder. The installer creates a `classify-server` folder and downloads Compact (about 1.6 GB) for your operating system and processor.
 
-**macOS or Linux.** Use macOS 15 or later, or Debian 12-compatible Linux on ARM64 or x64. The installer downloads Compact (about 1.6 GB) on Intel Macs, Apple Silicon and Linux.
+**macOS or Linux.** Use this command on macOS 15 or later (Apple Silicon or Intel) or Debian 12-compatible Linux (ARM64 or x64).
 
 ```sh
 curl -fLO https://raw.githubusercontent.com/nativelang/classify/df1003c024ff9db2cb203589ed671c142d59f7bb/self-hosting/install.sh && sh install.sh
@@ -17,7 +17,7 @@ curl -fLO https://raw.githubusercontent.com/nativelang/classify/df1003c024ff9db2
 <details>
 <summary>Windows</summary>
 
-On x64 or ARM64 Windows, run this in PowerShell to install Compact (about 1.6 GB).
+On x64 or ARM64 Windows, run this in PowerShell.
 
 ```powershell
 curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/df1003c024ff9db2cb203589ed671c142d59f7bb/self-hosting/install.cmd

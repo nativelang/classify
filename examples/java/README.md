@@ -23,6 +23,6 @@ public class Movie {
 }
 ```
 
-The first run downloads the model (about 1.6 GB). Later calls use the cached model.
+The first call downloads the model. Later calls work offline.
 
-[Maven example project](pom.xml)
+[Platforms, download sizes and Windows setup](../../SPECIFICATION.md#language-package-platform-support) · [Maven example project](pom.xml)

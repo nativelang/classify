@@ -12,4 +12,4 @@ console.log(await classify("This is a terrible movie", ["positive", "negative", 
 
 The first run downloads the Compact model and runtime (about 1.6 GB). Later runs work offline.
 
-[Supported platforms and TypeScript](../../SPECIFICATION.md#nodejs-platform-support)
+[Supported platforms and TypeScript](../../SPECIFICATION.md#language-package-platform-support)

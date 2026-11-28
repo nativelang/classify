@@ -7,8 +7,7 @@ Start in the root of a fresh Classify checkout. Download **only the SDK archive 
 | Platform | Portable C SDK | Model ZIP |
 | --- | --- | --- |
 | Linux | [ARM64 SDK][linux-arm] · [x64 SDK][linux-x64] | [Compact][compact] |
-| macOS 15+ on Apple Silicon | [ARM64 SDK][mac-arm] | [Compact][compact] |
-| macOS 15+ on Intel | [x64 SDK][mac-x64] | [Compact][compact] |
+| macOS 15+ | [Apple Silicon SDK][mac-arm] · [Intel SDK][mac-x64] | [Compact][compact] |
 | Windows | [ARM64 SDK][win-arm] · [x64 SDK][win-x64] | [Compact][compact] |
 
 Check the model ZIP against its published SHA-256. For the SDK, check the archive against the runtime entry for your platform in that model’s verified manifest. [Checksums and manifests](../../RELEASES.md#free-downloads)
@@ -35,7 +34,7 @@ Install the Xcode Command Line Tools if you need a C compiler (`xcode-select --i
 ```sh
 mkdir sdk
 tar -xzf classify-runtime-*-apple-darwin.tar.gz -C sdk
-unzip -q dm-classify-*.zip -d model
+unzip -q dm-classify-compact-r3.zip -d model
 cc -std=c11 -Isdk/include examples/c/classify.c -Lsdk/lib -lclassify_core \
   -Wl,-rpath,@executable_path/sdk/lib -o classify-example
 ./classify-example model/profile.json
