@@ -1,0 +1,30 @@
+name: Publish Python 0.2.0 to PyPI
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency: publish-python-to-pypi
+
+jobs:
+  publish:
+    if: github.repository == 'nativelang/classify' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - name: Download and verify the released wheel
+        shell: bash
+        run: |
+          mkdir dist
+          cd dist
+          wheel=nativelang_classify-0.2.0-py3-none-any.whl
+          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+            "https://github.com/nativelang/classify/releases/download/v0.2.0/$wheel" --output "$wheel"
+          printf '%s  %s\n' '1ba2f8f806cae93be52b369f29c2748ae2dfc9321f8c87a73c9fb6aa038d812a' "$wheel" | sha256sum --check --strict -
+
+      - name: Publish the verified wheel
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # release/v1
