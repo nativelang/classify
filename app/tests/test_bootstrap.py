@@ -13,11 +13,11 @@ import unittest
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / "bootstrap.sh"
-TAG = "v0.1.0-dm-classify-compact-r3"
+TAG = "v0.1.1-dm-classify-compact-r3"
 TARGETS = {
-    ("Darwin", "arm64"): ("aarch64-apple-darwin", "64d0972c97a87128d4698aa2940b724f321094e476b41b18531aa93426395dd3"),
-    ("Linux", "aarch64"): ("aarch64-unknown-linux-gnu", "fe432526cb458c4df37603917e8c4e321c340e30b631b3f2571332998c674877"),
-    ("Linux", "x86_64"): ("x86_64-unknown-linux-gnu", "211b8fdb1637709e8ecb1a3c5d2be9de9b6c624cca18c8a6df93029477dc6d28"),
+    ("Darwin", "arm64"): ("aarch64-apple-darwin", "666b9583ff4794f1537af8b6d2b60e98c383ebb87892b990066c68a1c02d219b"),
+    ("Linux", "aarch64"): ("aarch64-unknown-linux-gnu", "2daf0fde2c1a663c31e9913b0563070087d6bc8e3a02e2bb3cd0bf3295c9894a"),
+    ("Linux", "x86_64"): ("x86_64-unknown-linux-gnu", "f245e326547df8a090ea6a2d551c0658409346451f764528b6f837dd391d74c5"),
 }
 
 

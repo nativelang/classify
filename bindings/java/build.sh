@@ -23,5 +23,5 @@ mkdir -p "$out"
 javac --release 21 -classpath "$gson" -d "$classes" \
     "$root/bindings/java/src/io/nativelang/classify/Classifier.java"
 cp "$root/app/bootstrap.sh" "$classes/io/nativelang/classify/bootstrap.sh"
-jar --create --date=2020-01-01T00:00:00Z --file "$out/classify-0.2.0.jar" \
+jar --create --date=2020-01-01T00:00:00Z --file "$out/classify-0.2.2.jar" \
     -C "$classes" . -C "$root" LICENSE

@@ -14,9 +14,9 @@ Compact is the smaller model used by the language packages. Download one file in
 | --- | --- |
 | [Docker image · ARM64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-image-0.1.0-dm-classify-compact-r3-linux-arm64.oci.tar) | `a432db5bd87427cba5f046641c92a3aad49b4abd40afbed7c0761d18bd9e3028` |
 | [Docker image · AMD64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-image-0.1.0-dm-classify-compact-r3-linux-amd64.oci.tar) | `7a0cfc2eb99c8f3fd014671af4c062de97b0b247881b8a28fee0bd525475d128` |
-| [Native server · Apple Silicon](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-server-0.1.0-dm-classify-compact-r3-aarch64-apple-darwin.tar.gz) | `64d0972c97a87128d4698aa2940b724f321094e476b41b18531aa93426395dd3` |
-| [Native server · Linux ARM64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-server-0.1.0-dm-classify-compact-r3-aarch64-unknown-linux-gnu.tar.gz) | `fe432526cb458c4df37603917e8c4e321c340e30b631b3f2571332998c674877` |
-| [Native server · Linux x64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.0-dm-classify-compact-r3/classify-server-0.1.0-dm-classify-compact-r3-x86_64-unknown-linux-gnu.tar.gz) | `211b8fdb1637709e8ecb1a3c5d2be9de9b6c624cca18c8a6df93029477dc6d28` |
+| [Native server · Apple Silicon](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-server-0.1.1-dm-classify-compact-r3-aarch64-apple-darwin.tar.gz) | `666b9583ff4794f1537af8b6d2b60e98c383ebb87892b990066c68a1c02d219b` |
+| [Native server · Linux ARM64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-server-0.1.1-dm-classify-compact-r3-aarch64-unknown-linux-gnu.tar.gz) | `2daf0fde2c1a663c31e9913b0563070087d6bc8e3a02e2bb3cd0bf3295c9894a` |
+| [Native server · Linux x64](https://github.com/nativelang/classify-artifacts/releases/download/v0.1.1-dm-classify-compact-r3/classify-server-0.1.1-dm-classify-compact-r3-x86_64-unknown-linux-gnu.tar.gz) | `f245e326547df8a090ea6a2d551c0658409346451f764528b6f837dd391d74c5` |
 
 Run `shasum -a 256 FILENAME` on macOS or `sha256sum FILENAME` on Linux, replacing `FILENAME` with the downloaded name. In PowerShell, use `Get-FileHash FILENAME -Algorithm SHA256`. Continue only if the result matches the table.
 

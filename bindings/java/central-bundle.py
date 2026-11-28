@@ -1,4 +1,4 @@
-"""Assemble a signed Maven Central bundle of Classify's v0.2.0 Java release."""
+"""Assemble a signed Maven Central bundle of Classify's v0.2.2 Java release."""
 
 import argparse
 import hashlib
@@ -25,8 +25,8 @@ def main():
     root = java.parent.parent
     gson = args.gson.resolve()
     package = Path("io/nativelang/classify")
-    artifact = "classify-0.2.0"
-    prefix = "io/github/nativelang/classify/0.2.0"
+    artifact = "classify-0.2.2"
+    prefix = "io/github/nativelang/classify/0.2.2"
 
     with tempfile.TemporaryDirectory(dir=args.output.resolve().parent) as tmp:
         work = Path(tmp)
@@ -34,9 +34,9 @@ def main():
         subprocess.run(["sh", java / "build.sh", gson, files], check=True)
         binary = files / f"{artifact}.jar"
         if hashlib.sha256(binary.read_bytes()).hexdigest() != (
-            "f8f4afe48dda1350743b536a89935252c3d959308390b033e07c47f75adbd1f8"
+            "2623d81cfd2e447b28850b70ac05630f570b2a50c27339cb3aa2d55ce22ee951"
         ):
-            raise SystemExit("Binary differs from the v0.2.0 release. Use the documented JDK and source.")
+            raise SystemExit("Binary differs from the v0.2.2 release. Use the documented JDK and source.")
 
         date = "--date=2020-01-01T00:00:00Z"
         sources = work / "sources"
@@ -45,7 +45,7 @@ def main():
         if hashlib.sha256(source.read_bytes()).hexdigest() != (
             "2062e238897f30af3c4a0e600a6bb8d3d86348c4ead2e25df3401fef0ba3eaae"
         ):
-            raise SystemExit("Java source differs from the v0.2.0 release.")
+            raise SystemExit("Java source differs from the v0.2.2 release.")
         shutil.copyfile(source, sources / package / "Classifier.java")
         shutil.copyfile(root / "app/bootstrap.sh", sources / package / "bootstrap.sh")
         docs = work / "docs"
