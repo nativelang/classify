@@ -68,7 +68,7 @@ Asking for alternatives preserves the decision. On a match, the list excludes th
 
 ## Where the language packages store the model
 
-On the first call, the package downloads the Compact model and the program that runs it (about 1.6 GB together). It checks the download and saves the files under `~/.nativelang/classify/` in your home folder. Projects using the same version under your account reuse that copy, even across languages. Later calls work offline.
+On the first call, the package downloads the model and the program that runs it. Python and Node.js select Standard on Intel Macs and Windows (about 2.5 GB) and Compact on Apple Silicon and Linux (about 1.6 GB). It checks the download and saves the files under `~/.nativelang/classify/` in your home folder. Projects using the same version under your account reuse that copy, even across languages. Later calls work offline.
 
 <a id="deployment-options"></a>
 
@@ -76,11 +76,11 @@ To share a model already loaded in memory, [run a local server](self-hosting/REA
 
 ## Python platform support
 
-The Python package requires Python 3.9 or later. Its local runtime supports Apple Silicon on macOS 15 or later and [Debian 12-compatible Linux](#linux-requirements) on ARM64 or x64. On Windows and Intel Macs, applications can call the [local HTTP server](self-hosting/README.md).
+The Python package requires Python 3.9 or later. Use macOS 15 or later, x64 or ARM64 Windows, or [Debian 12-compatible Linux](#linux-requirements) on ARM64 or x64.
 
 ## Node.js platform support
 
-Use Node.js 22.18 or later on an Apple Silicon Mac with macOS 15 or later, or on [Debian 12-compatible Linux](#linux-requirements) on ARM64 or x64. On Windows or an Intel Mac, use the [local HTTP server](self-hosting/README.md).
+Use Node.js 22.18 or later on macOS 15 or later, x64 or ARM64 Windows, or [Debian 12-compatible Linux](#linux-requirements) on ARM64 or x64.
 
 For TypeScript, save the [JavaScript example](examples/node/) as `movie.mts` and run `node movie.mts`.
 

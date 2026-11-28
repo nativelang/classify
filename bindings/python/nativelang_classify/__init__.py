@@ -34,10 +34,17 @@ if hasattr(os, "register_at_fork"):
 
 
 def _start():
-    if os.name != "posix":
-        raise RuntimeError("Local Classify for Python requires macOS or Linux.")
+    if os.name == "nt":
+        powershell = Path(os.environ["SystemRoot"]) / "System32/WindowsPowerShell/v1.0/powershell.exe"
+        exe = Path(subprocess.check_output(
+            [str(powershell), "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass",
+             "-File", str(Path(__file__).with_name("install.ps1"))], encoding="utf-8",
+        ).rstrip())
+        command = [str(exe), "infer", "--profile", str(exe.parent / "model/profile.json")]
+    else:
+        command = ["/bin/sh", str(Path(__file__).with_name("bootstrap.sh"))]
     return subprocess.Popen(
-        ["/bin/sh", str(Path(__file__).with_name("bootstrap.sh"))],
+        command,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         encoding="utf-8",

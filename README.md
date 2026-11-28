@@ -19,6 +19,6 @@ classify("This is a terrible movie", categories=["positive", "negative", "neutra
 
 [Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/)
 
-The first time you run the example, Classify downloads its model (about 1.6 GB). After that, you can run it offline. Your text stays on your computer, and there’s no per-token fee.
+The first time you run the example, Classify downloads its model (about 1.6 GB for Compact or 2.5 GB for Standard). After that, you can run it offline. Your text stays on your computer, and there’s no per-token fee.
 
 [Other ways to run Classify](self-hosting/README.md) · [API reference](SPECIFICATION.md#call-and-result)

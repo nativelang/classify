@@ -1,5 +1,7 @@
-import { spawn } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { createInterface } from "node:readline";
+import { dirname, join } from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
 const bootstrap = fileURLToPath(new URL("./bootstrap.sh", import.meta.url));
@@ -7,8 +9,19 @@ let worker;
 let queue = Promise.resolve();
 process.once("exit", () => worker?.child.kill());
 
-function startWorker() {
-  const child = spawn("/bin/sh", [bootstrap], { stdio: ["pipe", "pipe", "inherit"] });
+async function startWorker() {
+  let command = "/bin/sh";
+  let args = [bootstrap];
+  if (process.platform === "win32") {
+    const script = fileURLToPath(new URL("./install.ps1", import.meta.url));
+    const powershell = join(process.env.SystemRoot, "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
+    const install = promisify(execFile)(powershell,
+      ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", script], { windowsHide: true });
+    install.child.stderr.pipe(process.stderr, { end: false });
+    command = (await install).stdout.trimEnd();
+    args = ["infer", "--profile", join(dirname(command), "model", "profile.json")];
+  }
+  const child = spawn(command, args, { stdio: ["pipe", "pipe", "inherit"], windowsHide: true });
   const output = createInterface({ input: child.stdout, crlfDelay: Infinity });
   const current = { child, lines: output[Symbol.asyncIterator](), error: null };
 
@@ -24,7 +37,7 @@ function startWorker() {
 }
 
 async function infer(request) {
-  const current = worker ??= startWorker();
+  const current = worker ??= await startWorker();
   const { child } = current;
   // Keep Node alive for this response. An idle worker should follow the app's lifetime.
   child.ref();

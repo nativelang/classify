@@ -1,0 +1,54 @@
+name: Native desktop quickstarts
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'bindings/node/**'
+      - 'bindings/python/**'
+      - '.github/workflows/desktop-quickstarts.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quickstarts:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15-intel
+            arch: x64
+          - runner: windows-2022
+            arch: x64
+          - runner: windows-11-arm
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+          architecture: ${{ matrix.arch }}
+          package-manager-cache: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+          architecture: ${{ matrix.arch }}
+      - name: Install packages and run both movie examples
+        shell: bash
+        run: |
+          set -eu
+          project=$(mktemp -d)
+          (cd bindings/node && npm pack --pack-destination "$project")
+          python -m pip install ./bindings/python
+          cd "$project"
+          npm install ./*.tgz
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { classify } from '@nativelang/classify';
+          assert.equal(await classify("This is a terrible movie", ["positive","negative","neutral"]), "negative");
+          JS
+          python - <<'PY'
+          from nativelang_classify import classify
+          assert classify("This is a terrible movie", ["positive","negative","neutral"]) == "negative"
+          PY
