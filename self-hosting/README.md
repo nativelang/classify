@@ -43,4 +43,17 @@ Run the server from the same folder.
 
 When [the health page](http://127.0.0.1:8080/health) says `ok`, try [your language example](../README.md#examples) in another terminal. Press Ctrl+C in the server terminal to stop it.
 
+<details>
+<summary>Use a different port</summary>
+
+The default port is `8080`. To use `9090`, add `--listen 127.0.0.1:9090` to the start command.
+
+```sh
+./classify-server/classify serve --listen 127.0.0.1:9090
+```
+
+Check [the health page on port 9090](http://127.0.0.1:9090/health) and use `http://127.0.0.1:9090/v1/classify` in your app.
+
+</details>
+
 [Docker and manual installation](manual.md)
