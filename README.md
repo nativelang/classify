@@ -5,7 +5,7 @@
   </picture>
 </h1>
 
-Classify text from categories you choose.
+Give Classify some text and a list of categories. It tells you which one fits, if any.
 
 *Example (pseudocode)*
 
@@ -17,16 +17,12 @@ The result is `"negative"`.
 
 ## Examples
 
-The C example runs in your app. The other examples call the local server.
+Pick your language for setup instructions and a working example.
 
 [Python](examples/python/) · [JavaScript / TypeScript](examples/node/) · [Java](examples/java/) · [C#](examples/csharp/) · [Go](examples/go/) · [Rust](examples/rust/) · [C](examples/c/)
 
-## Install and use
+## Run it on your computer
 
-Compact r3 and Standard r1 run offline after installation. Download a server with its model included, or embed the C library and load the model separately. [Published downloads](https://github.com/nativelang/classify-artifacts/releases)
+The free version works offline on your computer after setup. [Set up the server](self-hosting/README.md) or [use the C library in your app](PACKAGING.md#free-downloads).
 
-- **Use Classify in your app.** [Download the C SDK and model](PACKAGING.md#free-downloads) · [C example](examples/c/classify.c)
-- **Run Classify on your machine.** [Set up the server with Docker or directly on Windows, macOS, or Linux](self-hosting/README.md) · [Send a request](self-hosting/README.md#try-a-request)
-- **Run the large model on your infrastructure.** The model and its GPU serving software are available under an enterprise license. [Enterprise licensing](PACKAGING.md#enterprise-licensing)
-
-The free edition runs locally without an API key. The [planned hosted service](SPECIFICATION.md#opt-in-fallback-and-paid-offerings) will use an API key.
+The large model and its GPU server are available under an [enterprise license](PACKAGING.md#enterprise-licensing).
