@@ -4,7 +4,7 @@ The [C example](classify.c) asks whether “This is a terrible movie” is `posi
 
 ## Download the SDK and model
 
-Start in the root of a Classify checkout. Save **one SDK archive and one model ZIP** from the same row below. Match the SDK to the architecture of the app you are building. On Linux and macOS, `uname -m` prints `aarch64` or `arm64` for ARM64 and `x86_64` for x64.
+Start in the root of a fresh Classify checkout. Download **only the SDK archive and model ZIP** for your platform into that directory so the extraction commands select the right files. Match the SDK to the architecture of the app you are building. On Linux and macOS, `uname -m` prints `aarch64` or `arm64` for ARM64 and `x86_64` for x64.
 
 | Platform | Portable C SDK | Model ZIP |
 | --- | --- | --- |

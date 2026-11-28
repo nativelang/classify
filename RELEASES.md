@@ -35,7 +35,7 @@ Accelerated SDKs use the same model ZIPs. Metal requires Apple Silicon, a compat
 
 ## Build the C example
 
-Choose your platform for download, extraction and linking instructions. [Linux](examples/c/README.md#linux) · [macOS](examples/c/README.md#macos) · [Windows](examples/c/README.md#windows)
+Download the SDK and model for your platform, then [build and run the C example](examples/c/README.md).
 
 ## Licenses
 
