@@ -11,7 +11,7 @@ Open a terminal in an empty folder. The installer creates a `classify-server` fo
 **macOS or Linux.** Use macOS 15 or later, or Debian 12-compatible Linux on ARM64 or x64. The installer downloads Compact (about 1.6 GB) on Apple Silicon and Linux, or Standard (about 2.5 GB) on Intel Macs.
 
 ```sh
-curl -fLO https://raw.githubusercontent.com/nativelang/classify/5ab6d56e24296e97e1cb35cb34ba55203c92b565/self-hosting/install.sh && sh install.sh
+curl -fLO https://raw.githubusercontent.com/nativelang/classify/2c393f1d1b6d5fb72b2e0821db3a5e8d6b962997/self-hosting/install.sh && sh install.sh
 ```
 
 <details>
@@ -20,7 +20,7 @@ curl -fLO https://raw.githubusercontent.com/nativelang/classify/5ab6d56e24296e97
 On x64 or ARM64 Windows, run this in PowerShell to install Standard (about 2.5 GB).
 
 ```powershell
-curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/5ab6d56e24296e97e1cb35cb34ba55203c92b565/self-hosting/install.cmd
+curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/2c393f1d1b6d5fb72b2e0821db3a5e8d6b962997/self-hosting/install.cmd
 if ($LASTEXITCODE -eq 0) { .\install.cmd }
 ```
 
