@@ -1,0 +1,44 @@
+[
+  {"categories":["positive","negative","neutral"],"cases":[
+    ["I loved every minute of that film.","positive"],
+    ["What a waste of an evening.","negative"],
+    ["The film runs for ninety minutes.","neutral"],
+    ["The acting was wonderful.","positive"],
+    ["The dialogue was painfully bad.","negative"],
+    ["The credits list two editors.","neutral"]]},
+  {"categories":["billing","delivery","technical support"],"cases":[
+    ["I was charged twice for my order.","billing"],
+    ["My parcel has not arrived yet.","delivery"],
+    ["The app crashes whenever I open it.","technical support"],
+    ["Please send me a copy of my invoice.","billing"],
+    ["Can I change my shipping address?","delivery"],
+    ["The login screen keeps freezing.","technical support"]]},
+  {"categories":["accept","decline","reschedule"],"cases":[
+    ["Yes, I can join you on Tuesday.","accept"],
+    ["Thanks, but I cannot attend.","decline"],
+    ["Could we move our meeting to Friday?","reschedule"],
+    ["Count me in.","accept"],
+    ["I will have to pass on this invitation.","decline"],
+    ["I can meet an hour later instead.","reschedule"]]},
+  {"categories":["train","bicycle","airplane"],"cases":[
+    ["My boarding pass shows seat 18A and gate C4.","airplane"],
+    ["I need a new chain and pedals.","bicycle"],
+    ["The conductor checked my ticket in the sleeper car.","train"],
+    ["We waited on the runway for takeoff.","airplane"],
+    ["I pumped up both tires before pedaling home.","bicycle"],
+    ["The locomotive pulled into the station.","train"]]},
+  {"categories":["refund","exchange"],"cases":[
+    ["Please give me my money back.","refund"],
+    ["Could you swap this for a smaller size?","exchange"],
+    ["I want the charge reversed.","refund"],
+    ["I would like the same shoes in blue instead.","exchange"],
+    ["The library closes at six.",null],
+    ["How do I turn the volume up?",null]]},
+  {"categories":["rain","snow"],"cases":[
+    ["Drops of water are falling from the clouds.","rain"],
+    ["White flakes are accumulating on the ground.","snow"],
+    ["The sky is clear and sunny.",null],
+    ["A thunderstorm soaked our clothes.","rain"],
+    ["The blizzard covered the road in powder.","snow"],
+    ["My train ticket is in my pocket.",null]]}
+]
