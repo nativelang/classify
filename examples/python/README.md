@@ -7,7 +7,7 @@ In an empty folder, create a virtual environment and install Classify. On Debian
 ```sh
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install https://github.com/nativelang/classify/releases/download/v0.2.0/nativelang_classify-0.2.0-py3-none-any.whl
+python -m pip install nativelang-classify
 ```
 
 Save this as `movie.py`.
