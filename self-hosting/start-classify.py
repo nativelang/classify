@@ -1,4 +1,4 @@
-"""Download the local Classify server once and run it in the foreground."""
+"""Install or start the local Classify server."""
 
 import argparse
 import hashlib
@@ -58,7 +58,7 @@ def install(model, target, digest, destination, executable):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("install", "start"), nargs="?",
-                        help="install the server and model, or start the installed server")
+                        help="omit to install if needed and start the server")
     action = parser.parse_args().action
     system = platform.system()
     machine = platform.machine().lower()
@@ -90,4 +90,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         sys.exit(130)
     except (OSError, ValueError, subprocess.CalledProcessError, shutil.ReadError) as error:
-        sys.exit(f"Could not start Classify: {error}")
+        sys.exit(f"Classify: {error}")
