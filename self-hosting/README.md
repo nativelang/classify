@@ -7,7 +7,7 @@ Open a terminal on the computer where your app will run. In an empty folder, run
 **macOS 15+ or Debian 12-compatible Linux**
 
 ```sh
-curl -fLO https://raw.githubusercontent.com/nativelang/classify/70c1ac58ce7695b5ae6497a0c645207f71f4120d/self-hosting/install.sh && sh install.sh
+curl -fLO https://raw.githubusercontent.com/nativelang/classify/5ce35e00d97c2d89f97d91e094a094e9e310d08c/self-hosting/install.sh && sh install.sh
 ```
 
 <details>
@@ -16,7 +16,7 @@ curl -fLO https://raw.githubusercontent.com/nativelang/classify/70c1ac58ce7695b5
 In PowerShell, run the installer.
 
 ```powershell
-curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/70c1ac58ce7695b5ae6497a0c645207f71f4120d/self-hosting/install.cmd
+curl.exe -fLO https://raw.githubusercontent.com/nativelang/classify/5ce35e00d97c2d89f97d91e094a094e9e310d08c/self-hosting/install.cmd
 if ($LASTEXITCODE -eq 0) { .\install.cmd }
 ```
 
