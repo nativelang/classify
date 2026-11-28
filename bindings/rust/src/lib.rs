@@ -13,10 +13,51 @@ struct Session {
     output: BufReader<ChildStdout>,
 }
 
+#[cfg(not(windows))]
+fn worker_command() -> io::Result<Command> {
+    let mut command = Command::new("/bin/sh");
+    command.args(["-c", include_str!("../bootstrap.sh")]);
+    Ok(command)
+}
+
+#[cfg(windows)]
+fn worker_command() -> io::Result<Command> {
+    use std::path::PathBuf;
+    let root =
+        std::env::var_os("SystemRoot").ok_or_else(|| io::Error::other("missing SystemRoot"))?;
+    let shell = PathBuf::from(root).join(r"System32\WindowsPowerShell\v1.0\powershell.exe");
+    let mut bootstrap = Command::new(shell)
+        .args([
+            "-NoProfile",
+            "-NonInteractive",
+            "-Command",
+            "& ([ScriptBlock]::Create([Console]::In.ReadToEnd()))",
+        ])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::inherit())
+        .spawn()?;
+    bootstrap
+        .stdin
+        .take()
+        .expect("piped stdin")
+        .write_all(include_bytes!("../install.ps1"))?;
+    let install = bootstrap.wait_with_output()?;
+    if !install.status.success() {
+        return Err(io::Error::other("Classify installation failed"));
+    }
+    let path = String::from_utf8(install.stdout).map_err(io::Error::other)?;
+    let exe = PathBuf::from(path.trim());
+    let profile = exe.with_file_name("model").join("profile.json");
+    let mut command = Command::new(exe);
+    command.arg("infer").arg("--profile").arg(profile);
+    Ok(command)
+}
+
 impl Session {
     fn start() -> io::Result<Self> {
-        let mut child = Command::new("/bin/sh")
-            .args(["-c", include_str!("../bootstrap.sh")])
+        let mut command = worker_command()?;
+        let mut child = command
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .spawn()?;

@@ -12,6 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="../../app/bootstrap.sh" LogicalName="NativeLang.Classify.bootstrap.sh" />
+    <EmbeddedResource Include="../../app/install.ps1" LogicalName="NativeLang.Classify.install.ps1" />
     <None Include="../../LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

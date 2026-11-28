@@ -40,7 +40,7 @@ On Windows, run `.\classify-server\start.cmd`.
 
 ## 3. Classify a movie review
 
-Leave the server terminal open. When the [health page](http://127.0.0.1:8080/health) says `ok`, open a second terminal and [run the movie request](../SPECIFICATION.md#call-and-result). Look for `negative` in the `category` field. Press Ctrl+C in the server terminal when you’re done.
+Leave the server terminal open. When the [health page](http://127.0.0.1:8080/health) says `ok`, open a second terminal and [run the movie request](../docs/api/http.md). Look for `negative` in the `category` field. Press Ctrl+C in the server terminal when you’re done.
 
 ### Use a different port
 

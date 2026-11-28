@@ -8,11 +8,17 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"runtime"
+	"strings"
 	"sync"
 )
 
 //go:embed bootstrap.sh
 var bootstrap string
+
+//go:embed install.ps1
+var windowsInstaller string
 
 var (
 	mu      sync.Mutex
@@ -27,6 +33,18 @@ type session struct {
 
 func start() (*session, error) {
 	cmd := exec.Command("/bin/sh", "-c", bootstrap)
+	if runtime.GOOS == "windows" {
+		powershell := filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
+		install := exec.Command(powershell, "-NoProfile", "-NonInteractive", "-Command", "& ([ScriptBlock]::Create([Console]::In.ReadToEnd()))")
+		install.Stdin = strings.NewReader(windowsInstaller)
+		install.Stderr = os.Stderr
+		path, err := install.Output()
+		if err != nil {
+			return nil, fmt.Errorf("install Classify: %w", err)
+		}
+		exe := strings.TrimSpace(string(path))
+		cmd = exec.Command(exe, "infer", "--profile", filepath.Join(filepath.Dir(exe), "model", "profile.json"))
+	}
 	cmd.Stderr = os.Stderr
 	in, err := cmd.StdinPipe()
 	if err != nil {

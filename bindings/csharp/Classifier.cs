@@ -53,8 +53,10 @@ public sealed class Classifier : IDisposable
 
     private static Process Start()
     {
-        using var resource = typeof(Classifier).Assembly.GetManifestResourceStream("NativeLang.Classify.bootstrap.sh")
-            ?? throw new IOException("Classify package is missing bootstrap.sh");
+        bool windows = OperatingSystem.IsWindows();
+        string name = windows ? "install.ps1" : "bootstrap.sh";
+        using var resource = typeof(Classifier).Assembly.GetManifestResourceStream("NativeLang.Classify." + name)
+            ?? throw new IOException("Classify package is missing " + name);
         using var reader = new StreamReader(resource, Encoding.UTF8);
         var info = new ProcessStartInfo("/bin/sh")
         {
@@ -64,8 +66,28 @@ public sealed class Classifier : IDisposable
             StandardInputEncoding = new UTF8Encoding(false),
             StandardOutputEncoding = Encoding.UTF8
         };
-        info.ArgumentList.Add("-c");
-        info.ArgumentList.Add(reader.ReadToEnd());
+        if (windows)
+        {
+            var shell = Path.Combine(Environment.SystemDirectory, "WindowsPowerShell", "v1.0", "powershell.exe");
+            var install = new ProcessStartInfo(shell) { UseShellExecute = false, RedirectStandardInput = true, StandardInputEncoding = new UTF8Encoding(false), RedirectStandardOutput = true, StandardOutputEncoding = Encoding.UTF8 };
+            foreach (var arg in new[] { "-NoProfile", "-NonInteractive", "-Command", "& ([ScriptBlock]::Create([Console]::In.ReadToEnd()))" })
+                install.ArgumentList.Add(arg);
+            using var proc = Process.Start(install) ?? throw new IOException("Could not install Classify");
+            proc.StandardInput.Write(reader.ReadToEnd());
+            proc.StandardInput.Close();
+            var path = proc.StandardOutput.ReadToEnd().TrimEnd();
+            proc.WaitForExit();
+            if (proc.ExitCode != 0 || path.Length == 0) throw new IOException("Classify installation failed");
+            info.FileName = path;
+            info.ArgumentList.Add("infer");
+            info.ArgumentList.Add("--profile");
+            info.ArgumentList.Add(Path.Combine(Path.GetDirectoryName(path)!, "model", "profile.json"));
+        }
+        else
+        {
+            info.ArgumentList.Add("-c");
+            info.ArgumentList.Add(reader.ReadToEnd());
+        }
         return Process.Start(info) ?? throw new IOException("Could not start Classify");
     }
 

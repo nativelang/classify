@@ -16,6 +16,4 @@ fn main() -> std::io::Result<()> {
 }
 ```
 
-The first call downloads the model. Later calls work offline.
-
-[Platforms, download sizes and Windows setup](../../SPECIFICATION.md#language-package-platform-support)
+[Speed up startup with the local API service](../../docs/service.md).
