@@ -14,7 +14,7 @@ The result is `"bad"`.
 
 ## Define your own categories
 
-In the proposed v1 API, category names alone are enough. Classify uses each name as both its ID and its description. If a name has a special meaning in your app, give the category a description. You can also add examples.
+Category names alone are enough. Classify uses each name as both its ID and its description. If a name has a special meaning in your app, give the category a description. You can also add examples.
 
 For instance, a shop might use `"late"` for deliveries that missed a promised arrival date. This pseudocode gives that category a more precise meaning.
 
@@ -25,11 +25,9 @@ delivery = [
 ]
 ```
 
-You can also use a built-in set of categories. If your app asks “Should I send this message?”, `classify("Go ahead", "builtins.confirmation")` can pick `yes`. “Please hold off” means `no`.
-
 ## Call and result
 
-Call `classify(text, categories, settings?)` with at least one category. Each list entry can be a name or an object with `id`, `description`, and an optional list of `examples`. Text, names, IDs, descriptions and individual examples must be nonblank strings. IDs are case-sensitive and unique within a set. The result includes these fields.
+The C SDK and HTTP server accept one to sixteen categories per request. Each list entry can be a name or an object with `id`, `description`, and an optional list of `examples`. Text, names, IDs, descriptions and individual examples must be nonblank strings. IDs are case-sensitive and unique within a set. The result includes these fields.
 
 | Field | What your app receives |
 | --- | --- |
@@ -46,11 +44,11 @@ Start with the defaults. Two settings change what you receive.
 - Set `minScore` to a number from 0 to 1 to set the lowest match strength you will accept. Omitting it uses the library or service default. A category can meet the minimum and still be ambiguous.
 - Set `maxAlternatives` to a nonnegative integer to limit the list of alternatives. The default, 0, omits the field. The list excludes the selected category. Requesting it leaves the decision unchanged.
 
-Reordering the categories preserves the local decision. If two categories both apply or tie for first place, the local result is `unknown`. Invalid input produces an `invalid_argument` error.
+Reordering the categories preserves the local decision. A tie for first place yields `unknown`. Invalid input produces an `invalid_argument` error.
 
 ## Name a set or compile a catalog
 
-If you use the same categories repeatedly, give the list a name on your client. Your names start with `app.` and built-in names start with `builtins.`. Each name selects one set. Both examples below use pseudocode.
+The following examples describe a planned client API. With the current C SDK and server, keep reusable lists in your app and pass their definitions on each call. In the planned API, you can give a list a name on your client. Your names start with `app.` and built-in names start with `builtins.`. Each name selects one set. Both examples below use pseudocode.
 
 ```text
 app = client()
@@ -69,11 +67,11 @@ app = client(catalog = openCatalog("./catalogs/reviews-v1"))
 app.classify("I loved every minute", "app.ratings")
 ```
 
-Compiling validates every set and returns a read-only handle. You can copy the folder with your app and open it offline with a compatible installation. Given the same categories, settings and local runtime, a saved set gives the same decision as passing its list directly. To update the catalog, compile to a new folder. A failed compile leaves existing catalogs usable. An unknown name or an incompatible catalog produces an error.
+Compiling validates every set and returns a read-only handle. You can copy the folder with your app and open it offline with a compatible installation. Given the same categories, settings and local runtime, a saved set gives the same decision as passing its list directly. To update the catalog, compile to a new folder. A failed compile leaves existing catalogs usable. An unknown name or an incompatible catalog produces an error. A planned built-in confirmation set will also let callers use `builtins.confirmation` for yes/no requests.
 
 ## Free embedded and server use
 
-The free edition is designed to run inside your app or on a server you run. Both work offline after installation and require no account. To call a server directly, send `POST /v1/classify` with a JSON body containing `text`, the list of `categories`, and optional `settings`. Expand a named set to its definitions before sending it.
+You can embed the C SDK or run the HTTP server on your own machine. Both work offline after installation and require no account. To call a server directly, send `POST /v1/classify` with a JSON body containing `text`, the list of `categories`, and optional `settings`. Expand a named set to its definitions before sending it.
 
 ```sh
 curl --request POST 'http://127.0.0.1:8080/v1/classify' \
@@ -84,17 +82,17 @@ curl --request POST 'http://127.0.0.1:8080/v1/classify' \
   }'
 ```
 
-A successful response uses HTTP 200 for either `matched` or `unknown`. For this example you might receive
+A successful response uses HTTP 200 for either `matched` or `unknown`. Compact r3 on Apple Silicon returned
 
 ```json
-{"status": "matched", "category": "bad", "score": 0.91, "source": "self_hosted"}
+{"status": "matched", "category": "bad", "score": 0.9227963089685403, "source": "self_hosted"}
 ```
 
 The native server defaults to `http://127.0.0.1:8080` on your machine. You can change its address and port. The [server guide](self-hosting/README.md) shows how to start the native or Docker server and reach it from the same machine.
 
 ## Opt-in fallback and paid offerings
 
-Normally the library handles the request inside your app. If you want a second opinion when it returns `unknown`, configure a **fallback** on the client. A local match always ends the call.
+The released C SDK handles requests inside your app. The following fallback settings are planned for client libraries. They let the client ask a server for a second opinion when a local request returns `unknown`. A local match always ends the call.
 
 | Client setup | Where an uncertain request goes |
 | --- | --- |
