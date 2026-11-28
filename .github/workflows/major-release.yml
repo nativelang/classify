@@ -1,0 +1,127 @@
+name: Qualify a major release
+run-name: Qualify Classify ${{ inputs.version }}
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Published major release (for example 1.0.0)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+concurrency:
+  group: qualification-${{ inputs.version }}
+  cancel-in-progress: false
+env:
+  VERSION: ${{ inputs.version }}
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    outputs:
+      commit: ${{ steps.release.outputs.commit }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - run: python3 -m unittest discover -s release/qualification
+      - id: release
+        name: Resolve published major release before allocating hardware
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          [[ "$VERSION" =~ ^[1-9][0-9]*\.0\.0$ ]] || { echo "Expected a major release such as 1.0.0"; exit 1; }
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" | jq -e '.draft == false and .prerelease == false'
+          git fetch --depth=1 origin "refs/tags/v$VERSION"
+          echo "commit=$(git rev-parse 'FETCH_HEAD^{commit}')" >> "$GITHUB_OUTPUT"
+
+  benchmark:
+    needs: release
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm, macos-15, macos-15-intel, windows-2022, windows-11-arm]
+        model: [compact, standard]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ needs.release.outputs.commit }}
+          path: candidate
+          persist-credentials: false
+      - uses: ./.github/actions/qualification
+      - name: Test all clients and measure first and warm calls
+        env:
+          MODEL: ${{ matrix.model }}
+          RUNNER_LABEL: ${{ matrix.runner }}
+        shell: python {0}
+        run: |
+          import os, subprocess, sys
+          subprocess.run([sys.executable, "release/qualification/measure.py",
+                          "--version", os.environ["VERSION"], "--runner", os.environ["RUNNER_LABEL"],
+                          "--model", os.environ["MODEL"], "--release", "candidate", "--output", "results"], check=True)
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: bench-${{ matrix.runner }}-${{ matrix.model }}
+          path: results/
+          if-no-files-found: warn
+
+  rank:
+    needs: benchmark
+    runs-on: ubuntu-24.04
+    outputs:
+      runner: ${{ steps.rank.outputs.runner }}
+      language: ${{ steps.rank.outputs.language }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: bench-*
+          path: reports
+      - id: rank
+        run: python3 release/qualification/select_runner.py reports "$VERSION"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: performance
+          path: performance.csv
+
+  evaluate:
+    needs: [release, rank]
+    runs-on: ${{ needs.rank.outputs.runner }}
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ needs.release.outputs.commit }}
+          path: candidate
+          persist-credentials: false
+      - uses: ./.github/actions/qualification
+      - name: Score both models on the winning machine
+        env:
+          LANGUAGE: ${{ needs.rank.outputs.language }}
+          RUNNER_LABEL: ${{ needs.rank.outputs.runner }}
+        shell: python {0}
+        run: |
+          import os, subprocess, sys
+          failed = []
+          for model in ("compact", "standard"):
+              result = subprocess.run([sys.executable, "release/qualification/measure.py",
+                                       "--version", os.environ["VERSION"], "--runner", os.environ["RUNNER_LABEL"],
+                                       "--model", model, "--release", "candidate", "--output", "scores/" + model,
+                                       "--eval", os.environ["LANGUAGE"]])
+              if result.returncode:
+                  failed.append(model)
+          if failed:
+              sys.exit("Evaluation failed: " + ", ".join(failed))
+          subprocess.run([sys.executable, "release/qualification/compare.py"], check=True)
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: evaluation
+          path: scores/
+          if-no-files-found: warn

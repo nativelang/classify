@@ -40,6 +40,10 @@ The separate accelerated SDKs below use the same model ZIPs. Their Metal builds 
 
 Download the SDK and model for your platform, then [build and run the C example](examples/c/BUILD.md).
 
+## Major release testing
+
+To compare both models across the supported platforms, [run the release qualification suite](release/qualification/README.md).
+
 ## Licenses
 
 The public code and guides use the [MIT License](LICENSE). See each model or binary download for its terms and third-party notices.
