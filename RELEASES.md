@@ -4,7 +4,7 @@ To embed Classify in a C app, follow the [native C setup guide](examples/c/READM
 
 ## Free downloads
 
-Compact is the smaller model used by the language packages. Standard is larger and also runs natively on Windows and Intel Macs. For a C app, download one model ZIP and its matching SDK. The language packages and server installer download the files they need automatically.
+The Node.js and Python packages select Compact on Apple Silicon and Linux, and Standard on Intel Macs and Windows. For a C app, download one model ZIP and its matching SDK. The language packages and server installer download the files they need automatically.
 
 | Model ZIP (single file) | Bytes | SHA-256 |
 | --- | ---: | --- |

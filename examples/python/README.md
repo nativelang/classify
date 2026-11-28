@@ -12,7 +12,7 @@ from nativelang_classify import classify
 print(classify("This is a terrible movie", ["positive", "negative", "neutral"]))
 ```
 
-The first run downloads the model (about 1.6 GB). Later runs work offline.
+The first run downloads about 1.6 GB on Apple Silicon and Linux, or 2.5 GB on Intel Macs and Windows. Later runs work offline.
 
 ```sh
 python movie.py

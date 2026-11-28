@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nativelang-classify"
-version = "0.2.0"
+version = "0.2.1"
 description = "Classify text locally using categories you choose."
 requires-python = ">=3.9"
 license = "MIT"
@@ -14,4 +14,4 @@ license-files = ["LICENSE"]
 packages = ["nativelang_classify"]
 
 [tool.setuptools.package-data]
-nativelang_classify = ["bootstrap.sh"]
+nativelang_classify = ["bootstrap.sh", "install.ps1"]
