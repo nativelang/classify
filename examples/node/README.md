@@ -3,7 +3,7 @@
 Install the package and run the example with Node.js 22.18 or later on macOS 15+ with Apple Silicon or Debian 12-compatible Linux on ARM64 or x64.
 
 ```sh
-npm install https://github.com/nativelang/classify/releases/download/v0.2.0/nativelang-classify-0.2.0.tgz
+npm install @nativelang/classify
 ```
 
 ```javascript
