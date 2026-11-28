@@ -4,7 +4,7 @@ The [language packages](README.md#examples) return the matching category or an e
 
 ## Deployment options
 
-**Share one loaded model across apps.** The language packages share a download, but each app loads the model into memory. That takes time each time a script starts. If you run several apps or short-lived scripts, start one server and have them send it text over HTTP. The server keeps the model in memory between requests. This also works on Windows and Intel Macs. [Install and start the server](self-hosting/README.md)
+**Share one loaded model across apps.** Loading a model takes time and memory. If several programs on your machine use Classify, or your script starts and stops often, have them send text to one server over HTTP. The server keeps the model loaded even after a program exits. This also works on Windows and Intel Macs. [Install and start the server](self-hosting/README.md)
 
 **Call Classify inside a C program.** Link the C library when you want your program to load the model itself. Open it at startup, classify as many texts as you need, and close it when you’re done. This works without a separate server. [Build the C example for your platform](examples/c/)
 
